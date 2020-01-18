@@ -1,1 +1,2 @@
-# plugin-huawei4g
+# plugin-huawei4g for jeedom
+# monitoring
