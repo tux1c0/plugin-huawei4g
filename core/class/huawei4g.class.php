@@ -26,16 +26,16 @@ class huawei4g extends eqLogic {
 	public static $_widgetPossibility = array('custom' => true);
 	
     /*     * ***********************Methode static*************************** */
-	public static function dependancy_info() {
+	/*public static function dependancy_info() {
 		$return = array();
 		$return['progress_file'] = jeedom::getTmpFolder('huawei4g') . '/dependance';
 		$return['state'] = 'ok';
 		return $return;
-	}
-	public static function dependancy_install() {
+	}*/
+	/*public static function dependancy_install() {
 		log::remove(__CLASS__ . '_update');
 		//return array('script' => dirname(__FILE__) . '/../../resources/install.sh ' . jeedom::getTmpFolder('huawei4g') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_update'));
-	}
+	}*/
 
 	public static function update($_eqLogic_id = null) {
 		if ($_eqLogic_id == null) {
@@ -51,7 +51,7 @@ class huawei4g extends eqLogic {
 			}
 		}
 	}
-	
+	/*
 	public static function cron15() {
 		foreach (self::byType('huawei4g') as $rtr) {
 			if ($rtr->getIsEnable() == 1) {
@@ -63,7 +63,7 @@ class huawei4g extends eqLogic {
 			}
 		}
     }
-	
+	*/
 	public function preUpdate() {
 		if ($this->getConfiguration('ip') == '') {
 			throw new Exception(__('Le champs IP ne peut pas être vide', __FILE__));
@@ -86,19 +86,19 @@ class huawei4g extends eqLogic {
 		$this->infos = array(
 			'status'	=> ''
 		);
-		
+		/*
 		//The router class is the main entry point for interaction.
 		$Router = new Router();
 		$Router->setAddress($IPaddress);
 
 		//Username and password 
-		$router->login($login, $pwd);
+		$Router->login($login, $pwd);
 
 		if($Router->isLoggedIn()) {
 		  $this->infos['status'] = $Router->getStatus(); 
 		} else {
 			$this->infos['status'] = 'Down';
-		}
+		}*/
 	}
 	
 	// update HTML
