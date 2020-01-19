@@ -93,12 +93,9 @@ class huawei4g extends eqLogic {
 
 		try {
 			$Router->login($login, $pwd);
+			$Router->getStatus();
 
-			if($Router->isLoggedIn()) {
-			  $this->infos['status'] = $Router->getStatus(); 
-			} else {
-				$this->infos['status'] = 'Down';
-			}
+
 		} catch (Exception $e) {
 				log::add('huawei4g', 'error', $e);
 		}
