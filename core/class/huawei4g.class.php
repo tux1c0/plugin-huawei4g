@@ -51,7 +51,7 @@ class huawei4g extends eqLogic {
 			}
 		}
 	}
-	/*
+	
 	public static function cron15() {
 		foreach (self::byType('huawei4g') as $rtr) {
 			if ($rtr->getIsEnable() == 1) {
@@ -63,7 +63,7 @@ class huawei4g extends eqLogic {
 			}
 		}
     }
-	*/
+	
 	public function preUpdate() {
 		if ($this->getConfiguration('ip') == '') {
 			throw new Exception(__('Le champs IP ne peut pas être vide', __FILE__));
@@ -86,19 +86,22 @@ class huawei4g extends eqLogic {
 		$this->infos = array(
 			'status'	=> ''
 		);
-		/*
+		
 		//The router class is the main entry point for interaction.
 		$Router = new Router();
 		$Router->setAddress($IPaddress);
 
-		//Username and password 
-		$Router->login($login, $pwd);
+		try {
+			$Router->login($login, $pwd);
 
-		if($Router->isLoggedIn()) {
-		  $this->infos['status'] = $Router->getStatus(); 
-		} else {
-			$this->infos['status'] = 'Down';
-		}*/
+			if($Router->isLoggedIn()) {
+			  $this->infos['status'] = $Router->getStatus(); 
+			} else {
+				$this->infos['status'] = 'Down';
+			}
+		} catch (Exception $e) {
+				log::add('huawei4g', 'error', $e);
+		}
 	}
 	
 	// update HTML

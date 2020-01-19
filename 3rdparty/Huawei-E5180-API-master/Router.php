@@ -4,8 +4,7 @@
  * and provides relevant methods for getting at the details.
  * This has probably become quite a god object, but it's nice to use.
  */
-class Router
-{
+class Router {
     private $http = null; //Our custom HTTP provider.
 
     private $routerAddress = 'http://192.168.8.1'; //This is the one for the router I got.
@@ -377,3 +376,4 @@ class Router
         }
     }
 }
+?>

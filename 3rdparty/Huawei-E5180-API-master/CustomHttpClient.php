@@ -91,7 +91,7 @@ class CustomHttpClient
         $result = curl_exec($ch);
         curl_close($ch);
         if (!$result) {
-            throw new \Exception('A network error occured with cURL.');
+            throw new \Exception('postXml: A network error occured with cURL '.$url);
         }
 
         return $result;
@@ -136,9 +136,10 @@ class CustomHttpClient
         $result = curl_exec($ch);
         curl_close($ch);
         if (!$result) {
-            throw new \Exception('A network error occured with cURL.');
+            throw new \Exception('get: A network error occured with cURL '.$url);
         }
 
         return $result;
     }
 }
+?>
