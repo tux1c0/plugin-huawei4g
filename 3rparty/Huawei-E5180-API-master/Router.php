@@ -1,11 +1,4 @@
 <?php
-
-
-/*
-* Depends on:
-* HSPDev\HuaweiApi\CustomHttpClient
-*/
-
 /**
  * This class handles login, sessions and such.
  * and provides relevant methods for getting at the details.

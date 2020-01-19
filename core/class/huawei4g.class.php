@@ -81,8 +81,24 @@ class huawei4g extends eqLogic {
 		$IPaddress = $this->getConfiguration('ip');
 		$login = $this->getConfiguration('username');
 		$pwd = $this->getConfiguration('password');
-		$Routeur = $this->getName();
+		$RtrName = $this->getName();
 		
+		$this->infos = array(
+			'status'	=> ''
+		);
+		
+		//The router class is the main entry point for interaction.
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+
+		//Username and password 
+		$router->login($login, $pwd);
+
+		if($Router->isLoggedIn()) {
+		  $this->infos['status'] = $Router->getStatus(); 
+		} else {
+			$this->infos['status'] = 'Down';
+		}
 	}
 	
 	// update HTML
@@ -201,3 +217,5 @@ class huawei4gCmd extends cmd {
 
     /*     * **********************Getteur Setteur*************************** */
 }
+
+?>
