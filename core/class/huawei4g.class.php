@@ -18,8 +18,6 @@
 
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-//require_once dirname(__FILE__) . '/../../3rdparty/Huawei-E5180-API-master/CustomHttpClient.php';
-//require_once dirname(__FILE__) . '/../../3rdparty/Huawei-E5180-API-master/Router.php';
 require_once dirname(__FILE__) . '/router.class.php';
 
 class huawei4g extends eqLogic {
@@ -27,16 +25,16 @@ class huawei4g extends eqLogic {
 	public static $_widgetPossibility = array('custom' => true);
 	
     /*     * ***********************Methode static*************************** */
-	/*public static function dependancy_info() {
+	public static function dependancy_info() {
 		$return = array();
 		$return['progress_file'] = jeedom::getTmpFolder('huawei4g') . '/dependance';
 		$return['state'] = 'ok';
 		return $return;
-	}*/
-	/*public static function dependancy_install() {
+	}
+	public static function dependancy_install() {
 		log::remove(__CLASS__ . '_update');
-		//return array('script' => dirname(__FILE__) . '/../../resources/install.sh ' . jeedom::getTmpFolder('huawei4g') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_update'));
-	}*/
+		return array('script' => dirname(__FILE__) . '/../../resources/install.sh ' . jeedom::getTmpFolder('huawei4g') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_update'));
+	}
 
 	public static function update($_eqLogic_id = null) {
 		if ($_eqLogic_id == null) {

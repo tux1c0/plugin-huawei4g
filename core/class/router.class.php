@@ -2,7 +2,6 @@
 use GuzzleHttp\Client;
 
 class Router {
-    private $httpSession = null; 
     private $routerAddress = 'http://192.168.1.1';
 	private $client;
 
@@ -29,19 +28,14 @@ class Router {
 	Functions for HTTP sessions
 	*/
 	public function setHttpSession() {
-		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress(), 'timeout' => 3.0]);
+		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress(), 'timeout' => 5.0]);
 	}
 	
 	
 	private function getXML($api) {
         $response = $this->client->request('GET', $api);
 
-        // Si un retour erreur <code>
-        //if (property_exists($xml, 'code')) {
-			//log::add('huawei4g', 'error', 'Erreur API '.$response);
-        //}
-
-        return $response;
+        return $response->getBody();
     }
 	
 	
