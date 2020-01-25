@@ -18,8 +18,9 @@
 
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-require_once dirname(__FILE__) . '/../../3rdparty/Huawei-E5180-API-master/CustomHttpClient.php';
-require_once dirname(__FILE__) . '/../../3rdparty/Huawei-E5180-API-master/Router.php';
+//require_once dirname(__FILE__) . '/../../3rdparty/Huawei-E5180-API-master/CustomHttpClient.php';
+//require_once dirname(__FILE__) . '/../../3rdparty/Huawei-E5180-API-master/Router.php';
+require_once dirname(__FILE__) . '/router.class.php';
 
 class huawei4g extends eqLogic {
     /*     * *************************Attributs****************************** */
@@ -92,7 +93,7 @@ class huawei4g extends eqLogic {
 		$Router->setAddress($IPaddress);
 
 		try {
-			$Router->login($login, $pwd);
+			$Router->setHttpSession();
 			$Router->getStatus();
 
 
