@@ -29,16 +29,16 @@ class Router {
 	Functions for HTTP sessions
 	*/
 	public function setHttpSession() {
-		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress()]);
+		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress(), 'timeout' => 3.0]);
 	}
 	
 	
 	private function getXML($api) {
-        $response = $this->client->request('GET', $api, ['timeout' => 10.0]);
+        $response = $this->client->request('GET', $api);
 
         // Si un retour erreur <code>
         //if (property_exists($xml, 'code')) {
-			log::add('huawei4g', 'error', 'Erreur API '.$response);
+			//log::add('huawei4g', 'error', 'Erreur API '.$response);
         //}
 
         return $response;
@@ -51,6 +51,7 @@ class Router {
 	public function getTrafficStatistics() {
 		$res = $this->getXML('api/monitoring/traffic-statistics');
 		//$xml = new SimpleXMLElement($res);
+		return $res;
 	}
 	
 	/*

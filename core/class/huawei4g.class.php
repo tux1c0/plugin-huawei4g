@@ -94,8 +94,8 @@ class huawei4g extends eqLogic {
 
 		try {
 			$Router->setHttpSession();
-			$Router->getTrafficStatistics();
-
+			$stats = $Router->getTrafficStatistics();
+			log::add('huawei4g', 'error', $stats);
 
 		} catch (Exception $e) {
 				log::add('huawei4g', 'error', $e);
