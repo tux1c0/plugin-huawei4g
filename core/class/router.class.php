@@ -29,17 +29,12 @@ class Router {
 	Functions for HTTP sessions
 	*/
 	public function setHttpSession() {
-		$this->client = new GuzzleHttp\Client([
-			// Base URI is used with relative requests
-			'base_uri' => $this->getAddress(),
-			// You can set any number of default request options.
-			'timeout'  => 20.0,
-		]);
+		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress()]);
 	}
 	
 	
 	private function getXML($api) {
-        $response = $this->client->request('GET', $api);
+        $response = $this->client->request('GET', $api, ['timeout' => 10.0]);
 
         // Si un retour erreur <code>
         //if (property_exists($xml, 'code')) {
