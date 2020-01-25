@@ -94,7 +94,7 @@ class huawei4g extends eqLogic {
 
 		try {
 			$Router->setHttpSession();
-			$Router->getStatus();
+			$Router->getTrafficStatistics();
 
 
 		} catch (Exception $e) {
