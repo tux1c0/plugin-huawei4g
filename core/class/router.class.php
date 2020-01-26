@@ -24,6 +24,35 @@ class Router {
         return $this->routerAddress.'/'.$apiAddress;
     }
 	
+	// convert string to XML
+	private function toXml($response, array $config = [])
+    {
+        $disableEntities = libxml_disable_entity_loader(true);
+        $internalErrors = libxml_use_internal_errors(true);
+        try {
+            // Allow XML to be retrieved even if there is no response body
+            $xml = new SimpleXMLElement(
+                (string) $this->getBody() ?: '<root />',
+                isset($config['libxml_options']) ? $config['libxml_options'] : LIBXML_NONET,
+                false,
+                isset($config['ns']) ? $config['ns'] : '',
+                isset($config['ns_is_prefix']) ? $config['ns_is_prefix'] : false
+            );
+            libxml_disable_entity_loader($disableEntities);
+            libxml_use_internal_errors($internalErrors);
+        } catch (\Exception $e) {
+            libxml_disable_entity_loader($disableEntities);
+            libxml_use_internal_errors($internalErrors);
+            throw new XmlParseException(
+                'Unable to parse response body into XML: ' . $e->getMessage(),
+                $this,
+                $e,
+                (libxml_get_last_error()) ?: null
+            );
+        }
+        return $xml;
+    }
+	
 	/*
 	Functions for HTTP sessions
 	*/
@@ -33,9 +62,19 @@ class Router {
 	
 	
 	private function getXML($api) {
-        $response = $this->client->request('GET', $api);
-
-        return $response->getBody();
+		try {
+			$response = $this->client->get($api);
+		} catch (RequestException $e) {
+			log::add('huawei4g', 'error', $e->getRequest());
+			if ($e->hasResponse()) {
+				log::add('huawei4g', 'error', $e->getResponse());
+			}
+		}
+			//if($response->getStatusCode() == 200) {
+				$xml = $this->toXml($response->getBody(), []);
+			//}
+			
+        return $xml;
     }
 	
 	
