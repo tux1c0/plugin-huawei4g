@@ -23,6 +23,12 @@ require_once dirname(__FILE__) . '/router.class.php';
 class huawei4g extends eqLogic {
     /*     * *************************Attributs****************************** */
 	public static $_widgetPossibility = array('custom' => true);
+	const ERROR_SYSTEM_UNKNOWN = 100001;
+	const ERROR_SYSTEM_NO_SUPPORT = 100002;
+	const ERROR_SYSTEM_NO_RIGHTS = 100003;
+	const ERROR_SYSTEM_BUSY = 100004;
+	const ERROR_SYSTEM_PARAMETER = 100006;
+	const ERROR_SYSTEM_CSRF = 125002;
 	
     /*     * ***********************Methode static*************************** */
 	public static function dependancy_info() {
@@ -82,24 +88,72 @@ class huawei4g extends eqLogic {
 		$pwd = $this->getConfiguration('password');
 		$RtrName = $this->getName();
 		
-		$this->infos = array(
-			'status'	=> ''
-		);
+		$this->infos = array();
 		
-		//The router class is the main entry point for interaction.
+		// setting the router session
 		$Router = new Router();
 		$Router->setAddress($IPaddress);
 
 		try {
 			$Router->setHttpSession();
-			$stats = $Router->getTrafficStatistics();
-			foreach($stats as $stat => $value) {
-				log::add('huawei4g', 'debug', 'stat:'.$stats.' value:'.$value);
-			}
+			$this->setInfo($Router->getTrafficStatistics());
+			
 
 		} catch (Exception $e) {
-				log::add('huawei4g', 'error', $e);
+			log::add('huawei4g', 'error', $e);
 		}
+		
+		
+		$this->updateInfo();
+	}
+	
+	// fill the info array
+	private function setInfo($infoTab) {
+		if (!function_exists('array_key_first')) {
+			function array_key_first(array $arr) {
+				foreach($arr as $key => $unused) {
+					return $key;
+				}
+				return NULL;
+			}
+		}
+		
+		if(array_key_first($infoTab) == 'error') {
+			log::add('huawei4g', 'error', $this->errorInfo($infoTab['error']['code']));
+		} else {
+			foreach($infoTab as $key => $value) {
+				log::add('huawei4g', 'debug', 'key:'.$key.' value:'.$value);
+				$this->infos[$key] = $value;
+			}
+		}
+	}
+	
+	// manage API errors
+	private function errorInfo($code) {
+		switch($code) {
+			case ERROR_SYSTEM_BUSY: 
+				$e = "System busy";
+				break;
+			case ERROR_SYSTEM_CSRF: 
+				$e = "Token error";
+				break;
+			case ERROR_SYSTEM_NO_RIGHTS: 
+				$e = "You don't have rights";
+				break;
+			case ERROR_SYSTEM_NO_SUPPORT: 
+				$e = "API not supported";
+				break;
+			case ERROR_SYSTEM_PARAMETER: 
+				$e = "Wrong parameter";
+				break;
+			case ERROR_SYSTEM_UNKNOWN: 
+				$e = "Unknown API error";
+				break;	
+			default:
+				$e = "UNKNOWN";
+		}
+		
+		return $e;
 	}
 	
 	// update HTML
@@ -150,7 +204,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setSubType('other');
 			$RouteurCmd->save();
 		}
-		
+		/*
 		$RouteurCmd = $this->getCmd(null, 'reboot');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'reboot');
@@ -176,6 +230,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setOrder('17');
 			$RouteurCmd->save();
 		}
+		*/
 	}
 	
 	public function postUpdate() {		

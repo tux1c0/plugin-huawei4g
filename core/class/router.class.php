@@ -57,6 +57,14 @@ class Router {
 	}
 	
 	// retrieve the XML response
+	/*
+	ERROR_SYSTEM_UNKNOWN = 100001
+    ERROR_SYSTEM_NO_SUPPORT = 100002
+    ERROR_SYSTEM_NO_RIGHTS = 100003
+    ERROR_SYSTEM_BUSY = 100004
+	ERROR_SYSTEM_PARAMETER = 100006
+    ERROR_SYSTEM_CSRF = 125002 (token)
+	*/
 	private function getXML($api) {
 		try {
 			$response = $this->client->get($api);
@@ -80,6 +88,34 @@ class Router {
 	
 	/*
 	Functions w/o login needed
+	net/current-plmn
+	net/net-feature-switch
+	webserver/token
+	webserver/SesTokInfo
+	wlan/wifi-feature-switch
+	wlan/basic-settings
+	wlan/multi-switch-settings
+	wlan/wps-pbc
+	wlan/status-switch-settings
+	global/module-switch
+	language/current-language
+	cradle/status-info
+	monitoring/converged-status
+	monitoring/check-notifications
+	monitoring/traffic-statistics
+	monitoring/start_date
+	monitoring/month_statistics
+	dialup/mobile-dataswitch
+	dialup/connection
+	dialup/dialup-feature-switch
+	time/timeout
+	redirection/homepage
+	pin/status
+	pin/simlock
+	online-update/status
+	online-update/configuration
+	online-update/autoupdate-config
+	
 	*/
 	public function getTrafficStatistics() {
 		$res = $this->getInfo('api/monitoring/traffic-statistics');
@@ -87,10 +123,109 @@ class Router {
 		return $res;
 	}
 	
+
 	/*
 	Functions w/ login needed
 	*/
 
+
+	/*
+	Undefined
+	net/network
+	
+	
+	*/
+
+	/*
+	ERROR 125002
+	net/net-mode
+	net/register
+	net/net-mode-list
+	net/plmn-list
+	net/cell-info
+	net/csps_state
+	usbstorage/fsstatus
+	usbstorage/usbaccount
+	voice/featureswitch
+	voice/sipaccount
+	voice/sipadvance
+	voice/sipserver
+	voice/speeddial
+	voice/functioncode
+	voice/voiceadvance
+	vpn/feature-switch
+	vpn/br_list
+	vpn/ipsec_settings
+	vpn/l2tp_settings
+	vpn/pptp_settings
+	lan/HostInfo
+	led/nightmode
+	log/loginfo
+	dhcp/settings
+	dhcp/feature-switch
+	cradle/feature-switch
+	cradle/basic-info
+	cradle/factory-mac
+	cradle/mac-info
+	cwmp/basic-info
+	ddns/ddns-list
+	ddns/status
+	monitoring/status
+	monitoring/start_date_wlan
+	monitoring/month_statistics_wlan
+	ntwk/lan_upnp_portmapping
+	dialup/profiles
+	usbprinter/printerlist
+	sntp/sntpswitch
+	sntp/timeinfo
+	sntp/serverinfo
+	pb/pb-match
+	online-update/check-new-version
+	online-update/check-new-version
+	online-update/ack-newversion
+	sdcard/dlna-setting
+	sdcard/sdcardsamba
+	sdcard/printerlist
+	
+	
+	
+	ERROR 100002
+	vsim/operateswitch-vsim
+	wlan/handover-setting
+	ntwk/celllock
+	statistic/feature-roam-statistic
+	sdcard/sdcard
+	
+	
+	ERROR 100006
+	webserver/publickey
+	
+	
+	ERROR 100003
+	webserver/white_list_switch
+	wlan/station-information
+	wlan/security-settings
+	wlan/multi-security-settings
+	wlan/multi-security-settings-ex
+	wlan/multi-basic-settings
+	wlan/multi-macfilter-settings
+	wlan/multi-macfilter-settings-ex
+	wlan/mac-filter
+	wlan/oled-showpassword
+	wlan/wps
+	wlan/wps-appin
+	wlan/wps-switch
+	dialup/auto-apn
+	time/timerule
+	syslog/querylog
+	sntp/settings
+	ota/status
+	sdcard/share-account
+	
+	ERROR 100001
+	online-update/url-list
+	
+	*/
 
 }
 ?>
