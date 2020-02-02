@@ -76,7 +76,7 @@ class Router {
 		}
 
 		$xml = $this->toXml($response->getBody());
-		log::add('huawei4g', 'debug', $xml->asXML());
+		log::add('huawei4g', 'debug', $api.', '.$xml->asXML());
         return $xml;
     }
 	
@@ -118,16 +118,16 @@ class Router {
 	
 	*/
 	public function getTrafficStatistics() {
-		$res = $this->getInfo('api/monitoring/traffic-statistics');
-
-		return $res;
+		return $this->getInfo('api/monitoring/traffic-statistics');
 	}
 	
 
 	/*
 	Functions w/ login needed
 	*/
-
+	public function getCellInfo() {
+		return $this->getInfo('api/net/cell-info');
+	}
 
 	/*
 	Undefined
