@@ -118,8 +118,8 @@ class huawei4g extends eqLogic {
 			}
 		}
 		
-		if(array_key_first($infoTab) == 'error') {
-			log::add('huawei4g', 'error', $this->errorInfo($infoTab['error']['code']));
+		if(array_key_first($infoTab) == 'code') {
+			log::add('huawei4g', 'error', $this->errorInfo($infoTab['code']));
 		} else {
 			foreach($infoTab as $key => $value) {
 				log::add('huawei4g', 'debug', 'key:'.$key.' value:'.$value);
