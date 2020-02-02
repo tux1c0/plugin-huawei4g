@@ -23,12 +23,12 @@ require_once dirname(__FILE__) . '/router.class.php';
 class huawei4g extends eqLogic {
     /*     * *************************Attributs****************************** */
 	public static $_widgetPossibility = array('custom' => true);
-	const ERROR_SYSTEM_UNKNOWN = 100001;
-	const ERROR_SYSTEM_NO_SUPPORT = 100002;
-	const ERROR_SYSTEM_NO_RIGHTS = 100003;
-	const ERROR_SYSTEM_BUSY = 100004;
-	const ERROR_SYSTEM_PARAMETER = 100006;
-	const ERROR_SYSTEM_CSRF = 125002;
+	const ERROR_SYSTEM_UNKNOWN = '100001';
+	const ERROR_SYSTEM_NO_SUPPORT = '100002';
+	const ERROR_SYSTEM_NO_RIGHTS = '100003';
+	const ERROR_SYSTEM_BUSY = '100004';
+	const ERROR_SYSTEM_PARAMETER = '100006';
+	const ERROR_SYSTEM_CSRF = '125002';
 	
     /*     * ***********************Methode static*************************** */
 	public static function dependancy_info() {
@@ -150,7 +150,7 @@ class huawei4g extends eqLogic {
 				$e = "Unknown API error";
 				break;	
 			default:
-				$e = "UNKNOWN";
+				$e = "UNKNOWN ERROR";
 		}
 		
 		return $e;
@@ -193,6 +193,126 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
+		$RouteurCmd = $this->getCmd(null, 'CurrentConnectTime');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'CurrentConnectTime');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Current Connect Time', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('CurrentConnectTime');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 's' );
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'CurrentUpload');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'CurrentUpload');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Current Upload', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('CurrentUpload');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'o' );
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'CurrentDownload');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'CurrentDownload');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Current Download', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('CurrentDownload');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'o' );
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'CurrentDownloadRate');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'CurrentDownloadRate');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Current Download Rate', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('Current Download Rate');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'ko/s' );
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'CurrentUploadRate');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'CurrentUploadRate');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Current Upload Rate', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('CurrentUploadRate');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'ko/s' );
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'TotalUpload');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'TotalUpload');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Total Upload', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('TotalUpload');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'o' );
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'TotalDownload');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'TotalDownload');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Total Download', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('TotalDownload');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'o' );
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'TotalConnectTime');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'TotalConnectTime');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Total Connect Time', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('TotalConnectTime');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 's' );
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
 		$RouteurCmd = $this->getCmd(null, 'refresh');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'refresh');
@@ -204,6 +324,8 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setSubType('other');
 			$RouteurCmd->save();
 		}
+		
+		
 		/*
 		$RouteurCmd = $this->getCmd(null, 'reboot');
 		if (!is_object($RouteurCmd)) {

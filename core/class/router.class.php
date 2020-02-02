@@ -69,7 +69,8 @@ class Router {
 		try {
 			$response = $this->client->get($api);
 		} catch (RequestException $e) {
-			log::add('huawei4g', 'error', $e->getRequest());
+			log::add('huawei4g', 'error', 'Erreur de connexion au routeur');
+			log::add('huawei4g', 'debug', $e->getRequest());
 			if ($e->hasResponse()) {
 				log::add('huawei4g', 'error', $e->getResponse());
 			}
