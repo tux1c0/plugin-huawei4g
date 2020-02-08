@@ -4,6 +4,8 @@ use GuzzleHttp\Client;
 class Router {
     private $routerAddress = 'http://192.168.1.1';
 	private $client;
+	private $token;
+	private $session;
 
 
     public function setAddress($address) {
@@ -43,11 +45,33 @@ class Router {
 		}
     }
 	
+	private function setToken($infoTab) {
+		// workaround PHP < 7
+		if (!function_exists('array_key_first')) {
+			function array_key_first(array $arr) {
+				foreach($arr as $key => $unused) {
+					return $key;
+				}
+				return NULL;
+			}
+		}
+		
+		if(array_key_first($infoTab) == 'code') {
+			log::add('huawei4g', 'error', 'Impossible de récupérer le token');
+		} else {
+			$this->token = $infoTab['TokInfo'];
+			$this->session = $infoTab['SesInfo'];
+			log::add('huawei4g', 'debug', 'token:'.$this->token);
+			log::add('huawei4g', 'debug', 'session:'.$this->session);
+		}
+	}
+	
 	/*
 	Functions for HTTP sessions
 	*/
 	public function setHttpSession() {
 		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress(), 'timeout' => 5.0]);
+		$this->getToken();
 	}
 	
 	// get the info
@@ -89,7 +113,6 @@ class Router {
 	
 	/*
 	Functions w/o login needed
-	net/current-plmn
 	net/net-feature-switch
 	webserver/token
 	webserver/SesTokInfo
@@ -103,7 +126,6 @@ class Router {
 	cradle/status-info
 	monitoring/converged-status
 	monitoring/check-notifications
-	monitoring/traffic-statistics
 	monitoring/start_date
 	monitoring/month_statistics
 	dialup/mobile-dataswitch
@@ -122,6 +144,13 @@ class Router {
 		return $this->getInfo('api/monitoring/traffic-statistics');
 	}
 	
+	public function getPublicLandMobileNetwork() {
+		return $this->getInfo('api/net/current-plmn');
+	}
+	
+	public function getToken() {
+		return $this->getInfo('api/webserver/SesTokInfo');
+	}
 
 	/*
 	Functions w/ login needed

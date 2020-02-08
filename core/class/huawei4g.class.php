@@ -97,7 +97,7 @@ class huawei4g extends eqLogic {
 		try {
 			$Router->setHttpSession();
 			$this->setInfo($Router->getTrafficStatistics());
-			$this->setInfo($Router->getCellInfo());
+			$this->setInfo($Router->getPublicLandMobileNetwork());
 
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
@@ -109,6 +109,7 @@ class huawei4g extends eqLogic {
 	
 	// fill the info array
 	private function setInfo($infoTab) {
+		// workaround PHP < 7
 		if (!function_exists('array_key_first')) {
 			function array_key_first(array $arr) {
 				foreach($arr as $key => $unused) {
@@ -186,6 +187,20 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setName(__('Statut', __FILE__));
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('status');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'fullname');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'fullname');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Réseau mobile', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('fullname');
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','power');
 			$RouteurCmd->setSubType('string');
