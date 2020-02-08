@@ -71,7 +71,7 @@ class Router {
 	*/
 	public function setHttpSession() {
 		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress(), 'timeout' => 5.0]);
-		$this->setToken(getToken());
+		$this->setToken($this->getToken());
 	}
 	
 	// get the info
