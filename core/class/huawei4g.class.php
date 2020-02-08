@@ -101,6 +101,7 @@ class huawei4g extends eqLogic {
 			if($this->infos['status'] == "Up") {
 				$this->setInfo($Router->getTrafficStatistics());
 				$this->setInfo($Router->getPublicLandMobileNetwork());
+				$this->setInfo($Router->getDeviceBasicInfo());
 			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
@@ -343,6 +344,47 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
+		$RouteurCmd = $this->getCmd(null, 'devicename');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'devicename');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Modèle', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('devicename');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','linux');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('13');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'SoftwareVersion');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'SoftwareVersion');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Software', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('SoftwareVersion');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','linux');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('14');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'WebUIVersion');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'WebUIVersion');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('WebUI', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('WebUIVersion');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','linux');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
 		
 		/*
 		$RouteurCmd = $this->getCmd(null, 'reboot');

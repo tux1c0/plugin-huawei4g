@@ -158,6 +158,10 @@ class Router {
 	public function getToken() {
 		return $this->getInfo('api/webserver/SesTokInfo');
 	}
+	
+	public function getDeviceBasicInfo() {
+		return $this->getInfo('api/device/basic_information');
+	}
 
 	/*
 	Functions w/ login needed
