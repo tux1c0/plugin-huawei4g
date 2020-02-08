@@ -259,7 +259,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd = new huawei4gCmd();
 			$RouteurCmd->setName(__('Current Download Rate', __FILE__));
 			$RouteurCmd->setEqLogic_id($this->getId());
-			$RouteurCmd->setLogicalId('Current Download Rate');
+			$RouteurCmd->setLogicalId('CurrentDownloadRate');
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','power');
 			$RouteurCmd->setSubType('numeric');
