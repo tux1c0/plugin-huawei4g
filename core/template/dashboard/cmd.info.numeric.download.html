@@ -1,6 +1,6 @@
 <div class="cmd cmd-widget #history#" style="float:left; clear:both;" data-type="info" data-subtype="numeric" data-template="line" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
 	<div class="content-xs">
-		&nbsp;<span class="fas fa-download cmdName #hide_name#"> #name_display# </span><
+		&nbsp;<span class="fas fa-download cmdName #hide_name#"> #name_display# </span>
 		<strong class="state"></strong> #unite#
 	</div>
 	<script>
@@ -8,16 +8,12 @@
 			var cmd = $('.cmd[data-cmd_id=#id#]')
 			cmd.attr('title','Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 			var color = '';
-			if (_options.display_value != '') {
-				if (_options.display_value < 40) {
-					color = 'style="color:green !important"';
-				}else if (_options.display_value >= 40 && _options.display_value <= 60) {
-					color = 'style="color:orange !important"';
-				}else if (_options.display_value > 60) {
-					color = 'style="color:red !important"';
-				}
-			}
-			cmd.find('.state').empty().append('<span '+color+'>'+_options.display_value+'</span>')
+			var debit = 0;
+			const sizes = ['Octet', 'Ko', 'Mo', 'Go', 'To'];
+			const i = Math.floor(Math.log(_options.display_value) / Math.log(1024));
+			debit = parseFloat((_options.display_value / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
+			
+			cmd.find('.state').empty().append('<span>'+debit+'</span>')
 			if(_options.alertLevel){
 					if(_options.alertLevel == 'warning'){
 							cmd.addClass('label label-warning')
