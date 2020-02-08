@@ -194,13 +194,13 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
-		$RouteurCmd = $this->getCmd(null, 'fullname');
+		$RouteurCmd = $this->getCmd(null, 'FullName');
 		if (!is_object($RouteurCmd)) {
-			log::add('huawei4g', 'debug', 'fullname');
+			log::add('huawei4g', 'debug', 'FullName');
 			$RouteurCmd = new huawei4gCmd();
 			$RouteurCmd->setName(__('Réseau mobile', __FILE__));
 			$RouteurCmd->setEqLogic_id($this->getId());
-			$RouteurCmd->setLogicalId('fullname');
+			$RouteurCmd->setLogicalId('FullName');
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','power');
 			$RouteurCmd->setSubType('string');
