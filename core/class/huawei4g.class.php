@@ -233,7 +233,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','upload');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setUnite( 'o' );
+			//$RouteurCmd->setUnite( 'o' );
 			$RouteurCmd->setOrder('7');
 			$RouteurCmd->save();
 		}
@@ -248,7 +248,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','download');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setUnite( 'o' );
+			//$RouteurCmd->setUnite( 'o' );
 			$RouteurCmd->setOrder('6');
 			$RouteurCmd->save();
 		}
@@ -263,7 +263,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','perf');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setUnite( 'ko/s' );
+			//$RouteurCmd->setUnite( 'ko/s' );
 			$RouteurCmd->setOrder('4');
 			$RouteurCmd->save();
 		}
@@ -278,7 +278,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','perf');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setUnite( 'ko/s' );
+			//$RouteurCmd->setUnite( 'ko/s' );
 			$RouteurCmd->setOrder('5');
 			$RouteurCmd->save();
 		}
@@ -293,7 +293,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','upload');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setUnite( 'o' );
+			//$RouteurCmd->setUnite( 'o' );
 			$RouteurCmd->setOrder('12');
 			$RouteurCmd->save();
 		}
@@ -308,7 +308,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','download');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setUnite( 'o' );
+			//$RouteurCmd->setUnite( 'o' );
 			$RouteurCmd->setOrder('11');
 			$RouteurCmd->save();
 		}
