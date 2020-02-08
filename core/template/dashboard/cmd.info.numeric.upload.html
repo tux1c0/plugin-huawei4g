@@ -13,7 +13,7 @@
 			const i = Math.floor(Math.log(_options.display_value) / Math.log(1024));
 			debit = parseFloat((_options.display_value / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
 			
-			cmd.find('.state').empty().append('<span>'+debit+'</span>')
+			cmd.find('.state').empty().append(debit)
 			if(_options.alertLevel){
 					if(_options.alertLevel == 'warning'){
 							cmd.addClass('label label-warning')

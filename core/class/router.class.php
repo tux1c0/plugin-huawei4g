@@ -6,6 +6,7 @@ class Router {
 	private $client;
 	private $token;
 	private $session;
+	private $statut;
 
 
     public function setAddress($address) {
@@ -19,6 +20,10 @@ class Router {
 	
 	public function getAddress() {
 		return $this->routerAddress;
+	}
+
+	public function getStatus() {
+		return $this->statut;
 	}
 
 	// Build the full API URL
@@ -58,11 +63,13 @@ class Router {
 		
 		if(array_key_first($infoTab) == 'code') {
 			log::add('huawei4g', 'error', 'Impossible de récupérer le token');
+			$this->statut = "Down";
 		} else {
 			$this->token = $infoTab['TokInfo'];
 			$this->session = $infoTab['SesInfo'];
 			log::add('huawei4g', 'debug', 'token:'.$this->token);
 			log::add('huawei4g', 'debug', 'session:'.$this->session);
+			$this->statut = "Up";
 		}
 	}
 	
