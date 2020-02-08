@@ -190,7 +190,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','power');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('2');
 			$RouteurCmd->save();
 		}
 		
@@ -202,9 +202,9 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('FullName');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','linux');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('1');
 			$RouteurCmd->save();
 		}
 		
@@ -216,10 +216,10 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('CurrentConnectTime');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','time');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 's' );
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('3');
 			$RouteurCmd->save();
 		}
 		
@@ -231,10 +231,10 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('CurrentUpload');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','upload');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'o' );
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('7');
 			$RouteurCmd->save();
 		}
 		
@@ -246,10 +246,10 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('CurrentDownload');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','download');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'o' );
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('6');
 			$RouteurCmd->save();
 		}
 		
@@ -261,10 +261,10 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('CurrentDownloadRate');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','perf');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'ko/s' );
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('4');
 			$RouteurCmd->save();
 		}
 		
@@ -276,10 +276,10 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('CurrentUploadRate');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','perf');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'ko/s' );
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('5');
 			$RouteurCmd->save();
 		}
 		
@@ -291,10 +291,10 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('TotalUpload');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','upload');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'o' );
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('11');
 			$RouteurCmd->save();
 		}
 		
@@ -306,10 +306,10 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('TotalDownload');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','download');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'o' );
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('10');
 			$RouteurCmd->save();
 		}
 		
@@ -321,10 +321,10 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('TotalConnectTime');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','power');
+			$RouteurCmd->setTemplate('dashboard','time');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 's' );
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('12');
 			$RouteurCmd->save();
 		}
 		
