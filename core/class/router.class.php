@@ -1,5 +1,6 @@
 <?php
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 
 class Router {
     private $routerAddress = 'http://192.168.1.1';
@@ -116,6 +117,7 @@ class Router {
 		return $this->getInfo('api/user/state-login');
 	}
 	
+	// check if we're logged in
 	private function login() {
 		$state = $this->getStateLogin();
 		
@@ -124,6 +126,7 @@ class Router {
 		return $this->authentification($state['password_type']);
 	}
 	
+	// authenticate ourself
 	private function authentification($pwdType) {
 		$pwd = '';
 		
@@ -139,7 +142,14 @@ class Router {
 				break;
 		}
 		
-		return true;
+		$xml = '<?xml version="1.0" encoding="UTF-8"?><request>
+		<Username>'.$this->getLogin().'</Username>
+		<password_type>'.$pwdType.'</password_type>
+		<Password>'.$pwd.'</Password>
+		</request>
+		';
+		
+		return postXML('api/user/login', $xml);
 	}
 	
 	
@@ -147,6 +157,30 @@ class Router {
 	private function getInfo($api) {
 		$xml = $this->getXML($api);
 		return $this->xmlToArray($xml);		
+	}
+	
+	// POST
+	private function postXML($api, $postXml) {
+		try {
+			$options = [
+				'headers' => [
+					'Content-Type' => 'application/xml; charset=UTF8',
+				],
+				'body' => $postXml,
+			];
+			$request = new Request('POST', $api, $options);
+			$response = $client->send($request);
+		} catch (RequestException $e) {
+			log::add('huawei4g', 'error', 'Erreur de connexion au routeur');
+			log::add('huawei4g', 'debug', $e->getRequest());
+			if ($e->hasResponse()) {
+				log::add('huawei4g', 'error', $e->getResponse());
+			}
+		}
+
+		$xml = $this->toXml($response->getBody());
+		log::add('huawei4g', 'debug', $api.', '.$xml->asXML());
+        return true;
 	}
 	
 	// retrieve the XML response
