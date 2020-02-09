@@ -152,7 +152,8 @@ class Router {
 		';
 		log::add('huawei4g', 'debug', $api.', '.$xml);
 		
-		return $this->postXML('api/user/login', $xml);
+		//return $this->postXML('api/user/login', $xml);
+		return true;
 	}
 	
 	
