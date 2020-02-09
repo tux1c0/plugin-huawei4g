@@ -169,7 +169,7 @@ class Router {
 				'body' => $postXml,
 			];
 			$request = new Request('POST', $api, $options);
-			$response = $client->send($request);
+			$response = $this->client->send($request);
 		} catch (RequestException $e) {
 			log::add('huawei4g', 'error', 'Erreur de connexion au routeur');
 			log::add('huawei4g', 'debug', $e->getRequest());
