@@ -149,7 +149,7 @@ class Router {
 		</request>
 		';
 		
-		return postXML('api/user/login', $xml);
+		return $this->postXML('api/user/login', $xml);
 	}
 	
 	
