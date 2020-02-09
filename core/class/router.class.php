@@ -7,7 +7,30 @@ class Router {
 	private $token;
 	private $session;
 	private $statut;
+	private $login;
+	private $password;
+	const LOGGED_IN = '0';
+	const LOGGED_OUT = '-1';
+	const REPEAT = '-2';
+	const BASE_64 = '0';
+	const BASE_64_AFTER_PASSWORD_CHANGE = '3';
+	const SHA256 = '4';
 
+	private function setLogin($l) {
+		$this->login = $l;
+	}
+	
+	private function getLogin() {
+		return $this->login;
+	}
+	
+	private function setPassword($p) {
+		$this->password = $p;
+	}
+	
+	private function getPassword() {
+		return $this->password;
+	}
 
     public function setAddress($address) {
         $address = rtrim($address, '/');
@@ -50,6 +73,7 @@ class Router {
 		}
     }
 	
+	// get and set the token
 	private function setToken($infoTab) {
 		// workaround PHP < 7
 		if (!function_exists('array_key_first')) {
@@ -73,13 +97,51 @@ class Router {
 		}
 	}
 	
+	private function getToken() {
+		return $this->token;
+	}
+	
 	/*
 	Functions for HTTP sessions
 	*/
-	public function setHttpSession() {
+	public function setHttpSession($login, $pwd) {
+		$this->setLogin($login);
+		$this->setPassword($pwd);
 		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress(), 'timeout' => 5.0]);
-		$this->setToken($this->getToken());
+		$this->setToken($this->getSessionToken());
+		return $this->login();
 	}
+	
+	private function getStateLogin() {
+		return $this->getInfo('api/user/state-login');
+	}
+	
+	private function login() {
+		$state = $this->getStateLogin();
+		
+		if($state['State'] == LOGGED_IN) return true;
+		
+		return $this->authentification($state['password_type']);
+	}
+	
+	private function authentification($pwdType) {
+		$pwd = '';
+		
+		switch($pwdType) {
+			case BASE_64:
+				$pwd = base64_encode('sha256', $this->getPassword());
+				break;
+			case BASE_64_AFTER_PASSWORD_CHANGE:
+				$pwd = base64_encode('sha256', $this->getPassword());
+				break;
+			case SHA256:
+				$pwd = base64_encode(hash('sha256', $this->getLogin().base64_encode(hash('sha256', $this->getPassword(), false)).$this->getToken(), false));
+				break;
+		}
+		
+		return true;
+	}
+	
 	
 	// get the info
 	private function getInfo($api) {
@@ -155,7 +217,7 @@ class Router {
 		return $this->getInfo('api/net/current-plmn');
 	}
 	
-	public function getToken() {
+	public function getSessionToken() {
 		return $this->getInfo('api/webserver/SesTokInfo');
 	}
 	
