@@ -140,6 +140,8 @@ class Router {
 			case SHA256:
 				$pwd = base64_encode(hash('sha256', $this->getLogin().base64_encode(hash('sha256', $this->getPassword(), false)).$this->getToken(), false));
 				break;
+			default:
+				$pwd = base64_encode(hash('sha256', $this->getLogin().base64_encode(hash('sha256', $this->getPassword(), false)).$this->getToken(), false));
 		}
 		
 		$xml = '<?xml version="1.0" encoding="UTF-8"?><request>
@@ -171,7 +173,7 @@ class Router {
 				'body' => $postXml,
 			];
 			$request = new Request('POST', $this->getAddress().$api, $options);
-			$response = $this->client->send($request);
+			//$response = $this->client->send($request);
 		} catch (RequestException $e) {
 			log::add('huawei4g', 'error', 'Erreur de connexion au routeur');
 			log::add('huawei4g', 'debug', $e->getRequest());
