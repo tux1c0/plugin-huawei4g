@@ -148,6 +148,7 @@ class Router {
 		<Password>'.$pwd.'</Password>
 		</request>
 		';
+		log::add('huawei4g', 'debug', $api.', '.$xml);
 		
 		return $this->postXML('api/user/login', $xml);
 	}
@@ -161,7 +162,7 @@ class Router {
 	
 	// POST
 	private function postXML($api, $postXml) {
-		log::add('huawei4g', 'debug', $api.', '.$postXml->asXML());
+		
 		try {
 			$options = [
 				'headers' => [
