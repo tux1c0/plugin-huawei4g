@@ -10,6 +10,7 @@ class Router {
 	private $statut;
 	private $login;
 	private $password;
+	private $ip;
 	const LOGGED_IN = '0';
 	const LOGGED_OUT = '-1';
 	const REPEAT = '-2';
@@ -32,14 +33,18 @@ class Router {
 	private function getPassword() {
 		return $this->password;
 	}
+	
+	private function setIP($ip) {
+		$this->ip = $ip;
+	}
+	
+	private function getIP() {
+		return $this->ip;
+	}
 
     public function setAddress($address) {
-        $address = rtrim($address, '/');
-        if (strpos($address, 'http') !== 0) {
-            $address = 'http://'.$address;
-        }
-
-        $this->routerAddress = $address.'/';
+		$this->ip = $address;
+        $this->routerAddress = 'http://'.$address.'/';
     }
 	
 	public function getAddress() {
@@ -166,13 +171,13 @@ class Router {
 	
 	// get the info
 	private function getInfoPython($api) {
-		$command = escapeshellcmd("../../resources/scripts/poller.py ".$this->getAddress()." ".$this->getLogin()." ".$this->getPassword()." ".$api);
+		$command = dirname(__FILE__) . '/../../resources/scripts/poller.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$api;
 		try{
-			$json = shell_exec($command);
+			$json = shell_exec('python3 '.$command);
 		} catch (Exception $e){
 			log::add('huawei4g', 'debug', $e);
 		}
-
+		log::add('huawei4g', 'debug', $json);
 		return json_decode($json,TRUE);;		
 	}
 	
