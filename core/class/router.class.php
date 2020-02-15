@@ -288,6 +288,10 @@ class Router {
 	public function getCellInfo() {
 		return $this->getInfoPython('api/net/cell-info');
 	}
+	
+	public function getSignal() {
+		return $this->getInfoPython('api/device/signal');
+	}
 
 	/*
 	Undefined
