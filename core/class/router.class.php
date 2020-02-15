@@ -281,7 +281,7 @@ class Router {
 	Functions w/ login needed
 	*/
 	public function getCellInfo() {
-		//return $this->getInfoPython('api/net/cell-info');
+		return $this->getInfoPython('api/net/cell-info');
 	}
 
 	/*
