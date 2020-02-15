@@ -460,7 +460,7 @@ class huawei4g extends eqLogic {
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'rsrp');
 			$RouteurCmd = new huawei4gCmd();
-			$RouteurCmd->setName(__('Cell ID', __FILE__));
+			$RouteurCmd->setName(__('RSRP', __FILE__));
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('rsrp');
 			$RouteurCmd->setType('info');
