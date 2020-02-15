@@ -163,6 +163,18 @@ class Router {
 		return $this->xmlToArray($xml);		
 	}
 	
+	// get the info
+	private function getInfoPython($api) {
+		$command = escapeshellcmd("../../resources/scripts/poller.py ".$this->getAddress()." ".$this->getLogin()." ".$this->getPassword()." ".$api);
+		try{
+			$json = shell_exec($command);
+		} catch (Exception $e){
+			log::add('huawei4g', 'debug', $e);
+		}
+
+		return return json_decode($json,TRUE);;		
+	}
+	
 	// POST
 	private function postXML($api, $postXml) {
 		
@@ -268,7 +280,7 @@ class Router {
 	Functions w/ login needed
 	*/
 	public function getCellInfo() {
-		return $this->getInfo('api/net/cell-info');
+		return $this->getInfoPython('api/net/cell-info');
 	}
 
 	/*
