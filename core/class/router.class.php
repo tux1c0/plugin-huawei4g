@@ -178,7 +178,7 @@ class Router {
 			log::add('huawei4g', 'debug', $e);
 		}
 		log::add('huawei4g', 'debug', $json);
-		return json_decode($json,TRUE);;		
+		return json_decode($json, true);		
 	}
 	
 	// POST
