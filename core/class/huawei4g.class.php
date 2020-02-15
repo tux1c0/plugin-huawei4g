@@ -34,6 +34,12 @@ class huawei4g extends eqLogic {
 	public static function dependancy_info() {
 		$return = array();
 		$return['progress_file'] = jeedom::getTmpFolder('huawei4g') . '/dependance';
+		if (exec(system::getCmdSudo() . system::get('cmd_check') . '-E "php\-guzzlehttp" | wc -l') >= 1) {
+			$return['state'] = 'ok';
+		} else {
+			$return['state'] = 'nok';
+		}
+		
 		$return['state'] = 'ok';
 		return $return;
 	}
@@ -95,13 +101,15 @@ class huawei4g extends eqLogic {
 		$Router->setAddress($IPaddress);
 
 		try {
-			$Router->setHttpSession();
+			$Router->setHttpSession($login, $pwd);
 			$this->infos['status'] = $Router->getStatus();
 			
 			if($this->infos['status'] == "Up") {
 				$this->setInfo($Router->getTrafficStatistics());
 				$this->setInfo($Router->getPublicLandMobileNetwork());
 				$this->setInfo($Router->getDeviceBasicInfo());
+				$this->setInfo($Router->getCellInfo());
+				$this->setInfo($Router->getSignal());
 			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
@@ -128,7 +136,13 @@ class huawei4g extends eqLogic {
 		} else {
 			foreach($infoTab as $key => $value) {
 				log::add('huawei4g', 'debug', 'key:'.$key.' value:'.$value);
-				$this->infos[$key] = $value;
+				if(strpos($value, 'dB') === true) {
+					$this->infos[$key] = str_replace('dB', '', $value);
+				} elseif (strpos($value, 'dBm') === true) {
+					$this->infos[$key] = str_replace('dBm', '', $value);
+				} else {
+					$this->infos[$key] = $value;
+				}
 			}
 		}
 	}
@@ -383,6 +397,135 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setTemplate('dashboard','linux');
 			$RouteurCmd->setSubType('string');
 			$RouteurCmd->setOrder('15');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'Imei');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'Imei');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('IMEI', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('Imei');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('16');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'WanIPAddress');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'WanIPAddress');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('WAN IP', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('WanIPAddress');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('17');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'workmode');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'workmode');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Mode', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('workmode');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('18');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'cell_id');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'cell_id');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Cell ID', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('cell_id');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('19');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'rsrp');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'rsrp');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('RSRP', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('rsrp');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'dBm' );
+			$RouteurCmd->setOrder('20');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'rssi');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'rssi');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('RSSI', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('rssi');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'dBm' );
+			$RouteurCmd->setOrder('21');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'sinr');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'sinr');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('SINR', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('sinr');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'dB' );
+			$RouteurCmd->setOrder('22');
+			$RouteurCmd->save();
+		}
+		
+		/*$RouteurCmd = $this->getCmd(null, 'sinr');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'sinr');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('SINR', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('sinr');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('23');
+			$RouteurCmd->save();
+		}*/
+		
+		$RouteurCmd = $this->getCmd(null, 'Msisdn');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'Msisdn');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Numéro', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('Msisdn');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('24');
 			$RouteurCmd->save();
 		}
 		

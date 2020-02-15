@@ -10,6 +10,8 @@ echo "********************************************************"
 apt-get update
 echo 50 > ${PROGRESS_FILE}
 apt-get install -y php-guzzlehttp
+echo 75 > ${PROGRESS_FILE}
+pip3 install huawei-lte-api
 echo 100 > ${PROGRESS_FILE}
 rm ${PROGRESS_FILE}
 service apache2 restart
