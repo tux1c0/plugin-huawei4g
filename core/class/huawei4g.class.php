@@ -501,6 +501,34 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
+		/*$RouteurCmd = $this->getCmd(null, 'sinr');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'sinr');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('SINR', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('sinr');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('23');
+			$RouteurCmd->save();
+		}*/
+		
+		$RouteurCmd = $this->getCmd(null, 'Msisdn');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'Msisdn');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Numéro', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('Msisdn');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('24');
+			$RouteurCmd->save();
+		}
+		
 		/*
 		$RouteurCmd = $this->getCmd(null, 'reboot');
 		if (!is_object($RouteurCmd)) {
