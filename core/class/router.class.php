@@ -123,7 +123,8 @@ class Router {
 		
 		if($state['State'] == LOGGED_IN) return true;
 		
-		return $this->authentification($state['password_type']);
+		return false;
+		//return $this->authentification($state['password_type']);
 	}
 	
 	// authenticate ourself
@@ -172,11 +173,11 @@ class Router {
 			log::add('huawei4g', 'debug', $e);
 		}
 
-		return return json_decode($json,TRUE);;		
+		return json_decode($json,TRUE);;		
 	}
 	
 	// POST
-	private function postXML($api, $postXml) {
+	/*private function postXML($api, $postXml) {
 		
 		try {
 			$options = [
@@ -198,7 +199,7 @@ class Router {
 		$xml = $this->toXml($response->getBody());
 		log::add('huawei4g', 'debug', $api.', '.$xml->asXML());
         return true;
-	}
+	}*/
 	
 	// retrieve the XML response
 	/*
@@ -280,7 +281,7 @@ class Router {
 	Functions w/ login needed
 	*/
 	public function getCellInfo() {
-		return $this->getInfoPython('api/net/cell-info');
+		//return $this->getInfoPython('api/net/cell-info');
 	}
 
 	/*
