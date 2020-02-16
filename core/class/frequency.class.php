@@ -96,8 +96,8 @@ class Frequency {
 		$FUL_Low = $this->frqArray[$this->jsonKey]["FUL_Low"];
 		log::add('huawei4g', 'debug', 'FUL_Low: '.$FUL_Low);
 		
-		$this->setFdl($FDL_Low+0.1*($this->getNdl()-$NDL_Off));
-		$this->setFdl($FUL_Low+0.1*($this->getNul()-$NUL_Off));
+		$this->setFdl($FDL_Low+(0.1*($this->getNdl()-$NDL_Off)));
+		$this->setFul($FUL_Low+(0.1*($this->getNul()-$NUL_Off)));
 	}
 	
 	private function getJSON() {
