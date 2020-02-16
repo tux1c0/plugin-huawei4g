@@ -89,8 +89,8 @@ class Frequency {
 		$NUL_Off = $this->frqArray[$this->jsonKey]["NDL_Min"];
 		$FUL_Low = $this->frqArray[$this->jsonKey]["FUL_Low"];
 		
-		$this->setFdl($FDL_Low+0.1*($this->getNdl()-$NDL_Min);
-		$this->setFdl($FUL_Low+0.1*($this->getNul()-$NUL_Min);
+		$this->setFdl($FDL_Low+0.1*($this->getNdl()-$NDL_Min));
+		$this->setFdl($FUL_Low+0.1*($this->getNul()-$NUL_Min));
 	}
 	
 	private function getJSON() {
