@@ -25,5 +25,5 @@ if len(sys.argv) == 5:
 else:
     print("No parameter has been included")
 
-
+client.user.logout()
 
