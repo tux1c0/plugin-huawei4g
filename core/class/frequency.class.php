@@ -17,11 +17,11 @@ class Frequency {
 		return $this->earfcn;
 	}
 	
-	private function setBand($b) {
+	public function setBand($b) {
 		$this->band = $b;
 	}
 	
-	private function getBand() {
+	public function getBand() {
 		return $this->band;
 	}
 
