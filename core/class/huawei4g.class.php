@@ -19,6 +19,7 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 require_once dirname(__FILE__) . '/router.class.php';
+require_once dirname(__FILE__) . '/frequency.class.php';
 
 class huawei4g extends eqLogic {
     /*     * *************************Attributs****************************** */
@@ -93,13 +94,15 @@ class huawei4g extends eqLogic {
 		$login = $this->getConfiguration('username');
 		$pwd = $this->getConfiguration('password');
 		$RtrName = $this->getName();
+		$Frequency = new Frequency();
 		
 		$this->infos = array();
 		
 		// setting the router session
 		$Router = new Router();
 		$Router->setAddress($IPaddress);
-
+		
+		// calling API
 		try {
 			$Router->setHttpSession($login, $pwd);
 			$this->infos['status'] = $Router->getStatus();
@@ -115,6 +118,9 @@ class huawei4g extends eqLogic {
 			log::add('huawei4g', 'error', $e);
 		}
 		
+		// calculating frequencies
+		$Frequency->setBand($this->infos['band']);
+		$Frequency->setEarfcn($this->infos['earfcn']);
 		
 		$this->updateInfo();
 	}
