@@ -122,9 +122,9 @@ class huawei4g extends eqLogic {
 		$Frequency->setBand($this->infos['band']);
 		$Frequency->setEarfcn($this->infos['earfcn']);
 		$Frequency->calculator();
-		$this->info['frq'] = $Frequency->getName();
-		$this->info['fdl'] = $Frequency->getFdl();
-		$this->info['ful'] = $Frequency->getFul();
+		$this->infos['frq'] = $Frequency->getName();
+		$this->infos['fdl'] = $Frequency->getFdl();
+		$this->infos['ful'] = $Frequency->getFul();
 		
 		$this->updateInfo();
 	}

@@ -10,6 +10,7 @@ class Frequency {
 	private $earfcn;
 	private $frqArray;
 	private $jsonFile = 'frequency.json';
+	private $jsonKey;
 
 	public function setEarfcn($e) {
 		$this->earfcn = $e;
@@ -67,10 +68,11 @@ class Frequency {
 	}
 
     private function setName() {
-		$val = $this->searchArray('band', $this->getBand());
-		log::add('huawei4g', 'debug', 'val Name: '.$val);
+		$this->jsonKey = $this->searchArray('band', $this->getBand());
+		log::add('huawei4g', 'debug', 'val Name: '.$this->jsonKey);
 		
-		$this->name = $this->frqArray[$val]["bandType"].' '.$this->frqArray[$val]["name"];
+		$this->name = $this->frqArray[$this->jsonKey]["bandType"].' '.$this->frqArray[$this->jsonKey]["name"];
+		log::add('huawei4g', 'debug', 'Freq Name: '.$this->name);
     }
 	
 	public function getName() {
@@ -82,8 +84,13 @@ class Frequency {
     }
 
 	public function calculator() {
+		$NDL_Off = $this->frqArray[$this->jsonKey]["NDL_Min"];
+		$FDL_Low = $this->frqArray[$this->jsonKey]["FDL_Low"];
+		$NUL_Off = $this->frqArray[$this->jsonKey]["NDL_Min"];
+		$FUL_Low = $this->frqArray[$this->jsonKey]["FUL_Low"];
 		
-		
+		$this->setFdl($FDL_Low+0.1*($this->getNdl()-$NDL_Min);
+		$this->setFdl($FUL_Low+0.1*($this->getNul()-$NUL_Min);
 	}
 	
 	private function getJSON() {
