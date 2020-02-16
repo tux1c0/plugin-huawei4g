@@ -69,8 +69,8 @@ class Frequency {
     private function setName() {
 		$val = $this->searchArray('band', $this->getBand());
 		log::add('huawei4g', 'debug', 'val Name: '.$val);
-		print_r($this->frqArray[$val]);
-		$this->name = $this->frqArray[$val]['bandType'].' '.$this->frqArray[$val]['name'];
+		
+		$this->name = $this->frqArray[$val]["bandType"].' '.$this->frqArray[$val]["name"];
     }
 	
 	public function getName() {
