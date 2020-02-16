@@ -5,8 +5,8 @@ class Frequency {
 	private $band;
 	private $fdl = 0;
 	private $ful = 0;
-	private $ndl;
-	private $nul;
+	private $ndl = 0;
+	private $nul = 0;
 	private $earfcn;
 	private $frqArray;
 	private $jsonFile = 'frequency.json';
@@ -69,7 +69,7 @@ class Frequency {
     private function setName() {
 		$val = $this->searchArray('band', $this->getBand());
 		log::add('huawei4g', 'debug', 'val Name: '.$val);
-		$this->name = 'a';
+		$this->name = $this->frqArray[$val]['bandType'].' '.$this->frqArray[$val]['name'];
     }
 	
 	public function getName() {
@@ -105,6 +105,7 @@ class Frequency {
 		$foundKey = array_search($value, $list);
 		log::add('huawei4g', 'debug', $foundKey);
 		
+		return $foundKey;
 	}
 
 
