@@ -69,6 +69,7 @@ class Frequency {
     private function setName() {
 		$val = $this->searchArray('band', $this->getBand());
 		log::add('huawei4g', 'debug', 'val Name: '.$val);
+		print_r($this->frqArray[$val]);
 		$this->name = $this->frqArray[$val]['bandType'].' '.$this->frqArray[$val]['name'];
     }
 	
@@ -92,7 +93,7 @@ class Frequency {
 
 			//Decode JSON
 			$this->frqArray = json_decode($json,true);
-			log::add('huawei4g', 'debug', $this->frqArray);
+			log::add('huawei4g', 'debug', 'tableau from JSON: '.$this->frqArray);
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e->getMessage());
 		}
@@ -101,9 +102,9 @@ class Frequency {
 	
 	private function searchArray($key, $value) {
 		$list = array_column($this->frqArray, $key);
-		log::add('huawei4g', 'debug', $list);
+		log::add('huawei4g', 'debug', 'liste: '.$list);
 		$foundKey = array_search($value, $list);
-		log::add('huawei4g', 'debug', $foundKey);
+		log::add('huawei4g', 'debug', 'key: '.$foundKey);
 		
 		return $foundKey;
 	}
