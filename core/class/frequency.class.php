@@ -16,6 +16,8 @@ class Frequency {
 		$split = explode(" ", $e);
 		$this->setNdl(explode(':', $split[0])[1]);
 		$this->setNul(explode(':', $split[1])[1]);
+		log::add('huawei4g', 'debug', 'freq ndl: '.$this->getNdl());
+		log::add('huawei4g', 'debug', 'freq nul: '.$this->getNul());
 	}
 	
 	public function getEarfcn() {
@@ -56,6 +58,7 @@ class Frequency {
 	
 	public function setBand($b) {
 		$this->band = $b;
+		log::add('huawei4g', 'debug', 'freq band: '.$b);
 	}
 	
 	public function getBand() {
