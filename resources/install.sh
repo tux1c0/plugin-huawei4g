@@ -10,7 +10,9 @@ echo "********************************************************"
 apt-get update
 echo 50 > ${PROGRESS_FILE}
 apt-get install -y php-guzzlehttp
-echo 75 > ${PROGRESS_FILE}
+echo 65 > ${PROGRESS_FILE}
+apt-get install -y python3-pip
+echo 80 > ${PROGRESS_FILE}
 pip3 install huawei-lte-api
 echo 100 > ${PROGRESS_FILE}
 rm ${PROGRESS_FILE}
