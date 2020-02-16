@@ -1,10 +1,10 @@
 <?php
 
 class Frequency {
-    private $name;
+    private $name = '';
 	private $band;
-	private $fdl;
-	private $ful;
+	private $fdl = 0;
+	private $ful = 0;
 	private $ndl;
 	private $nul;
 	private $earfcn;
@@ -59,6 +59,7 @@ class Frequency {
 	public function setBand($b) {
 		$this->band = $b;
 		log::add('huawei4g', 'debug', 'freq band: '.$b);
+		$this->setName();
 	}
 	
 	public function getBand() {
@@ -66,6 +67,8 @@ class Frequency {
 	}
 
     private function setName() {
+		$val = $this->searchArray('band', $this->getBand());
+		log::add('huawei4g', 'debug', 'val Name: '.$val);
 		$this->name = 'a';
     }
 	
@@ -96,6 +99,13 @@ class Frequency {
 		
 	}
 	
+	private function searchArray($key, $value) {
+		$list = array_column($this->frqArray, $key);
+		log::add('huawei4g', 'debug', $list);
+		$foundKey = array_search($value, $list);
+		log::add('huawei4g', 'debug', $foundKey);
+		
+	}
 
 
 }

@@ -121,6 +121,10 @@ class huawei4g extends eqLogic {
 		// calculating frequencies
 		$Frequency->setBand($this->infos['band']);
 		$Frequency->setEarfcn($this->infos['earfcn']);
+		$Frequency->calculator();
+		$this->info['frq'] = $Frequency->getName();
+		$this->info['fdl'] = $Frequency->getFdl();
+		$this->info['ful'] = $Frequency->getFul();
 		
 		$this->updateInfo();
 	}
@@ -507,20 +511,6 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
-		/*$RouteurCmd = $this->getCmd(null, 'sinr');
-		if (!is_object($RouteurCmd)) {
-			log::add('huawei4g', 'debug', 'sinr');
-			$RouteurCmd = new huawei4gCmd();
-			$RouteurCmd->setName(__('SINR', __FILE__));
-			$RouteurCmd->setEqLogic_id($this->getId());
-			$RouteurCmd->setLogicalId('sinr');
-			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','antenna');
-			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('23');
-			$RouteurCmd->save();
-		}*/
-		
 		$RouteurCmd = $this->getCmd(null, 'Msisdn');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'Msisdn');
@@ -531,7 +521,49 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','antenna');
 			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('23');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'frq');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'frq');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Fréquence', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('frq');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('string');
 			$RouteurCmd->setOrder('24');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'fdl');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'fdl');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('FDL', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('fdl');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setOrder('25');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'ful');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'ful');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('FUL', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('ful');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','antenna');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setOrder('26');
 			$RouteurCmd->save();
 		}
 		
