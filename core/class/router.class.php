@@ -1,5 +1,6 @@
 <?php
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 
 class Router {
     private $routerAddress = 'http://192.168.1.1';
@@ -7,15 +8,43 @@ class Router {
 	private $token;
 	private $session;
 	private $statut;
+	private $login;
+	private $password;
+	private $ip;
+	const LOGGED_IN = '0';
+	const LOGGED_OUT = '-1';
+	const REPEAT = '-2';
+	const BASE_64 = '0';
+	const BASE_64_AFTER_PASSWORD_CHANGE = '3';
+	const SHA256 = '4';
 
+	private function setLogin($l) {
+		$this->login = $l;
+	}
+	
+	private function getLogin() {
+		return $this->login;
+	}
+	
+	private function setPassword($p) {
+		$this->password = $p;
+	}
+	
+	private function getPassword() {
+		return $this->password;
+	}
+	
+	private function setIP($ip) {
+		$this->ip = $ip;
+	}
+	
+	private function getIP() {
+		return $this->ip;
+	}
 
     public function setAddress($address) {
-        $address = rtrim($address, '/');
-        if (strpos($address, 'http') !== 0) {
-            $address = 'http://'.$address;
-        }
-
-        $this->routerAddress = $address.'/';
+		$this->ip = $address;
+        $this->routerAddress = 'http://'.$address.'/';
     }
 	
 	public function getAddress() {
@@ -50,6 +79,7 @@ class Router {
 		}
     }
 	
+	// get and set the token
 	private function setToken($infoTab) {
 		// workaround PHP < 7
 		if (!function_exists('array_key_first')) {
@@ -73,19 +103,108 @@ class Router {
 		}
 	}
 	
+	private function getToken() {
+		return $this->token;
+	}
+	
 	/*
 	Functions for HTTP sessions
 	*/
-	public function setHttpSession() {
+	public function setHttpSession($login, $pwd) {
+		$this->setLogin($login);
+		$this->setPassword($pwd);
 		$this->client = new GuzzleHttp\Client(['base_uri' => $this->getAddress(), 'timeout' => 5.0]);
-		$this->setToken($this->getToken());
+		$this->setToken($this->getSessionToken());
+		return $this->login();
 	}
+	
+	private function getStateLogin() {
+		return $this->getInfo('api/user/state-login');
+	}
+	
+	// check if we're logged in
+	private function login() {
+		$state = $this->getStateLogin();
+		
+		if($state['State'] == LOGGED_IN) return true;
+		
+		return false;
+		//return $this->authentification($state['password_type']);
+	}
+	
+	// authenticate ourself
+	private function authentification($pwdType) {
+		$pwd = '';
+		
+		switch($pwdType) {
+			case BASE_64:
+				$pwd = base64_encode('sha256', $this->getPassword());
+				break;
+			case BASE_64_AFTER_PASSWORD_CHANGE:
+				$pwd = base64_encode('sha256', $this->getPassword());
+				break;
+			case SHA256:
+				$pwd = base64_encode(hash('sha256', $this->getLogin().base64_encode(hash('sha256', $this->getPassword(), false)).$this->getToken(), false));
+				break;
+			default:
+				$pwd = base64_encode(hash('sha256', $this->getLogin().base64_encode(hash('sha256', $this->getPassword(), false)).$this->getToken(), false));
+		}
+		
+		$xml = '<?xml version="1.0" encoding="UTF-8"?><request>
+		<Username>'.$this->getLogin().'</Username>
+		<password_type>'.$pwdType.'</password_type>
+		<Password>'.$pwd.'</Password>
+		</request>
+		';
+		log::add('huawei4g', 'debug', $api.', '.$xml);
+		
+		//return $this->postXML('api/user/login', $xml);
+		return true;
+	}
+	
 	
 	// get the info
 	private function getInfo($api) {
 		$xml = $this->getXML($api);
 		return $this->xmlToArray($xml);		
 	}
+	
+	// get the info
+	private function getInfoPython($api) {
+		$command = dirname(__FILE__) . '/../../resources/scripts/poller.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$api;
+		try{
+			$json = shell_exec('python3 '.$command);
+		} catch (Exception $e){
+			log::add('huawei4g', 'debug', $e);
+		}
+		log::add('huawei4g', 'debug', $json);
+		return json_decode($json, true);		
+	}
+	
+	// POST
+	/*private function postXML($api, $postXml) {
+		
+		try {
+			$options = [
+				'headers' => [
+					'Content-Type' => 'application/xml; charset=UTF8',
+				],
+				'body' => $postXml,
+			];
+			//$request = new Request('POST', $this->getAddress().$api, $options);
+			//$response = $this->client->send($request);
+		} catch (RequestException $e) {
+			log::add('huawei4g', 'error', 'Erreur de connexion au routeur');
+			log::add('huawei4g', 'debug', $e->getRequest());
+			if ($e->hasResponse()) {
+				log::add('huawei4g', 'error', $e->getResponse());
+			}
+		}
+
+		$xml = $this->toXml($response->getBody());
+		log::add('huawei4g', 'debug', $api.', '.$xml->asXML());
+        return true;
+	}*/
 	
 	// retrieve the XML response
 	/*
@@ -155,7 +274,7 @@ class Router {
 		return $this->getInfo('api/net/current-plmn');
 	}
 	
-	public function getToken() {
+	public function getSessionToken() {
 		return $this->getInfo('api/webserver/SesTokInfo');
 	}
 	
@@ -167,7 +286,11 @@ class Router {
 	Functions w/ login needed
 	*/
 	public function getCellInfo() {
-		return $this->getInfo('api/net/cell-info');
+		return $this->getInfoPython('api/net/cell-info');
+	}
+	
+	public function getSignal() {
+		return $this->getInfoPython('api/device/signal');
 	}
 
 	/*
