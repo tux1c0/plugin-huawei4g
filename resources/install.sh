@@ -15,6 +15,8 @@ apt-get install -y python3-pip
 echo 60 > ${PROGRESS_FILE}
 apt-get install -y python3-setuptools
 echo 80 > ${PROGRESS_FILE}
+pip3 install typing
+echo 90 > ${PROGRESS_FILE}
 pip3 install huawei-lte-api
 echo 100 > ${PROGRESS_FILE}
 rm ${PROGRESS_FILE}
