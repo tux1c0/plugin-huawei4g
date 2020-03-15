@@ -292,6 +292,14 @@ class Router {
 	public function getSignal() {
 		return $this->getInfoPython('api/device/signal');
 	}
+	
+	public function getSMS() {
+		return $this->getInfoPython('api/sms/sms-count');
+	}
+	
+	public function setReboot() {
+		return $this->getInfoPython('api/device/control');
+	}
 
 	/*
 	Undefined

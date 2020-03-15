@@ -8,7 +8,9 @@ import sys
 def switch_func(apiCall):
     return {
         'api/net/cell-info': client.device.information(),
-		'api/device/signal': client.device.signal()
+		'api/device/signal': client.device.signal(),
+		'api/sms/sms-count': client.sms.get_sms_list(),
+		'api/device/control': client.device.reboot()
     }.get(apiCall)
 
 
