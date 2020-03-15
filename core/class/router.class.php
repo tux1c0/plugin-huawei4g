@@ -181,6 +181,18 @@ class Router {
 		return json_decode($json, true);		
 	}
 	
+	// get the info
+	private function setSMSPython($tel, $msg) {
+		$command = dirname(__FILE__) . '/../../resources/scripts/sender.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$msg.' '.$tel;
+		try{
+			$json = shell_exec('python3 '.$command);
+		} catch (Exception $e){
+			log::add('huawei4g', 'debug', $e);
+		}
+		log::add('huawei4g', 'debug', $json);
+		return json_decode($json, true);		
+	}
+	
 	// POST
 	/*private function postXML($api, $postXml) {
 		
@@ -299,6 +311,10 @@ class Router {
 	
 	public function setReboot() {
 		return $this->getInfoPython('api/device/control');
+	}
+	
+	public function sendSMS($phone, $message) {
+		return $this->setSMSPython($phone, $message);
 	}
 
 	/*

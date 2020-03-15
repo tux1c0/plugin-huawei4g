@@ -57,6 +57,7 @@ class huawei4g extends eqLogic {
 		}
 		foreach ($eqLogics as $rtr) {
 			try {
+				$rtr->postSave();
 				$rtr->getRouteurInfo();
 			} catch (Exception $e) {
 				log::add('huawei4g', 'error', $e->getMessage());
@@ -165,6 +166,11 @@ class huawei4g extends eqLogic {
 	public function reboot() {
 		$Router->setReboot();
 		log::add('huawei4g', 'debug', 'Rebooting');
+	}
+	
+	public function sendSMS() {
+		$Router->sendSMS('0123456789', 'test');
+		log::add('huawei4g', 'debug', 'Sending');
 	}
 	
 	// manage API errors
@@ -605,7 +611,6 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
-		
 		$RouteurCmd = $this->getCmd(null, 'reboot');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'reboot');
@@ -615,6 +620,20 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setLogicalId('reboot');
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setSubType('other');
+			//$RouteurCmd->setOrder('30');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'sendsms');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'sendsms');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('sendsms', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('sendsms');
+			$RouteurCmd->setType('action');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sendsms');
+			$RouteurCmd->setSubType('message');
 			//$RouteurCmd->setOrder('30');
 			$RouteurCmd->save();
 		}
@@ -646,6 +665,10 @@ class huawei4gCmd extends cmd {
 			case "reboot":
 				$eqLogic->reboot();
 				log::add('huawei4g','debug','reboot ' . $this->getHumanName());
+				break;
+			case "sendsms":
+				$eqLogic->sendSMS();
+				log::add('huawei4g','debug','sendsms ' . $this->getHumanName());
 				break;
 
 			case "refresh":
