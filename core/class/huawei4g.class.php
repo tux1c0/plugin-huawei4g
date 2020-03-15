@@ -164,12 +164,42 @@ class huawei4g extends eqLogic {
 	}
 	
 	public function reboot() {
-		$Router->setReboot();
+		// getting configuration
+		$IPaddress = $this->getConfiguration('ip');
+		$login = $this->getConfiguration('username');
+		$pwd = $this->getConfiguration('password');
+		
+		// setting the router session
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+		try {
+			$Router->setHttpSession($login, $pwd);
+			$Router->setReboot();
+			}
+		} catch (Exception $e) {
+			log::add('huawei4g', 'error', $e);
+		}
+		
 		log::add('huawei4g', 'debug', 'Rebooting');
 	}
 	
 	public function sendSMS() {
-		$Router->sendSMS('0123456789', 'test');
+		// getting configuration
+		$IPaddress = $this->getConfiguration('ip');
+		$login = $this->getConfiguration('username');
+		$pwd = $this->getConfiguration('password');
+		
+		// setting the router session
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+		try {
+			$Router->setHttpSession($login, $pwd);
+			$Router->sendSMS('0123456789', 'test');
+			}
+		} catch (Exception $e) {
+			log::add('huawei4g', 'error', $e);
+		}
+		
 		log::add('huawei4g', 'debug', 'Sending');
 	}
 	
@@ -619,6 +649,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('reboot');
 			$RouteurCmd->setType('action');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-btn');
 			$RouteurCmd->setSubType('other');
 			//$RouteurCmd->setOrder('30');
 			$RouteurCmd->save();
@@ -628,13 +659,13 @@ class huawei4g extends eqLogic {
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'sendsms');
 			$RouteurCmd = new huawei4gCmd();
-			$RouteurCmd->setName(__('sendsms', __FILE__));
+			$RouteurCmd->setName(__('Envoyer SMS', __FILE__));
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('sendsms');
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sendsms');
 			$RouteurCmd->setSubType('message');
-			//$RouteurCmd->setOrder('30');
+			$RouteurCmd->setOrder('29');
 			$RouteurCmd->save();
 		}
 
