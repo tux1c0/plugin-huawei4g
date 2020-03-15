@@ -16,7 +16,7 @@ if len(sys.argv) == 6:
 	connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
 	client = Client(connection)
 
-	print(json.dumps(client.send_sms(phone, message)))
+	print(json.dumps(client.Sms.send_sms(phone, message)))
 else:
     print("No parameter has been included")
 
