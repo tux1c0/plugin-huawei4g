@@ -175,7 +175,6 @@ class huawei4g extends eqLogic {
 		try {
 			$Router->setHttpSession($login, $pwd);
 			$Router->setReboot();
-			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
 		}
@@ -195,7 +194,6 @@ class huawei4g extends eqLogic {
 		try {
 			$Router->setHttpSession($login, $pwd);
 			$Router->sendSMS('0123456789', 'test');
-			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
 		}
