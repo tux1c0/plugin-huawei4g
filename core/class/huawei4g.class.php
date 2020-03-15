@@ -581,11 +581,11 @@ class huawei4g extends eqLogic {
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'Count');
 			$RouteurCmd = new huawei4gCmd();
-			$RouteurCmd->setName(__('SMS Nb', __FILE__));
+			$RouteurCmd->setName(__('SMS Reçus', __FILE__));
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('Count');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setOrder('27');
 			$RouteurCmd->save();
@@ -599,7 +599,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('Messages');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
 			$RouteurCmd->setSubType('string');
 			$RouteurCmd->setOrder('28');
 			$RouteurCmd->save();
