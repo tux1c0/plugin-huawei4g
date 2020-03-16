@@ -41,7 +41,6 @@ class huawei4g extends eqLogic {
 			$return['state'] = 'nok';
 		}
 		
-		$return['state'] = 'ok';
 		return $return;
 	}
 	public static function dependancy_install() {
@@ -105,7 +104,7 @@ class huawei4g extends eqLogic {
 		
 		// calling API
 		try {
-			$Router->setHttpSession($login, $pwd);
+			$Router->setSession($login, $pwd);
 			$this->infos['status'] = $Router->getStatus();
 			
 			if($this->infos['status'] == "Up") {
@@ -173,7 +172,7 @@ class huawei4g extends eqLogic {
 		$Router = new Router();
 		$Router->setAddress($IPaddress);
 		try {
-			$Router->setHttpSession($login, $pwd);
+			$Router->setSession($login, $pwd);
 			$Router->setReboot();
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
@@ -192,7 +191,7 @@ class huawei4g extends eqLogic {
 		$Router = new Router();
 		$Router->setAddress($IPaddress);
 		try {
-			$Router->setHttpSession($login, $pwd);
+			$Router->setSession($login, $pwd);
 			$Router->sendSMS('0123456789', 'test');
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);

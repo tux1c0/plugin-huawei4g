@@ -7,6 +7,10 @@ import sys
 
 def switch_func(apiCall):
     return {
+		'api/monitoring/traffic-statistics': client.monitoring.traffic_statistics(),
+		'api/user/state-login': client.user.state_login(),
+		'api/net/current-plmn': client.net.current_plmn(),
+		'api/device/basic_information': client.device.basic_information(),
         'api/net/cell-info': client.device.information(),
 		'api/device/signal': client.device.signal(),
 		'api/sms/sms-count': client.sms.get_sms_list(),
