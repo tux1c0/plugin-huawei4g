@@ -10,8 +10,8 @@ if len(sys.argv) == 6:
 	ip = sys.argv[1]
 	login = sys.argv[2]
 	pwd = sys.argv[3]
-	message = sys.argv[4]
-	phone = sys.argv[5]
+	phone = sys.argv[4]
+	message = sys.argv[5]
 	
 	connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
 	client = Client(connection)

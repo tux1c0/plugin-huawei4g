@@ -24,7 +24,7 @@ if len(sys.argv) == 4:
 	
 	client.user.logout()
 	
-	print(json.dumps(list))
+	print(list)
 else:
     print("No parameter has been included")
 
