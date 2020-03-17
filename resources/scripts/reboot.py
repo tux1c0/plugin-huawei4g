@@ -14,17 +14,8 @@ if len(sys.argv) == 4:
 	connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
 	client = Client(connection)
 
-	list = [json.dumps(client.user.state_login())]
-	list.append(json.dumps(client.monitoring.traffic_statistics()))
-	list.append(json.dumps(client.net.current_plmn()))
-	list.append(json.dumps(client.device.basic_information()))
-	list.append(json.dumps(client.device.information()))
-	list.append(json.dumps(client.device.signal()))
-	list.append(json.dumps(client.sms.get_sms_list()))
-	
+	print(json.dumps(client.device.reboot()))
 	client.user.logout()
-	
-	print(json.dumps(list))
 else:
     print("No parameter has been included")
 

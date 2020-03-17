@@ -26,7 +26,8 @@ Un login et mot de passe doit être défini sur le routeur.
 
 Le plugin est compatible avec le modèle suivant
 -	Huawei B715s-23c
--	B528s-23a
+-	Huawei B528s-23a
+-	Huawei B612s-25d
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22

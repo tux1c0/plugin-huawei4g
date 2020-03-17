@@ -17,8 +17,6 @@ if len(sys.argv) == 6:
 	client = Client(connection)
 
 	print(json.dumps(client.sms.send_sms(phone, message)))
+	client.user.logout()
 else:
     print("No parameter has been included")
-
-client.user.logout()
-

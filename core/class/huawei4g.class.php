@@ -181,7 +181,7 @@ class huawei4g extends eqLogic {
 		log::add('huawei4g', 'debug', 'Rebooting');
 	}
 	
-	public function sendSMS() {
+	public function sendSMS($arr) {
 		// getting configuration
 		$IPaddress = $this->getConfiguration('ip');
 		$login = $this->getConfiguration('username');
@@ -192,12 +192,14 @@ class huawei4g extends eqLogic {
 		$Router->setAddress($IPaddress);
 		try {
 			$Router->setSession($login, $pwd);
-			$Router->sendSMS('0123456789', 'test');
+			log::add('huawei4g', 'debug', 'numerotel: '.$arr['numerotel']);
+			log::add('huawei4g', 'debug', 'message: '.$arr['message']);
+			$res = $Router->sendSMS($arr['numerotel'], $arr['message']);
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
 		}
 		
-		log::add('huawei4g', 'debug', 'Sending');
+		log::add('huawei4g', 'debug', 'Sending: '.$res);
 	}
 	
 	// manage API errors
@@ -695,7 +697,7 @@ class huawei4gCmd extends cmd {
 				log::add('huawei4g','debug','reboot ' . $this->getHumanName());
 				break;
 			case "sendsms":
-				$eqLogic->sendSMS();
+				$eqLogic->sendSMS($_options);
 				log::add('huawei4g','debug','sendsms ' . $this->getHumanName());
 				break;
 
