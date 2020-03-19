@@ -1,12 +1,10 @@
 <div class="cmd cmd-widget #history#" style="float:left; clear:both;" data-type="info" data-subtype="string" data-template="default" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
 	<div class="content-xs">
 		&nbsp;<span class="fas fa-sms cmdName #hide_name#"> #name_display# </span>
+		&nbsp;<i id="Prev" class="fas fa-chevron-left" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;"></i>
+		&nbsp;<i id="Next" class="fas fa-chevron-right" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;"></i>
 	</div>
-	<div id="Arrows">
-		<i id="Prev" class="fas fa-chevron-left" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;" aria-hidden="true"></i>
-		<i id="Next" class="fas fa-chevron-right" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;" aria-hidden="true"></i>
-	</div>
-	<section id="Wrapper" style="display: flex; height: 50px;">
+	<section id="Wrapper" style="display: flex; height: 65px; width:200px;">
 		<div id="Slideshow" style="display: flex; flex-direction: column; overflow: hidden; position: relative;">
 			<div id="Slider" style="height: 50px; overflow: hidden;">
 			</div>	
