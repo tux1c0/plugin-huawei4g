@@ -196,7 +196,7 @@ class huawei4g extends eqLogic {
 			$Router->setSession($login, $pwd);
 			log::add('huawei4g', 'debug', 'numerotel: '.$arr['numerotel']);
 			log::add('huawei4g', 'debug', 'message: '.$arr['message']);
-			$res = $Router->sendSMS($arr['numerotel'], "'".$arr['message']."'");
+			$res = $Router->sendSMS($arr['numerotel'], $arr['message']);
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
 		}
