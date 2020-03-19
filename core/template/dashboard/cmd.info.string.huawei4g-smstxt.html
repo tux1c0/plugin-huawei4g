@@ -1,0 +1,54 @@
+<div class="cmd cmd-widget #history#" style="float:left; clear:both;" data-type="info" data-subtype="string" data-template="default" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+	<div class="content-xs">
+		&nbsp;<span class="fas fa-sms cmdName #hide_name#"> #name_display# </span>
+	</div>
+	<div id="Arrows">
+		<i id="Prev" class="fas fa-chevron-left" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;" aria-hidden="true"></i>
+		<i id="Next" class="fas fa-chevron-right" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;" aria-hidden="true"></i>
+	</div>
+	<section id="Wrapper" style="align-items: center; display: flex; height: 50px; justify-content: center;">
+		<div id="Slideshow" style="align-items: center; display: flex; flex-direction: column; justify-content: center; overflow: hidden; position: relative;">
+			<div id="Slider" style="height: 50px; overflow: hidden;">
+			</div>	
+		</div>
+	</section>
+	<script>
+	$("#Next").click(function(){
+		$("#Slider").append($("#Slider textarea:first-of-type"));
+	});
+
+	$("#Prev").click(function(){
+		$("#Slider").prepend($("#Slider textarea:last-of-type"));
+	});
+	
+		jeedom.cmd.update['#id#'] = function(_options) {
+			var arrayJSON = JSON.parse(_options.display_value);
+			for (var i = 0; i < arrayJSON.length; i++) {
+				var SMS = arrayJSON[i];
+				var StatutSMS;
+				if(SMS.Smstat == '0') {
+					StatutSMS = "Reçu";
+				}else{
+					StatutSMS = "Envoyé";
+				}
+				var txtArea = $('<textarea class="input-sm message">Statut : '+StatutSMS+'&#10;Tel : '+SMS.Phone+'&#10;Date : '+SMS.Date+'&#10;'+SMS.Content+'</textarea>');
+				$("#Slider").append(txtArea);
+			}
+			var cmd = $('.cmd[data-cmd_id=#id#]')
+			cmd.attr('title','Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+			if(_options.alertLevel){
+				if(_options.alertLevel == 'warning'){
+						cmd.addClass('label label-warning')
+						cmd.attr('data-alertlevel','warning');
+				}else if(_options.alertLevel == 'danger'){
+						cmd.addClass('label label-danger')
+						cmd.attr('data-alertlevel','danger');
+				}else{
+						cmd.removeClass('label label-warning label-danger')
+						cmd.attr('data-alertlevel','none');
+				}
+			}
+		}
+		jeedom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#',alertLevel:'#alertLevel#'})
+    </script>
+</div>

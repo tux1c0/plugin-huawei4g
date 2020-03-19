@@ -6,25 +6,17 @@ import json
 import sys
 
 
-if len(sys.argv) == 4:
+if len(sys.argv) == 6:
 	ip = sys.argv[1]
 	login = sys.argv[2]
 	pwd = sys.argv[3]
+	phone = sys.argv[4]
+	message = sys.argv[5]
 	
 	connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
 	client = Client(connection)
 
-	list = [json.dumps(client.user.state_login())]
-	list.append(json.dumps(client.monitoring.traffic_statistics()))
-	list.append(json.dumps(client.net.current_plmn()))
-	list.append(json.dumps(client.device.basic_information()))
-	list.append(json.dumps(client.device.information()))
-	list.append(json.dumps(client.device.signal()))
-	list.append(json.dumps(client.sms.get_sms_list()))
-	
+	print(json.dumps(client.sms.send_sms([phone], message)))
 	client.user.logout()
-	
-	print(list)
 else:
     print("No parameter has been included")
-

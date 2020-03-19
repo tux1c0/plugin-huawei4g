@@ -9,7 +9,6 @@ echo "*             Installation des dépendances             *"
 echo "********************************************************"
 apt-get update
 echo 20 > ${PROGRESS_FILE}
-apt-get install -y php-guzzlehttp
 echo 40 > ${PROGRESS_FILE}
 apt-get install -y python3-pip
 echo 60 > ${PROGRESS_FILE}
