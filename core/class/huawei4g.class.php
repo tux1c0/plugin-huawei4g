@@ -618,7 +618,7 @@ class huawei4g extends eqLogic {
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'Count');
 			$RouteurCmd = new huawei4gCmd();
-			$RouteurCmd->setName(__('SMS Reçus', __FILE__));
+			$RouteurCmd->setName(__('SMS Stockés', __FILE__));
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('Count');
 			$RouteurCmd->setType('info');

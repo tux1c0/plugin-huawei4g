@@ -1,7 +1,6 @@
 <div class="cmd cmd-widget #history#" style="float:left; clear:both;" data-type="info" data-subtype="string" data-template="default" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
 	<div class="content-xs">
 		&nbsp;<span class="fas fa-sms cmdName #hide_name#"> #name_display# </span>
-		<strong class="state"></strong>
 	</div>
 	<div id="Arrows">
 		<i id="Prev" class="fas fa-chevron-left" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;" aria-hidden="true"></i>
@@ -10,11 +9,7 @@
 	<section id="Wrapper" style="align-items: center; display: flex; height: 50px; justify-content: center;">
 		<div id="Slideshow" style="align-items: center; display: flex; flex-direction: column; justify-content: center; overflow: hidden; position: relative;">
 			<div id="Slider" style="height: 50px; overflow: hidden;">
-				<textarea class="form-control input-sm message" rows="2" placeholder="txt1"></textarea>
-				<textarea class="form-control input-sm message" rows="2" placeholder="txt2"></textarea>
-
-			</div>
-			
+			</div>	
 		</div>
 	</section>
 	<script>
@@ -27,15 +22,20 @@
 	});
 	
 		jeedom.cmd.update['#id#'] = function(_options) {
-			var arrayJSON = eval(_options.display_value);
+			var arrayJSON = JSON.parse(_options.display_value);
 			for (var i = 0; i < arrayJSON.length; i++) {
 				var SMS = arrayJSON[i];
-				var txtArea = $('<textarea class="form-control input-sm message" rows="2" placeholder="txt">'+SMS[Content]+'</textarea>');
+				var StatutSMS;
+				if(SMS.Smstat == '0') {
+					StatutSMS = "Reçu";
+				}else{
+					StatutSMS = "Envoyé";
+				}
+				var txtArea = $('<textarea class="input-sm message">Statut : '+StatutSMS+'&#10;Tel : '+SMS.Phone+'&#10;Date : '+SMS.Date+'&#10;'+SMS.Content+'</textarea>');
 				$("#Slider").append(txtArea);
 			}
 			var cmd = $('.cmd[data-cmd_id=#id#]')
 			cmd.attr('title','Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
-			cmd.find('.state').empty().append(_options.display_value)
 			if(_options.alertLevel){
 				if(_options.alertLevel == 'warning'){
 						cmd.addClass('label label-warning')
