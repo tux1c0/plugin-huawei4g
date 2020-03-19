@@ -1,0 +1,21 @@
+<div class="cmd cmd-widget reportModeHidden" style="float:left; clear:both;" data-type="action" data-subtype="message" data-template="default" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+    <div style="float:left; clear:both;">
+		&nbsp;<span class="fas fa-sms cmdName #hide_name#">Envoie de SMS</span>
+	</div>
+	<div>
+        <input class="form-control input-sm numerotel" placeholder="Numéro" data-cmd_id="#id#"/>
+        <textarea class="form-control input-sm message" rows="2" placeholder="#message_placeholder#" data-cmd_uid="#uid#" data-cmd_id="#id#"></textarea>
+        <a class='btn btn-xs execute'>Envoyer SMS</a>
+    </div>
+    <script>
+        if('#title_disable#' == '1'){
+            $('.cmd[data-cmd_uid=#uid#] .numerotel').hide();
+        }
+        if('#message_disable#' == '1'){
+            $('.cmd[data-cmd_uid=#uid#] .message').hide();
+        }
+        $('.cmd[data-cmd_uid=#uid#]:last .execute').on('click', function() {
+            jeedom.cmd.execute({id: '#id#', value: {numerotel: $('.cmd[data-cmd_uid=#uid#] .numerotel').value(), message: $('.cmd[data-cmd_uid=#uid#] .message').value()}});
+        });
+    </script>
+</div>

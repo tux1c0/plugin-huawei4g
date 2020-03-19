@@ -5,6 +5,7 @@ Plugin permettant la supervision de routeur 4G Huawei.
 Les informations supervisées
 -	Volumétrie de données
 -	Opérateur
+-	SMS
 
 Installationn 
 ===
@@ -25,6 +26,8 @@ Un login et mot de passe doit être défini sur le routeur.
 
 Le plugin est compatible avec le modèle suivant
 -	Huawei B715s-23c
+-	Huawei B528s-23a
+-	Huawei B612s-25d
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
@@ -32,7 +35,6 @@ Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B525s-65a
 -	Huawei E3131
 -	Huawei E5186s-22a
--	Huawei B528s
 -	Autres modèles LTE non listés
 
 Le plugin n'est pas compatible avec le modèle suivant
@@ -56,3 +58,6 @@ Changelog
 
 -	18/01/2020 : Init du plugin
 -	08/02/2020 : 1ere version beta fonctionnelle
+-	12/03/2020 : Passage en prod
+-	15/03/2020 : Ajout nombre SMS, redémarrage, correction bug quand aucune info remonte
+-	19/03/2020 : Ajout lecture et envoie SMS
