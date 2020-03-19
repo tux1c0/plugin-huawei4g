@@ -650,7 +650,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('reboot');
 			$RouteurCmd->setType('action');
-			$RouteurCmd->setTemplate('dashboard','huawei4g-btn');
+			//$RouteurCmd->setTemplate('dashboard','huawei4g-btn');
 			$RouteurCmd->setSubType('other');
 			//$RouteurCmd->setOrder('30');
 			$RouteurCmd->save();
