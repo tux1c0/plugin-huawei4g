@@ -60,3 +60,4 @@ Changelog
 -	08/02/2020 : 1ere version beta fonctionnelle
 -	12/03/2020 : Passage en prod
 -	15/03/2020 : Ajout nombre SMS, redémarrage, correction bug quand aucune info remonte
+-	19/03/2020 : Ajout lecture et envoie SMS
