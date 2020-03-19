@@ -81,10 +81,10 @@ class huawei4g extends eqLogic {
 			throw new Exception(__('Le champs IP ne peut pas être vide', __FILE__));
 		}
 		if ($this->getConfiguration('username') == '') {
-			throw new Exception(__("Le champs SSH Nom d'utilisateur ne peut pas être vide", __FILE__));
+			throw new Exception(__("Le champs Nom d'utilisateur ne peut pas être vide", __FILE__));
 		}
 		if ($this->getConfiguration('password') == '') {
-			throw new Exception(__('Le champs SSH Mot de passe ne peut pas être vide', __FILE__));
+			throw new Exception(__('Le champs Mot de passe ne peut pas être vide', __FILE__));
 		}
 	}
 
@@ -152,6 +152,8 @@ class huawei4g extends eqLogic {
 						$this->infos[$key] = str_replace('dB', '', $value);
 					} elseif (strpos($value, 'dBm') === true) {
 						$this->infos[$key] = str_replace('dBm', '', $value);
+					} elseif ($key == "Messages"){
+						$this->infos[$key] = json_encode($value[Message]);
 					} else {
 						$this->infos[$key] = $value;
 					}
@@ -173,12 +175,12 @@ class huawei4g extends eqLogic {
 		$Router->setAddress($IPaddress);
 		try {
 			$Router->setSession($login, $pwd);
-			$Router->setReboot();
+			$res = $Router->setReboot();
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
 		}
 		
-		log::add('huawei4g', 'debug', 'Rebooting');
+		log::add('huawei4g', 'debug', 'Rebooting: '.$res);
 	}
 	
 	public function sendSMS($arr) {
