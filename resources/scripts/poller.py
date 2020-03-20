@@ -7,24 +7,29 @@ import sys
 
 
 if len(sys.argv) == 4:
-	ip = sys.argv[1]
-	login = sys.argv[2]
-	pwd = sys.argv[3]
-	
-	connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
-	client = Client(connection)
+        ip = sys.argv[1]
+        login = sys.argv[2]
+        pwd = sys.argv[3]
+        list = []
 
-	list = [json.dumps(client.user.state_login())]
-	list.append(json.dumps(client.monitoring.traffic_statistics()))
-	list.append(json.dumps(client.net.current_plmn()))
-	list.append(json.dumps(client.device.basic_information()))
-	list.append(json.dumps(client.device.information()))
-	list.append(json.dumps(client.device.signal()))
-	list.append(json.dumps(client.sms.get_sms_list()))
-	
-	client.user.logout()
-	
-	print(list)
+        try:
+                connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
+                client = Client(connection)
+                list.append(json.dumps(client.user.state_login()))
+                list.append(json.dumps(client.monitoring.traffic_statistics()))
+                list.append(json.dumps(client.net.current_plmn()))
+                list.append(json.dumps(client.device.basic_information()))
+                list.append(json.dumps(client.device.information()))
+                list.append(json.dumps(client.device.signal()))
+                list.append(json.dumps(client.sms.get_sms_list()))
+
+                client.user.logout()
+
+        except:
+                list.append(sys.exc_info())
+
+
+        print(list)
 else:
     print("No parameter has been included")
 
