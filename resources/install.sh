@@ -9,17 +9,17 @@ echo "*             Installation des dépendances             *"
 echo "********************************************************"
 apt-get update
 echo 20 > ${PROGRESS_FILE}
-echo 40 > ${PROGRESS_FILE}
 apt-get install -y python3-pip
-echo 60 > ${PROGRESS_FILE}
+echo 40 > ${PROGRESS_FILE}
 apt-get install -y python3-setuptools
-echo 80 > ${PROGRESS_FILE}
+echo 50 > ${PROGRESS_FILE}
+pip3 install datetime
+echo 60 > ${PROGRESS_FILE}
 pip3 install typing
-echo 90 > ${PROGRESS_FILE}
+echo 80 > ${PROGRESS_FILE}
 pip3 install huawei-lte-api
 echo 100 > ${PROGRESS_FILE}
 rm ${PROGRESS_FILE}
-service apache2 restart
 echo "********************************************************"
 echo "*             Installation terminée                    *"
 echo "********************************************************"

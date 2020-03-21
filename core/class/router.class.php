@@ -47,7 +47,7 @@ class Router {
 	 public function getStatus() {
 		$state = $this->getState();
 		log::add('huawei4g', 'debug', 'State: '.$state['State']);
-		if(intval($state['State']) == LOGGED_IN) {
+		if(intval($state['State']) == self::LOGGED_IN) {
 			$this->statut = "Up";
 			log::add('huawei4g', 'debug', 'Up');
 		} else {
