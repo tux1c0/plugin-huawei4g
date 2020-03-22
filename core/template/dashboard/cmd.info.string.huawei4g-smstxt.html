@@ -19,7 +19,8 @@
 		$("#Slider").prepend($("#Slider textarea:last-of-type"));
 	});
 	
-		jeedom.cmd.update['#id#'] = function(_options) {
+	jeedom.cmd.update['#id#'] = function(_options) {
+		if(_options.display_value) {
 			var arrayJSON = JSON.parse(_options.display_value);
 			for (var i = 0; i < arrayJSON.length; i++) {
 				var SMS = arrayJSON[i];
@@ -32,21 +33,22 @@
 				var txtArea = $('<textarea class="input-sm message">Statut : '+StatutSMS+'&#10;Tel : '+SMS.Phone+'&#10;Date : '+SMS.Date+'&#10;'+SMS.Content+'</textarea>');
 				$("#Slider").append(txtArea);
 			}
-			var cmd = $('.cmd[data-cmd_id=#id#]')
-			cmd.attr('title','Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
-			if(_options.alertLevel){
-				if(_options.alertLevel == 'warning'){
-						cmd.addClass('label label-warning')
-						cmd.attr('data-alertlevel','warning');
-				}else if(_options.alertLevel == 'danger'){
-						cmd.addClass('label label-danger')
-						cmd.attr('data-alertlevel','danger');
-				}else{
-						cmd.removeClass('label label-warning label-danger')
-						cmd.attr('data-alertlevel','none');
-				}
+		}
+		var cmd = $('.cmd[data-cmd_id=#id#]')
+		cmd.attr('title','Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
+		if(_options.alertLevel){
+			if(_options.alertLevel == 'warning'){
+					cmd.addClass('label label-warning')
+					cmd.attr('data-alertlevel','warning');
+			}else if(_options.alertLevel == 'danger'){
+					cmd.addClass('label label-danger')
+					cmd.attr('data-alertlevel','danger');
+			}else{
+					cmd.removeClass('label label-warning label-danger')
+					cmd.attr('data-alertlevel','none');
 			}
 		}
-		jeedom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#',alertLevel:'#alertLevel#'})
+	}
+	jeedom.cmd.update['#id#']({display_value:'#state#',valueDate:'#valueDate#',collectDate:'#collectDate#',alertLevel:'#alertLevel#'})
     </script>
 </div>
