@@ -49,16 +49,16 @@ class Router {
 		log::add('huawei4g', 'debug', 'State: '.$state['State']);
 		
 		if(empty($state['State'])) {
-			$this->statut = "Down";
-			log::add('huawei4g', 'debug', 'Down - no data');
-		} else {
 			if(intval($state['State']) == self::LOGGED_IN) {
 				$this->statut = "Up";
 				log::add('huawei4g', 'debug', 'Up');
 			} else {
 				$this->statut = "Down";
-				log::add('huawei4g', 'debug', 'Down');
+				log::add('huawei4g', 'debug', 'Down - no data');
 			}
+		} else {
+			$this->statut = "Down";
+			log::add('huawei4g', 'debug', 'Down');
 		}
 		
 		return $this->statut;
