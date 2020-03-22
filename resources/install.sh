@@ -7,6 +7,8 @@ echo 0 > ${PROGRESS_FILE}
 echo "********************************************************"
 echo "*             Installation des dépendances             *"
 echo "********************************************************"
+pip3 uninstall huawei-lte-api
+echo 10 > ${PROGRESS_FILE}
 wget -O - https://repository.salamek.cz/deb/salamek.gpg.key|apt-key add -
 echo 30 > ${PROGRESS_FILE}
 echo "deb     https://repository.salamek.cz/deb/pub all main" | tee /etc/apt/sources.list.d/salamek.cz.list
