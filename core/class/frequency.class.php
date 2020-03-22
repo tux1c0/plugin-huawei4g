@@ -71,10 +71,10 @@ class Frequency {
 		$this->jsonKey = $this->searchArray('band', $this->getBand());
 		log::add('huawei4g', 'debug', 'jsonKey: '.$this->jsonKey);
 		
-		if(isset($this->jsonKey)) {
-			$this->name = $this->frqArray[$this->jsonKey]["bandType"].' '.$this->frqArray[$this->jsonKey]["name"];
-		} else {
+		if(empty($this->jsonKey)) {
 			$this->name = "Unknown";
+		} else {
+			$this->name = $this->frqArray[$this->jsonKey]["bandType"].' '.$this->frqArray[$this->jsonKey]["name"];
 		}
 		log::add('huawei4g', 'debug', 'Freq Name: '.$this->name);
     }
