@@ -35,7 +35,7 @@ class huawei4g extends eqLogic {
 	public static function dependancy_info() {
 		$return = array();
 		$return['progress_file'] = jeedom::getTmpFolder('huawei4g') . '/dependance';
-		if (exec(system::getCmdSudo() . 'pip3 list | grep -E huawei-lte-api | wc -l') >= 1) {
+		if (exec(system::getCmdSudo() . ' -E "python3\-huawei\-lte\-api" | wc -l') >= 1) {
 			$return['state'] = 'ok';
 		} else {
 			$return['state'] = 'nok';
@@ -152,10 +152,17 @@ class huawei4g extends eqLogic {
 						$this->infos[$key] = str_replace('dB', '', $value);
 					} elseif (strpos($value, 'dBm') === true) {
 						$this->infos[$key] = str_replace('dBm', '', $value);
-					} elseif ($key == "Messages"){
-						$this->infos[$key] = json_encode($value[Message]);
 					} else {
-						$this->infos[$key] = $value;
+						switch($key) {
+							case "Messages": 
+								$this->infos[$key] = json_encode($value[Message]);
+								break;
+							case "lte_bandinfo": 
+								$this->infos['band'] = $value;
+								break;
+							default:
+								$this->infos[$key] = $value;
+						}
 					}
 				}
 			}
