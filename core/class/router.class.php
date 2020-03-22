@@ -89,7 +89,7 @@ class Router {
 			}
 						
 			$this->output[$key] = str_replace("\\'", "'", $this->output[$key]);
-			$this->output[$key] = preg_replace( "/\r|\n/", "", $this->output[$key]);
+			$this->output[$key] = str_replace((array("\r\n", "\n", "\r"), "", $this->output[$key]);
 			log::add('huawei4g', 'debug', $key.': '.$this->output[$key]);
 			$this->output[$key] = json_decode($this->output[$key], true);
 			
