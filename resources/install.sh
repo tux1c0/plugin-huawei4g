@@ -7,17 +7,13 @@ echo 0 > ${PROGRESS_FILE}
 echo "********************************************************"
 echo "*             Installation des dépendances             *"
 echo "********************************************************"
-apt-get update
-echo 20 > ${PROGRESS_FILE}
-apt-get install -y python3-pip
-echo 40 > ${PROGRESS_FILE}
-apt-get install -y python3-setuptools
-echo 50 > ${PROGRESS_FILE}
-pip3 install datetime
+wget -O - https://repository.salamek.cz/deb/salamek.gpg.key|apt-key add -
+echo 30 > ${PROGRESS_FILE}
+echo "deb     https://repository.salamek.cz/deb/pub all main" | tee /etc/apt/sources.list.d/salamek.cz.list
 echo 60 > ${PROGRESS_FILE}
-pip3 install typing
+apt update
 echo 80 > ${PROGRESS_FILE}
-pip3 install huawei-lte-api
+apt install python3-huawei-lte-api
 echo 100 > ${PROGRESS_FILE}
 rm ${PROGRESS_FILE}
 echo "********************************************************"
