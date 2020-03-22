@@ -11,9 +11,9 @@ wget -O - https://repository.salamek.cz/deb/salamek.gpg.key|apt-key add -
 echo 30 > ${PROGRESS_FILE}
 echo "deb     https://repository.salamek.cz/deb/pub all main" | tee /etc/apt/sources.list.d/salamek.cz.list
 echo 60 > ${PROGRESS_FILE}
-apt update
+apt-get update
 echo 80 > ${PROGRESS_FILE}
-apt install python3-huawei-lte-api
+apt-get install -y python3-huawei-lte-api
 echo 100 > ${PROGRESS_FILE}
 rm ${PROGRESS_FILE}
 echo "********************************************************"
