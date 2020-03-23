@@ -13,17 +13,21 @@ echo "deb https://repository.salamek.cz/deb/pub all main" | tee /etc/apt/sources
 echo 20 > ${PROGRESS_FILE}
 apt-get update
 echo 30 > ${PROGRESS_FILE}
-apt-get install -y python3-dicttoxml python3-xmltodict python3-dicttoxml python3-xmltodict
+apt-get install -y python3-dicttoxml python3-xmltodict python3-requests
 echo 40 > ${PROGRESS_FILE}
-apt-get install -y python3-huawei-lte-api
+apt-get install -y python3-huawei-lte-apizz
 echo 50 > ${PROGRESS_FILE}
-if [ $? > 0 ]; then
-        echo "Installation failed, trying to copy locally."
-        echo 60 > ${PROGRESS_FILE}
-        API=../../3rdparty/huawei-lte-api
-        python3 $API/setup.py install
+RES=$( dpkg-query -l | grep huawei-lte-api | wc -l )
+echo $RES
+if [ $RES -gt 0 ]; then
+        echo "Installation OK"
 else
-   echo "Installation OK"
+        echo "Installation failed, trying to copy locally."
+        cd "$(dirname "$0")"
+        cd ../3rdparty/huawei-lte-api
+        pwd
+        echo 60 > ${PROGRESS_FILE}
+        python3 setup.py install
 fi
 echo 100 > ${PROGRESS_FILE}
 rm ${PROGRESS_FILE}
