@@ -111,7 +111,7 @@ class Frequency {
 
 			//Decode JSON
 			$this->frqArray = json_decode($json,true);
-			log::add('huawei4g', 'debug', 'tableau from JSON: '.$this->frqArray);
+			log::add('huawei4g', 'debug', 'tableau frequency from JSON: '.$this->frqArray);
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e->getMessage());
 		}

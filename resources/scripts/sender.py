@@ -2,6 +2,7 @@
 from huawei_lte_api.Client import Client
 from huawei_lte_api.AuthorizedConnection import AuthorizedConnection
 from huawei_lte_api.Connection import Connection
+import huawei_lte_api
 import json
 import sys
 
@@ -12,6 +13,9 @@ if len(sys.argv) == 6:
 	phone = sys.argv[4]
 	message = sys.argv[5]
 	list = []
+	
+	list.append('{"huawei_lte_api": "'+huawei_lte_api.__version__+'"}')
+	list.append('{"message": "'+message+'"}')
 	
 	try:
 		connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)

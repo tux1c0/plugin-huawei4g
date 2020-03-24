@@ -35,7 +35,8 @@ class huawei4g extends eqLogic {
 	public static function dependancy_info() {
 		$return = array();
 		$return['progress_file'] = jeedom::getTmpFolder('huawei4g') . '/dependance';
-		if (exec(system::getCmdSudo() . system::get('cmd_check') . ' -E "python3\-huawei\-lte\-api" | wc -l') >= 1) {
+		//if (exec(system::getCmdSudo() . system::get('cmd_check') . ' -E "python3\-huawei\-lte\-api" | wc -l') >= 1) {
+		if (exec(system::getCmdSudo() . ' python3 -c "import huawei_lte_api"; echo $?') == 0) {
 			$return['state'] = 'ok';
 		} else {
 			$return['state'] = 'nok';
