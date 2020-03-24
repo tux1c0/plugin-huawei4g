@@ -13,6 +13,8 @@ if len(sys.argv) == 4:
 	pwd = sys.argv[3]
 	list = []
 
+	list.append('{"huawei_lte_api": "'+huawei_lte_api.__version__+'"}')
+	
 	try:
 		connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
 		client = Client(connection)
@@ -57,7 +59,6 @@ if len(sys.argv) == 4:
 	except:
 		list.append(sys.exc_info())
 
-	list.append('{"huawei_lte_api": "'+huawei_lte_api.__version__+'"}')
 	print(list)
 else:
 	print("No parameter has been included")

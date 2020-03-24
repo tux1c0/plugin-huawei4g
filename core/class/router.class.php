@@ -73,13 +73,13 @@ class Router {
 		$this->setLogin($login);
 		$this->setPassword($pwd);
 		$out = $this->getInfoPython();
-		log::add('huawei4g', 'debug', 'PreOutput: '.$this->output);
+		log::add('huawei4g', 'debug', 'PreOutput: '.$out);
 		
 		// removing Python bracket list
 		$tmp = substr(trim($out), 2, -2);
 		// splitting json outputs
 		$this->output = explode('}\', \'{', $tmp);
-		log::add('huawei4g', 'debug', 'PostOutput:');
+		log::add('huawei4g', 'debug', 'PostOutput: '.$this->output);
 		foreach($this->output as $key => $value) {
 			if($value[0] != '{') {
 				$this->output[$key] = substr_replace($value,'{',0,0);
@@ -89,7 +89,7 @@ class Router {
 			}
 						
 			$this->output[$key] = str_replace("\\'", "'", $this->output[$key]);
-			$this->output[$key] = preg_replace( "/\r|\n/", "", $this->output[$key]);
+			$this->output[$key] = str_replace(array("\r\n", "\n", "\r"), "", $this->output[$key]);
 			log::add('huawei4g', 'debug', $key.': '.$this->output[$key]);
 			$this->output[$key] = json_decode($this->output[$key], true);
 			
