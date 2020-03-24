@@ -120,6 +120,15 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 									<input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="password" />
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">{{Fréquence de Récupération}}</label>
+								<div class="col-sm-3">
+									<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="frequence" >
+										<option value="5">5 minutes</option>
+										<option value="15">15 minutes</option>
+									</select>
+								</div>
+							</div>
 						</div>
 					</div>
 				</fieldset>

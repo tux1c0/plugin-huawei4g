@@ -65,6 +65,20 @@ class huawei4g extends eqLogic {
 		}
 	}
 	
+	public static function cron5() {
+		foreach (self::byType('huawei4g') as $rtr) {
+			if ($rtr->getIsEnable() == 1) {
+				$cmd = $rtr->getCmd(null, 'refresh');
+				if (!is_object($cmd)) {
+					continue; 
+				}
+				if($rtr->getConfiguration('frequence') == '5') {
+					$cmd->execCmd();
+				}
+			}
+		}
+    }
+	
 	public static function cron15() {
 		foreach (self::byType('huawei4g') as $rtr) {
 			if ($rtr->getIsEnable() == 1) {
@@ -72,7 +86,9 @@ class huawei4g extends eqLogic {
 				if (!is_object($cmd)) {
 					continue; 
 				}
-				$cmd->execCmd();
+				if($rtr->getConfiguration('frequence') == '15') {
+					$cmd->execCmd();
+				}
 			}
 		}
     }
@@ -86,6 +102,9 @@ class huawei4g extends eqLogic {
 		}
 		if ($this->getConfiguration('password') == '') {
 			throw new Exception(__('Le champs Mot de passe ne peut pas être vide', __FILE__));
+		}
+		if ($this->getConfiguration('frequence') == '') {
+			throw new Exception(__('Le champs fréquence ne peut pas être vide', __FILE__));
 		}
 	}
 
