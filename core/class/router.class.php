@@ -160,30 +160,30 @@ class Router {
 	Functions w/o login needed
 	*/
 	public function getTrafficStatistics() {
-		return $this->output[1];
-	}
-	
-	public function getPublicLandMobileNetwork() {
 		return $this->output[2];
 	}
 	
-	public function getDeviceBasicInfo() {
+	public function getPublicLandMobileNetwork() {
 		return $this->output[3];
+	}
+	
+	public function getDeviceBasicInfo() {
+		return $this->output[4];
 	}
 
 	/*
 	Functions w/ login needed
 	*/
 	public function getCellInfo() {
-		return $this->output[4];
-	}
-	
-	public function getSignal() {
 		return $this->output[5];
 	}
 	
-	public function getSMS() {
+	public function getSignal() {
 		return $this->output[6];
+	}
+	
+	public function getSMS() {
+		return $this->output[7];
 	}
 	
 	public function setReboot() {
@@ -191,7 +191,7 @@ class Router {
 	}
 	
 	public function getState() {
-		return $this->output[0];
+		return $this->output[1];
 	}
 	
 	public function sendSMS($phone, $message) {
