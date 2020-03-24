@@ -149,14 +149,14 @@ class huawei4g extends eqLogic {
 			} else {
 				foreach($infoTab as $key => $value) {
 					log::add('huawei4g', 'debug', 'key:'.$key.' value:'.$value);
-					if(strpos($value, 'dB') === true) {
+					if(strpos(strval($value), 'dB') === true) {
 						$this->infos[$key] = str_replace('dB', '', $value);
-					} elseif (strpos($value, 'dBm') === true) {
+					} elseif (strpos(strval($value), 'dBm') === true) {
 						$this->infos[$key] = str_replace('dBm', '', $value);
 					} else {
 						switch($key) {
 							case "Messages": 
-								$this->infos[$key] = json_encode($value[Message]);
+								$this->infos[$key] = json_encode($value['Message']);
 								break;
 							case "lte_bandinfo": 
 								$this->infos['band'] = $value;
