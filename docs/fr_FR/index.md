@@ -31,12 +31,12 @@ Le plugin est compatible avec les modèles suivant
 -	Huawei B612s-25d
 -	Huawei B535-232
 -	Huawei B525s-65a
+-	Huawei E5186s-22a
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
 -	Huawei B525s-23a
 -	Huawei E3131
--	Huawei E5186s-22a
 -	Autres modèles LTE non listés
 
 Le plugin n'est pas compatible avec les modèles suivant
