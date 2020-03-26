@@ -31,12 +31,12 @@ Le plugin est compatible avec les modèles suivant
 -	Huawei B612s-25d
 -	Huawei B535-232
 -	Huawei B525s-65a
+-	Huawei E5186s-22a
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
 -	Huawei B525s-23a
 -	Huawei E3131
--	Huawei E5186s-22a
 -	Autres modèles LTE non listés
 
 Le plugin n'est pas compatible avec les modèles suivant
@@ -51,8 +51,9 @@ Tous les éléments suivants sont obligatoires pour avoir le plugin fonctionnel
 
 -   API (login et mot de passe de connexion du routeur définit au-dessus)
 
+-	Fréquence : choisir si la récupération des données est toutes les 5 ou 15 minutes
 
-Sauvegarder la configuration. Le module va commencer à poller toutes les 15 minutes le routeur.
+Sauvegarder la configuration. 
 
 
 
@@ -64,3 +65,4 @@ Changelog
 -	12/03/2020 : Passage en prod
 -	15/03/2020 : Ajout nombre SMS, redémarrage, correction bug quand aucune info remonte
 -	19/03/2020 : Ajout lecture et envoie SMS
+-	25/03/2020 : Ajout possibilité de polling à 5min + bug fix

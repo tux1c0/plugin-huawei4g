@@ -133,7 +133,8 @@ class Router {
 	
 	// SMS
 	private function setSMSPython($tel, $msg) {
-		$command = dirname(__FILE__) . '/../../resources/scripts/sender.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$tel.' '.escapeshellarg(utf8_encode($msg));
+		$escapedArg = "'".str_replace("'", "'\\''", $msg)."'";
+		$command = dirname(__FILE__) . '/../../resources/scripts/sender.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$tel.' '.$escapedArg;
 		try{
 			$json = shell_exec('python3 '.$command);
 		} catch (Exception $e){

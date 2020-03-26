@@ -65,6 +65,20 @@ class huawei4g extends eqLogic {
 		}
 	}
 	
+	public static function cron5() {
+		foreach (self::byType('huawei4g') as $rtr) {
+			if ($rtr->getIsEnable() == 1) {
+				$cmd = $rtr->getCmd(null, 'refresh');
+				if (!is_object($cmd)) {
+					continue; 
+				}
+				if($rtr->getConfiguration('frequence') == '5') {
+					$cmd->execCmd();
+				}
+			}
+		}
+    }
+	
 	public static function cron15() {
 		foreach (self::byType('huawei4g') as $rtr) {
 			if ($rtr->getIsEnable() == 1) {
@@ -72,7 +86,9 @@ class huawei4g extends eqLogic {
 				if (!is_object($cmd)) {
 					continue; 
 				}
-				$cmd->execCmd();
+				if($rtr->getConfiguration('frequence') == '15') {
+					$cmd->execCmd();
+				}
 			}
 		}
     }
@@ -86,6 +102,9 @@ class huawei4g extends eqLogic {
 		}
 		if ($this->getConfiguration('password') == '') {
 			throw new Exception(__('Le champs Mot de passe ne peut pas être vide', __FILE__));
+		}
+		if ($this->getConfiguration('frequence') == '') {
+			throw new Exception(__('Le champs fréquence ne peut pas être vide', __FILE__));
 		}
 	}
 
@@ -149,14 +168,14 @@ class huawei4g extends eqLogic {
 			} else {
 				foreach($infoTab as $key => $value) {
 					log::add('huawei4g', 'debug', 'key:'.$key.' value:'.$value);
-					if(strpos($value, 'dB') === true) {
+					if(strpos(strval($value), 'dB') === true) {
 						$this->infos[$key] = str_replace('dB', '', $value);
-					} elseif (strpos($value, 'dBm') === true) {
+					} elseif (strpos(strval($value), 'dBm') === true) {
 						$this->infos[$key] = str_replace('dBm', '', $value);
 					} else {
 						switch($key) {
 							case "Messages": 
-								$this->infos[$key] = json_encode($value[Message]);
+								$this->infos[$key] = json_encode($value['Message']);
 								break;
 							case "lte_bandinfo": 
 								$this->infos['band'] = $value;
@@ -203,8 +222,13 @@ class huawei4g extends eqLogic {
 		try {
 			$Router->setSession($login, $pwd);
 			log::add('huawei4g', 'debug', 'numerotel: '.$arr['numerotel']);
+			log::add('huawei4g', 'debug', 'title: '.$arr['title']);
 			log::add('huawei4g', 'debug', 'message: '.$arr['message']);
-			$res = $Router->sendSMS($arr['numerotel'], $arr['message']);
+			if(empty($arr['numerotel'])) {
+				$res = $Router->sendSMS($arr['title'], $arr['message']);
+			} else {
+				$res = $Router->sendSMS($arr['numerotel'], $arr['message']);
+			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
 		}
