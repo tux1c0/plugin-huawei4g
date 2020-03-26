@@ -125,7 +125,7 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 								<div class="col-sm-3">
 									<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="frequence" >
 										<option value="5">5 minutes</option>
-										<option value="15">15 minutes</option>
+										<option value="15" selected>15 minutes</option>
 									</select>
 								</div>
 							</div>
