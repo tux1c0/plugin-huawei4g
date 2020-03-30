@@ -4,7 +4,7 @@
     </div>
     <script>
         $('.cmd[data-cmd_uid=#uid#]:last .execute').on('click', function() {
-            jeedom.cmd.execute({id: '#id#', value: {smsid: $("#Slider:first-child").attr("sms-id")}});
+            jeedom.cmd.execute({id: '#id#', value: {smsid: $('#Slider:first-child').attr('sms-id')}});
         });
     </script>
 </div>
