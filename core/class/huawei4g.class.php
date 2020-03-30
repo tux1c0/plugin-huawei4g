@@ -239,6 +239,30 @@ class huawei4g extends eqLogic {
 		log::add('huawei4g', 'debug', 'Sending: '.$res);
 	}
 	
+	public function delSMS($arr) {
+		// getting configuration
+		$IPaddress = $this->getConfiguration('ip');
+		$login = $this->getConfiguration('username');
+		$pwd = $this->getConfiguration('password');
+		
+		// setting the router session
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+		try {
+			$Router->setSession($login, $pwd);
+			log::add('huawei4g', 'debug', 'sms-id: '.$arr['sms-id']);
+			if(empty($arr['sms-id'])) {
+				log::add('huawei4g', 'debug', 'sms-id empty');
+			} else {
+				$res = $Router->delSMS($arr['sms-id']);
+			}
+		} catch (Exception $e) {
+			log::add('huawei4g', 'error', $e);
+		}
+		
+		log::add('huawei4g', 'debug', 'Sending: '.$res);
+	}
+	
 	// manage API errors
 	private function errorInfo($code) {
 		switch($code) {
@@ -770,6 +794,11 @@ class huawei4gCmd extends cmd {
 			case "refresh":
 				$eqLogic->getRouteurInfo();
 				log::add('huawei4g','debug','refresh ' . $this->getHumanName());
+				break;
+			
+			case "delsms":
+				$eqLogic->delSMS($_options);
+				log::add('huawei4g','debug','delsms ' . $this->getHumanName());
 				break;
  		}
 		return true;
