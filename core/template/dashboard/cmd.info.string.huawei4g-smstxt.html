@@ -30,7 +30,7 @@
 				}else{
 					StatutSMS = "Envoyé";
 				}
-				var txtArea = $('<textarea class="input-sm message">Statut : '+StatutSMS+'&#10;Tel : '+SMS.Phone+'&#10;Date : '+SMS.Date+'&#10;'+SMS.Content+'</textarea>');
+				var txtArea = $('<textarea class="input-sm message" sms-id="'+SMS.Index+'">Statut : '+StatutSMS+'&#10;Tel : '+SMS.Phone+'&#10;Date : '+SMS.Date+'&#10;'+SMS.Content+'</textarea>');
 				$("#Slider").append(txtArea);
 			}
 		}

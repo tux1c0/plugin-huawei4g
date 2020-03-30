@@ -19,7 +19,7 @@ Installationn
 Configuration
 ===
 
-### Routeur 
+### Routeurs compatibles
 
 Le routeur doit être accessible via le réseau privé afin de pouvoir récupérer des informations.
 
@@ -32,10 +32,10 @@ Le plugin est compatible avec les modèles suivant
 -	Huawei B535-232
 -	Huawei B525s-65a
 -	Huawei E5186s-22a
+-	Huawei B525s-23a
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
--	Huawei B525s-23a
 -	Huawei E3131
 -	Autres modèles LTE non listés
 
@@ -55,6 +55,13 @@ Tous les éléments suivants sont obligatoires pour avoir le plugin fonctionnel
 
 Sauvegarder la configuration. 
 
+
+Utilisation
+===
+
+### Envoie de SMS par scénario
+
+Pour envoyer des SMS par scénario, choisissez la commande d'action "Envoyer SMS". Dans le champs "titre", remplissez le numéro de téléphone et dans le champs "Message" le texte à envoyer.
 
 
 Changelog
