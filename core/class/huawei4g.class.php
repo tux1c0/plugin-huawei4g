@@ -147,6 +147,9 @@ class huawei4g extends eqLogic {
 		$this->infos['fdl'] = $Frequency->getFdl();
 		$this->infos['ful'] = $Frequency->getFul();
 		
+		// calcul Marge RF
+		$this->infos['mrf'] = $this->infos['rssi'] - $this->infos['rsrp'];
+		
 		$this->updateInfo();
 	}
 	
@@ -228,6 +231,30 @@ class huawei4g extends eqLogic {
 				$res = $Router->sendSMS($arr['title'], $arr['message']);
 			} else {
 				$res = $Router->sendSMS($arr['numerotel'], $arr['message']);
+			}
+		} catch (Exception $e) {
+			log::add('huawei4g', 'error', $e);
+		}
+		
+		log::add('huawei4g', 'debug', 'Sending: '.$res);
+	}
+	
+	public function delSMS($arr) {
+		// getting configuration
+		$IPaddress = $this->getConfiguration('ip');
+		$login = $this->getConfiguration('username');
+		$pwd = $this->getConfiguration('password');
+		
+		// setting the router session
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+		try {
+			$Router->setSession($login, $pwd);
+			log::add('huawei4g', 'debug', 'smsid: '.$arr['smsid']);
+			if(empty($arr['smsid'])) {
+				log::add('huawei4g', 'debug', 'smsid empty');
+			} else {
+				$res = $Router->delSMS($arr['smsid']);
 			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
@@ -575,6 +602,21 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
+		$RouteurCmd = $this->getCmd(null, 'mrf');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'mrf');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Marge RF', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('mrf');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setUnite( 'dBm' );
+			$RouteurCmd->setOrder('22');
+			$RouteurCmd->save();
+		}
+		
 		$RouteurCmd = $this->getCmd(null, 'sinr');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'sinr');
@@ -586,7 +628,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'dB' );
-			$RouteurCmd->setOrder('22');
+			$RouteurCmd->setOrder('23');
 			$RouteurCmd->save();
 		}
 		
@@ -600,7 +642,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('23');
+			$RouteurCmd->setOrder('24');
 			$RouteurCmd->save();
 		}
 		
@@ -614,7 +656,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('24');
+			$RouteurCmd->setOrder('25');
 			$RouteurCmd->save();
 		}
 		
@@ -628,7 +670,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('25');
+			$RouteurCmd->setOrder('26');
 			$RouteurCmd->save();
 		}
 		
@@ -642,7 +684,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('26');
+			$RouteurCmd->setOrder('27');
 			$RouteurCmd->save();
 		}
 		
@@ -656,7 +698,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('27');
+			$RouteurCmd->setOrder('28');
 			$RouteurCmd->save();
 		}
 		
@@ -670,7 +712,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('28');
+			$RouteurCmd->setOrder('29');
 			$RouteurCmd->save();
 		}
 		
@@ -698,7 +740,21 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sendsms');
 			$RouteurCmd->setSubType('message');
-			$RouteurCmd->setOrder('29');
+			$RouteurCmd->setOrder('31');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'delsms');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'delsms');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Supprimer SMS', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('delsms');
+			$RouteurCmd->setType('action');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-delsms');
+			$RouteurCmd->setSubType('other');
+			$RouteurCmd->setOrder('30');
 			$RouteurCmd->save();
 		}
 
@@ -738,6 +794,11 @@ class huawei4gCmd extends cmd {
 			case "refresh":
 				$eqLogic->getRouteurInfo();
 				log::add('huawei4g','debug','refresh ' . $this->getHumanName());
+				break;
+			
+			case "delsms":
+				$eqLogic->delSMS($_options);
+				log::add('huawei4g','debug','delsms ' . $this->getHumanName());
 				break;
  		}
 		return true;

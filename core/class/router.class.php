@@ -144,6 +144,17 @@ class Router {
 		return json_decode($json, true);		
 	}
 	
+	private function delSMSPython($ind) {
+		$command = dirname(__FILE__) . '/../../resources/scripts/delsms.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$ind;
+		try{
+			$json = shell_exec('python3 '.$command);
+		} catch (Exception $e){
+			log::add('huawei4g', 'debug', $e);
+		}
+		log::add('huawei4g', 'debug', $json);
+		return json_decode($json, true);		
+	}
+	
 	// Reboot
 	private function reboot() {
 		$command = dirname(__FILE__) . '/../../resources/scripts/reboot.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword();
@@ -198,6 +209,9 @@ class Router {
 	public function sendSMS($phone, $message) {
 		return $this->setSMSPython($phone, $message);
 	}
-
+	
+	public function delSMS($index) {
+		return $this->delSMSPython($index);
+	}
 }
 ?>
