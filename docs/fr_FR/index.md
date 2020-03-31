@@ -73,3 +73,4 @@ Changelog
 -	15/03/2020 : Ajout nombre SMS, redémarrage, correction bug quand aucune info remonte
 -	19/03/2020 : Ajout lecture et envoie SMS
 -	25/03/2020 : Ajout possibilité de polling à 5min + bug fix
+-	30/03/2020 : Ajout suppression SMS et marge RF
