@@ -1,0 +1,10 @@
+<div class="cmd cmd-widget reportModeHidden" style="float:left; clear:both;" data-type="action" data-subtype="other" data-template="default" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
+	<div style="float:left; clear:both;">
+		&nbsp;<a class='btn btn-xs execute'>Supprimer SMS</a>
+    </div>
+    <script>
+        $('.cmd[data-cmd_uid=#uid#]:last .execute').on('click', function() {
+            jeedom.cmd.execute({id: '#id#', value: {smsid: $('#Slider textarea:first-child').attr('sms-id')}});
+        });
+    </script>
+</div>
