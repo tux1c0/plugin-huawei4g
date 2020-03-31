@@ -250,11 +250,11 @@ class huawei4g extends eqLogic {
 		$Router->setAddress($IPaddress);
 		try {
 			$Router->setSession($login, $pwd);
-			log::add('huawei4g', 'debug', 'sms-id: '.$arr['sms-id']);
-			if(empty($arr['sms-id'])) {
-				log::add('huawei4g', 'debug', 'sms-id empty');
+			log::add('huawei4g', 'debug', 'smsid: '.$arr['smsid']);
+			if(empty($arr['smsid'])) {
+				log::add('huawei4g', 'debug', 'smsid empty');
 			} else {
-				$res = $Router->delSMS($arr['sms-id']);
+				$res = $Router->delSMS($arr['smsid']);
 			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
