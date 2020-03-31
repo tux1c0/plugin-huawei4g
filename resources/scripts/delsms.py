@@ -14,7 +14,7 @@ if len(sys.argv) == 5:
 	list = []
 	
 	list.append('{"huawei_lte_api": "'+huawei_lte_api.__version__+'"}')
-	list.append('{"message": "'+message+'"}')
+	list.append('{"sms_index": "'+index+'"}')
 	
 	try:
 		connection = AuthorizedConnection('http://'+login+':'+pwd+'@'+ip)
