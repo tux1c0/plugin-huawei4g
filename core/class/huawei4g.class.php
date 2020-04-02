@@ -135,7 +135,7 @@ class huawei4g extends eqLogic {
 		
 		// calling API
 		try {
-			$Router->setSession($login, $pwd);
+			$Router->setSession($login, $pwd, "get");
 			$this->infos['status'] = $Router->getStatus();
 			
 			if($this->infos['status'] == "Up") {
