@@ -8,6 +8,7 @@ class Router {
 	private $password;
 	private $ip;
 	private $output;
+	private $outputSMS;
 	const LOGGED_IN = '0';
 	const LOGGED_OUT = '-1';
 
@@ -69,10 +70,26 @@ class Router {
 	Functions for sessions
 	*/
 
-	public function setSession($login, $pwd) {
+	public function setSession($login, $pwd, $action) {
 		$this->setLogin($login);
 		$this->setPassword($pwd);
-		$out = $this->getInfoPython();
+		
+		switch($action) {
+			case "get":
+				$this->setInfo($this->getInfoPython());
+				break;
+			
+			case "sms":
+				$this->setInfo($this->getSMSPython());
+				break;
+				
+			default:
+				break;
+		}
+		
+	}
+	
+	private function setInfo($out) {
 		log::add('huawei4g', 'debug', 'PreOutput: '.$out);
 		
 		// removing Python bracket list
@@ -92,6 +109,53 @@ class Router {
 			$this->output[$key] = str_replace(array("\r\n", "\n", "\r"), "", $this->output[$key]);
 			log::add('huawei4g', 'debug', $key.': '.$this->output[$key]);
 			$this->output[$key] = json_decode($this->output[$key], true);
+			
+			switch (json_last_error()) {
+				case JSON_ERROR_NONE:
+					log::add('huawei4g', 'debug', ' - Aucune erreur');
+				break;
+				case JSON_ERROR_DEPTH:
+					log::add('huawei4g', 'debug', ' - Profondeur maximale atteinte');
+				break;
+				case JSON_ERROR_STATE_MISMATCH:
+					log::add('huawei4g', 'debug', ' - Inadéquation des modes ou underflow');
+				break;
+				case JSON_ERROR_CTRL_CHAR:
+					log::add('huawei4g', 'debug', ' - Erreur lors du contrôle des caractères');
+				break;
+				case JSON_ERROR_SYNTAX:
+					log::add('huawei4g', 'debug', ' - Erreur de syntaxe ; JSON malformé');
+				break;
+				case JSON_ERROR_UTF8:
+					log::add('huawei4g', 'debug', ' - Caractères UTF-8 malformés, probablement une erreur d\'encodage');
+				break;
+				default:
+					log::add('huawei4g', 'debug', ' - Erreur inconnue');
+				break;
+			}
+		}
+	}
+	
+	private function setInfoSMS($out) {
+		log::add('huawei4g', 'debug', 'PreOutputSMS: '.$out);
+		
+		// removing Python bracket list
+		$tmp = substr(trim($out), 2, -2);
+		// splitting json outputs
+		$this->outputSMS = explode('}\', \'{', $tmp);
+		log::add('huawei4g', 'debug', 'PostOutputSMS: '.$this->outputSMS);
+		foreach($this->outputSMS as $key => $value) {
+			if($value[0] != '{') {
+				$this->outputSMS[$key] = substr_replace($value,'{',0,0);
+			}
+			if(substr($this->outputSMS[$key], -1) != '}') {
+				$this->outputSMS[$key] = $this->outputSMS[$key].'}';
+			}
+						
+			$this->outputSMS[$key] = str_replace("\\'", "'", $this->outputSMS[$key]);
+			$this->outputSMS[$key] = str_replace(array("\r\n", "\n", "\r"), "", $this->outputSMS[$key]);
+			log::add('huawei4g', 'debug', $key.': '.$this->outputSMS[$key]);
+			$this->outputSMS[$key] = json_decode($this->outputSMS[$key], true);
 			
 			switch (json_last_error()) {
 				case JSON_ERROR_NONE:
@@ -142,6 +206,17 @@ class Router {
 		}
 		log::add('huawei4g', 'debug', $json);
 		return json_decode($json, true);		
+	}
+	
+	private function getSMSPython() {
+		$command = dirname(__FILE__) . '/../../resources/scripts/getsms.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword();
+		try{
+			$json = shell_exec('python3 '.$command);
+		} catch (Exception $e){
+			log::add('huawei4g', 'debug', $e);
+		}
+		log::add('huawei4g', 'debug', $json);
+		return $json;		
 	}
 	
 	private function delSMSPython($ind) {
@@ -195,7 +270,7 @@ class Router {
 	}
 	
 	public function getSMS() {
-		return $this->output[7];
+		return $this->outputSMS[2];
 	}
 	
 	public function setReboot() {
@@ -203,7 +278,11 @@ class Router {
 	}
 	
 	public function getState() {
-		return $this->output[1];
+		if(empty($this->outputSMS[1])) {
+			return $this->output[1];
+		} else {
+			return $this->outputSMS[1];
+		}
 	}
 	
 	public function sendSMS($phone, $message) {
