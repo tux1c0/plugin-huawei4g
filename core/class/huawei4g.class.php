@@ -353,7 +353,9 @@ class huawei4g extends eqLogic {
 			try {
 				$key = $cmd->getLogicalId();
 				$value = $this->infos[$key];
-				$this->checkAndUpdateCmd($cmd, $value);
+				if(!empty($value)) {
+					$this->checkAndUpdateCmd($cmd, $value);
+				}
 				log::add('huawei4g', 'debug', 'key '.$key. ' valeur '.$value);
 			} catch (Exception $e) {
 				log::add('huawei4g', 'error', 'Impossible de mettre à jour le champs '.$key);
