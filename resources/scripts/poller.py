@@ -49,11 +49,6 @@ if len(sys.argv) == 4:
 		except:
 			list.append('{"signal()": "Not supported"}')
 
-		try:
-			list.append(json.dumps(client.sms.get_sms_list()))
-		except:
-			list.append('{"get_sms_list()": "Not supported"}')
-
 		client.user.logout()
 
 	except:

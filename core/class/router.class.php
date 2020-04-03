@@ -80,7 +80,7 @@ class Router {
 				break;
 			
 			case "sms":
-				$this->setInfo($this->getSMSPython());
+				$this->setInfoSMS($this->getSMSPython());
 				break;
 				
 			default:
