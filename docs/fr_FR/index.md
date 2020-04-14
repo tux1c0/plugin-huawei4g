@@ -59,10 +59,17 @@ Sauvegarder la configuration.
 Utilisation
 ===
 
-### Envoie de SMS par scénario
+### Actions sur les SMS par scénario
 
-Pour envoyer des SMS par scénario, choisissez la commande d'action "Envoyer SMS". Dans le champs "titre", remplissez le numéro de téléphone et dans le champs "Message" le texte à envoyer.
+-	Pour envoyer des SMS par scénario, choisissez la commande d'action "Envoyer SMS". Dans le champs "titre", remplissez le numéro de téléphone et dans le champs "Message" le texte à envoyer.
+-	Utilisez la fonction "Rafraichir SMS" si vous souhaitez mettre à jour les informations liées aux SMS. C'est pratique si vous voulez allez à un polling supérieur aux 5min.
+-	De manière générale, lancer les fonctions de refresh trop souvent peuvent bloquer le routeur qui se met en sécurité. Si cela arrive, penser à augmenter votre fréquence.
 
+### Debug
+
+-	En cas de problème d'installation, merci de poster le log de dépendance dans community
+-	En cas de problème de récupération d'information, passez le plugin en mode debug, et postez le log dans community. Votre routeur n'est peut être pas compatible.
+-	Pensez à préciser votre matériel (routeur, Jeedom, versions, Linux, ...)
 
 Changelog
 ===
@@ -74,3 +81,4 @@ Changelog
 -	19/03/2020 : Ajout lecture et envoie SMS
 -	25/03/2020 : Ajout possibilité de polling à 5min + bug fix
 -	30/03/2020 : Ajout suppression SMS et marge RF
+-	14/04/2020 : Ajout des valeurs pour les SMS (non lu, reçu; envoyé, supprimé) et une action pour rafraichir les SMS

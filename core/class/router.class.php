@@ -269,6 +269,10 @@ class Router {
 		return $this->output[6];
 	}
 	
+	public function getSMSCount() {
+		return $this->outputSMS[3];
+	}
+	
 	public function getSMS() {
 		return $this->outputSMS[2];
 	}

@@ -65,7 +65,7 @@ class huawei4g extends eqLogic {
 		}
 	}
 	
-	public static function cron() {
+	/*public static function cron() {
 		foreach (self::byType('huawei4g') as $rtr) {
 			if ($rtr->getIsEnable() == 1) {
 				$cmd = $rtr->getCmd(null, 'refreshsms');
@@ -74,7 +74,7 @@ class huawei4g extends eqLogic {
 				}
 			}
 		}
-    }
+    }*/
 	
 	public static function cron5() {
 		foreach (self::byType('huawei4g') as $rtr) {
@@ -183,6 +183,7 @@ class huawei4g extends eqLogic {
 			
 			if($this->infos['status'] == "Up") {
 				$this->setInfo($Router->getSMS());
+				$this->setInfo($Router->getSMSCount());
 			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
@@ -772,6 +773,62 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
+		$RouteurCmd = $this->getCmd(null, 'LocalUnread');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'LocalUnread');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('SMS Non Lu', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('LocalUnread');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setOrder('29');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'LocalInbox');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'LocalInbox');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('SMS Reçus', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('LocalInbox');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setOrder('30');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'LocalOutbox');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'LocalOutbox');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('SMS Envoyés', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('LocalOutbox');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setOrder('31');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'LocalDeleted');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'LocalDeleted');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('SMS Supprimés', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('LocalDeleted');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
+			$RouteurCmd->setSubType('numeric');
+			$RouteurCmd->setOrder('32');
+			$RouteurCmd->save();
+		}
+		
 		$RouteurCmd = $this->getCmd(null, 'Messages');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'Messages');
@@ -782,7 +839,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('29');
+			$RouteurCmd->setOrder('33');
 			$RouteurCmd->save();
 		}
 		
@@ -810,7 +867,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sendsms');
 			$RouteurCmd->setSubType('message');
-			$RouteurCmd->setOrder('31');
+			$RouteurCmd->setOrder('34');
 			$RouteurCmd->save();
 		}
 		
@@ -824,7 +881,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-delsms');
 			$RouteurCmd->setSubType('other');
-			$RouteurCmd->setOrder('30');
+			$RouteurCmd->setOrder('35');
 			$RouteurCmd->save();
 		}
 
