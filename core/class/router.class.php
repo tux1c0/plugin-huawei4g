@@ -44,8 +44,13 @@ class Router {
 	public function getAddress() {
 		return $this->routerAddress;
 	}
+	
+	private function encodeToUtf8($string) {
+		return mb_convert_encoding($string, "UTF-8", mb_detect_encoding($string, "UTF-8, ISO-8859-1, ISO-8859-15", true));
+	}
 
-	 public function getStatus() {
+	
+	public function getStatus() {
 		$state = $this->getState();
 		log::add('huawei4g', 'debug', 'State: '.$state['State']);
 		
@@ -198,7 +203,7 @@ class Router {
 	// SMS
 	private function setSMSPython($tel, $msg) {
 		$escapedArg = "'".str_replace("'", "'\\''", $msg)."'";
-		$command = dirname(__FILE__) . '/../../resources/scripts/sender.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$tel.' '.utf8_encode($escapedArg);
+		$command = dirname(__FILE__) . '/../../resources/scripts/sender.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$tel.' '.$this->encodeToUtf8($escapedArg);
 		try{
 			$json = shell_exec('python3 '.$command);
 		} catch (Exception $e){
