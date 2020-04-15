@@ -48,6 +48,16 @@ if len(sys.argv) == 4:
 			list.append(json.dumps(client.device.signal()))
 		except:
 			list.append('{"signal()": "Not supported"}')
+			
+		try:
+			list.append(json.dumps(client.monitoring.month_statistics()))
+		except:
+			list.append('{"month_statistics()": "Not supported"}')
+			
+		try:
+			list.append(json.dumps(client.wlan.multi_basic_settings()))
+		except:
+			list.append('{"wlan.multi_basic_settings()": "Not supported"}')
 
 		client.user.logout()
 

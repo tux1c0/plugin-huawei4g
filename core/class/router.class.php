@@ -198,7 +198,7 @@ class Router {
 	// SMS
 	private function setSMSPython($tel, $msg) {
 		$escapedArg = "'".str_replace("'", "'\\''", $msg)."'";
-		$command = dirname(__FILE__) . '/../../resources/scripts/sender.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$tel.' '.$escapedArg;
+		$command = dirname(__FILE__) . '/../../resources/scripts/sender.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$tel.' '.utf8_encode($escapedArg);
 		try{
 			$json = shell_exec('python3 '.$command);
 		} catch (Exception $e){
@@ -269,12 +269,21 @@ class Router {
 		return $this->output[6];
 	}
 	
-	public function getSMSCount() {
-		return $this->outputSMS[3];
+	public function getMonthStats() {
+		return $this->output[7];
 	}
 	
-	public function getSMS() {
+	public function getWifiInfo() {
+		return $this->output[8];
+	}
+	
+	public function getSMSCount() {
 		return $this->outputSMS[2];
+	}
+	
+	/* toujours garder en dernier dans le tableau */
+	public function getSMS() {
+		return $this->outputSMS[3];
 	}
 	
 	public function setReboot() {

@@ -25,14 +25,14 @@ if len(sys.argv) == 4:
 			list.append('{"state_login()": "Not supported"}')
 
 		try:
-			list.append(json.dumps(client.sms.get_sms_list()))
-		except:
-			list.append('{"get_sms_list()": "Not supported"}')
-			
-		try:
 			list.append(json.dumps(client.sms.sms_count()))
 		except:
 			list.append('{"sms_count()": "Not supported"}')
+			
+		try:
+			list.append(json.dumps(client.sms.get_sms_list()))
+		except:
+			list.append('{"get_sms_list()": "Not supported"}')
 
 		client.user.logout()
 

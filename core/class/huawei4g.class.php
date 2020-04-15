@@ -59,6 +59,7 @@ class huawei4g extends eqLogic {
 			try {
 				$rtr->postSave();
 				$rtr->getRouteurInfo();
+				$rtr->getSMSInfo();
 			} catch (Exception $e) {
 				log::add('huawei4g', 'error', $e->getMessage());
 			}
@@ -144,6 +145,8 @@ class huawei4g extends eqLogic {
 				$this->setInfo($Router->getDeviceBasicInfo());
 				$this->setInfo($Router->getCellInfo());
 				$this->setInfo($Router->getSignal());
+				$this->setInfo($Router->getMonthStats());
+				$this->setInfo($Router->getWifiInfo());
 			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
@@ -521,6 +524,36 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
+		$RouteurCmd = $this->getCmd(null, 'CurrentMonthUpload');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'CurrentMonthUpload');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Mois Upload', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('CurrentMonthUpload');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-upload');
+			$RouteurCmd->setSubType('numeric');
+			//$RouteurCmd->setUnite( 'o' );
+			$RouteurCmd->setOrder('14');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'CurrentMonthDownload');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'CurrentMonthDownload');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Mois Download', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('CurrentMonthDownload');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-download');
+			$RouteurCmd->setSubType('numeric');
+			//$RouteurCmd->setUnite( 'o' );
+			$RouteurCmd->setOrder('13');
+			$RouteurCmd->save();
+		}
+		
 		$RouteurCmd = $this->getCmd(null, 'refresh');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'refresh');
@@ -555,7 +588,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-linux');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('13');
+			$RouteurCmd->setOrder('15');
 			$RouteurCmd->save();
 		}
 		
@@ -569,7 +602,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-linux');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('14');
+			$RouteurCmd->setOrder('16');
 			$RouteurCmd->save();
 		}
 		
@@ -583,7 +616,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-linux');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('15');
+			$RouteurCmd->setOrder('17');
 			$RouteurCmd->save();
 		}
 		
@@ -597,7 +630,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('16');
+			$RouteurCmd->setOrder('18');
 			$RouteurCmd->save();
 		}
 		
@@ -611,7 +644,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('17');
+			$RouteurCmd->setOrder('19');
 			$RouteurCmd->save();
 		}
 		
@@ -625,7 +658,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('18');
+			$RouteurCmd->setOrder('20');
 			$RouteurCmd->save();
 		}
 		
@@ -639,7 +672,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('19');
+			$RouteurCmd->setOrder('21');
 			$RouteurCmd->save();
 		}
 		
@@ -654,7 +687,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'dBm' );
-			$RouteurCmd->setOrder('20');
+			$RouteurCmd->setOrder('22');
 			$RouteurCmd->save();
 		}
 		
@@ -669,7 +702,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'dBm' );
-			$RouteurCmd->setOrder('21');
+			$RouteurCmd->setOrder('23');
 			$RouteurCmd->save();
 		}
 		
@@ -684,7 +717,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'dBm' );
-			$RouteurCmd->setOrder('22');
+			$RouteurCmd->setOrder('24');
 			$RouteurCmd->save();
 		}
 		
@@ -699,7 +732,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setUnite( 'dB' );
-			$RouteurCmd->setOrder('23');
+			$RouteurCmd->setOrder('25');
 			$RouteurCmd->save();
 		}
 		
@@ -713,7 +746,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('24');
+			$RouteurCmd->setOrder('26');
 			$RouteurCmd->save();
 		}
 		
@@ -727,7 +760,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('25');
+			$RouteurCmd->setOrder('27');
 			$RouteurCmd->save();
 		}
 		
@@ -741,7 +774,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('26');
+			$RouteurCmd->setOrder('28');
 			$RouteurCmd->save();
 		}
 		
@@ -755,7 +788,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-antenna');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('27');
+			$RouteurCmd->setOrder('29');
 			$RouteurCmd->save();
 		}
 		
@@ -769,7 +802,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('28');
+			$RouteurCmd->setOrder('30');
 			$RouteurCmd->save();
 		}
 		
@@ -783,7 +816,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('29');
+			$RouteurCmd->setOrder('31');
 			$RouteurCmd->save();
 		}
 		
@@ -797,7 +830,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('30');
+			$RouteurCmd->setOrder('32');
 			$RouteurCmd->save();
 		}
 		
@@ -811,7 +844,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('31');
+			$RouteurCmd->setOrder('33');
 			$RouteurCmd->save();
 		}
 		
@@ -825,7 +858,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('32');
+			$RouteurCmd->setOrder('34');
 			$RouteurCmd->save();
 		}
 		
@@ -839,7 +872,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('33');
+			$RouteurCmd->setOrder('35');
 			$RouteurCmd->save();
 		}
 		
@@ -867,7 +900,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sendsms');
 			$RouteurCmd->setSubType('message');
-			$RouteurCmd->setOrder('34');
+			$RouteurCmd->setOrder('36');
 			$RouteurCmd->save();
 		}
 		
@@ -881,7 +914,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-delsms');
 			$RouteurCmd->setSubType('other');
-			$RouteurCmd->setOrder('35');
+			$RouteurCmd->setOrder('37');
 			$RouteurCmd->save();
 		}
 

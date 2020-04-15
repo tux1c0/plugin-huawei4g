@@ -6,15 +6,14 @@ Les informations supervisées
 -	Volumétrie de données
 -	Opérateur
 -	Signal 4G
--	SMS (lecture et envoie)
+-	SMS (nombre, lecture et envoie)
+-	SMS (suppression), donne des réponses aléatoires sur certain modèle. Le routeur renvoie un OK alors que l'action n'est pas réalisée.
 
-Installationn 
+Installation
 ===
 
 -	Le plugin, une fois installé, doit être activé. Il installera les dépéndances nécessaires au bon fonctionnement.
 -	Le plugin est compatible Debian 9/10, Jeedom v3/v4.
-
-
 
 Configuration
 ===
@@ -48,12 +47,15 @@ Le plugin n'est pas compatible avec les modèles suivant
 Tous les éléments suivants sont obligatoires pour avoir le plugin fonctionnel
 
 -   IP : adresse IP du routeur
-
 -   API (login et mot de passe de connexion du routeur définit au-dessus)
-
 -	Fréquence : choisir si la récupération des données est toutes les 5 ou 15 minutes
+-	SMS en mode texte : cocher la case si les SMS ne fonctionnent pas (principalement à cause des caractères accentués)
 
 Sauvegarder la configuration. 
+
+Upgrade
+===
+En cas de mise à jour du plugin, pensez à sauvegarder tous vos équipements si les données ne s'affichent pas, ou pour voirs les nouvelles commandes.
 
 
 Utilisation
@@ -64,6 +66,18 @@ Utilisation
 -	Pour envoyer des SMS par scénario, choisissez la commande d'action "Envoyer SMS". Dans le champs "titre", remplissez le numéro de téléphone et dans le champs "Message" le texte à envoyer.
 -	Utilisez la fonction "Rafraichir SMS" si vous souhaitez mettre à jour les informations liées aux SMS. C'est pratique si vous voulez allez à un polling supérieur aux 5min.
 -	De manière générale, lancer les fonctions de refresh trop souvent peuvent bloquer le routeur qui se met en sécurité. Si cela arrive, penser à augmenter votre fréquence.
+
+
+### Notification Manager
+
+Le plugin notification manager ne demande qu'une commande et il n'est pas possible de paramétrer un numéro et le message à envoyer par SMS.
+Dans ce cas, il existe 2 possibilités en utilisant un scénario (voir au-dessus) avec un virtuel ou avec une commande virtuelle sans scenario.
+-	Créer un virtuel et activez le
+-	Ajouter une commande action, soit qui appelera le scenario (voir la suite) ou directement appeler la commande du routeur
+-	Configurer cette commande (onglet configuration)
+-	Ajouter le scénario dans la section "Action avant exécution de la commande"
+-	Sauvegarder
+
 
 ### Debug
 
@@ -79,6 +93,7 @@ Changelog
 -	12/03/2020 : Passage en prod
 -	15/03/2020 : Ajout nombre SMS, redémarrage, correction bug quand aucune info remonte
 -	19/03/2020 : Ajout lecture et envoie SMS
--	25/03/2020 : Ajout possibilité de polling à 5min + bug fix
+-	25/03/2020 : Ajout possibilité de polling à 5 min + bug fix
 -	30/03/2020 : Ajout suppression SMS et marge RF
--	14/04/2020 : Ajout des valeurs pour les SMS (non lu, reçu; envoyé, supprimé) et une action pour rafraichir les SMS
+-	14/04/2020 : Ajout des valeurs pour les SMS (non lu, reçu; envoyé, supprimé) et une action pour rafraichir les SMS, ajout mode texte pour les SMS
+-	15/04/2020 : Ajout des stats mensuelle, ajout dépendance setuptools
