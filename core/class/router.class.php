@@ -282,6 +282,10 @@ class Router {
 		return $this->output[8];
 	}
 	
+	public function getWifiDetails() {
+		return $this->output[9];
+	}
+	
 	public function getSMSCount() {
 		return $this->outputSMS[2];
 	}

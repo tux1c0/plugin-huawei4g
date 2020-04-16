@@ -147,6 +147,7 @@ class huawei4g extends eqLogic {
 				$this->setInfo($Router->getSignal());
 				$this->setInfo($Router->getMonthStats());
 				$this->setInfo($Router->getWifiInfo());
+				$this->setInfo($Router->getWifiDetails());
 			}
 		} catch (Exception $e) {
 			log::add('huawei4g', 'error', $e);
