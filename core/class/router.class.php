@@ -281,7 +281,9 @@ class Router {
 	public function getWifiInfo() {
 		$tmp = $this->output[8];
 		$return = array();
+		log::add('huawei4g', 'debug', "Cleaning WiFi Radio");
 		foreach($tmp as $key => $value) {
+			log::add('huawei4g', 'debug', "Radio ".$tmp[$key]->ID);
 			if(isset($tmp[$key]->ID)) {
 				if($tmp[$key]->ID == "InternetGatewayDevice.X_Config.Wifi.Radio.1"){
 					$return["Radio 2.4 GHz"] = $tmp[$key]->wifienable;
