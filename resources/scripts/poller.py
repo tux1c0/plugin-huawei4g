@@ -55,12 +55,12 @@ if len(sys.argv) == 4:
 			list.append('{"month_statistics()": "Not supported"}')
 		
 		try:
-			list.append(json.dumps(client.wlan.status_switch_settings()))
+			list.append(json.dumps(client.wlan.status_switch_settings()).replace('{"radios": ',''))
 		except:
 			list.append('{"status_switch_settings()": "Not supported"}')
 		
 		try:
-			list.append(json.dumps(client.wlan.multi_basic_settings()))
+			list.append(json.dumps(client.wlan.multi_basic_settings()).replace('{"Ssids": ',''))
 		except:
 			list.append('{"multi_basic_settings()": "Not supported"}')
 
