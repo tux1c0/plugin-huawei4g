@@ -279,7 +279,19 @@ class Router {
 	}
 	
 	public function getWifiInfo() {
-		return $this->output[8];
+		$tmp = $this->output[8];
+		$return = array();
+		foreach($tmp as $key => $value) {
+			if(isset($tmp[$key]->ID)) {
+				if($tmp[$key]->ID == "InternetGatewayDevice.X_Config.Wifi.Radio.1"){
+					$return["Radio 2.4 GHz"] = $tmp[$key]->wifienable;
+				}
+				if($tmp[$key]->ID == "InternetGatewayDevice.X_Config.Wifi.Radio.2"){
+					$return["Radio 5 GHz"] = $tmp[$key]->wifienable;
+				}
+			}
+		}
+		return $return;
 	}
 	
 	public function getWifiDetails() {
