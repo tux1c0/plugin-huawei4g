@@ -60,7 +60,7 @@ if len(sys.argv) == 4:
 			list.append('{"status_switch_settings()": "Not supported"}')
 		
 		try:
-			list.append(json.dumps(client.wlan.multi_basic_settings()).replace('{"Ssids": ',''))
+			list.append(json.dumps(client.wlan.multi_basic_settings()).replace('{"Ssids": ','')[:-1])
 		except:
 			list.append('{"multi_basic_settings()": "Not supported"}')
 
