@@ -288,12 +288,12 @@ class Router {
 			/*foreach($tmp[$key] as $k => $v) {
 				log::add('huawei4g', 'debug', "cle ".$k." val ".$v);
 			}*/
-			if(isset($tmp[$key]->ID)) {
+			if(isset($tmp[$key]['ID'])) {
 				if($tmp[$key]['ID'] == "InternetGatewayDevice.X_Config.Wifi.Radio.1."){
-					$return["Radio 2.4 GHz"] = $tmp[$key]['wifienable'];
+					$return["Radio24"] = $tmp[$key]['wifienable'];
 				}
 				if($tmp[$key]['ID'] == "InternetGatewayDevice.X_Config.Wifi.Radio.2."){
-					$return["Radio 5 GHz"] = $tmp[$key]['wifienable'];
+					$return["Radio5"] = $tmp[$key]['wifienable'];
 				}
 			}
 		}

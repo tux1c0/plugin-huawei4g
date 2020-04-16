@@ -918,6 +918,34 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setOrder('37');
 			$RouteurCmd->save();
 		}
+		
+		$RouteurCmd = $this->getCmd(null, 'Radio24');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'Radio24');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Radio 2.4 GHz', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('Radio24');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-wifi-bin');
+			$RouteurCmd->setSubType('binary');
+			$RouteurCmd->setOrder('38');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'Radio5');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'Radio5');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Radio 5 GHz', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('Radio5');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-wifi-bin');
+			$RouteurCmd->setSubType('binary');
+			$RouteurCmd->setOrder('39');
+			$RouteurCmd->save();
+		}
 
 	}
 	
