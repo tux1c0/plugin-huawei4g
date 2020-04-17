@@ -230,6 +230,12 @@ class huawei4g extends eqLogic {
 							case "lte_bandinfo": 
 								$this->infos['band'] = $value;
 								break;
+							case "Radio24": 
+								$this->infos['Radio24'] = intval($value);
+								break;
+							case "Radio5": 
+								$this->infos['Radio5'] = intval($value);
+								break;
 							default:
 								$this->infos[$key] = $value;
 						}
@@ -1028,6 +1034,20 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setTemplate('dashboard','huawei4g-wifi-bin');
 			$RouteurCmd->setSubType('binary');
 			$RouteurCmd->setOrder('40');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'Ssid');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'Ssid');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('SSID', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('Ssid');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-ssid');
+			$RouteurCmd->setSubType('binary');
+			$RouteurCmd->setOrder('41');
 			$RouteurCmd->save();
 		}
 
