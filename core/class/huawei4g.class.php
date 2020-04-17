@@ -422,7 +422,7 @@ class huawei4g extends eqLogic {
 	
 		/*     * *********************Methode d'instance************************* */
 	public function preSave() {
-		$this->setDisplay('height','900');
+		//$this->setDisplay('height','900');
 		//$this->setDisplay('width','200');
     }
 	
