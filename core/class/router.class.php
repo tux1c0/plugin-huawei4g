@@ -248,7 +248,7 @@ class Router {
 	}
 	
 	// Switching on/off mobile data
-	private function setSwitchData($switch) {
+	private function SwitchData($switch) {
 		$command = dirname(__FILE__) . '/../../resources/scripts/dialup.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$switch;
 		try{
 			$json = shell_exec('python3 '.$command);
@@ -330,6 +330,10 @@ class Router {
 	
 	public function setReboot() {
 		return $this->reboot();
+	}
+	
+	public function setSwitchData($switch) {
+		return $this->SwitchData($switch);	
 	}
 	
 	public function getState() {
