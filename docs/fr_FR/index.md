@@ -32,6 +32,7 @@ Le plugin est compatible avec les modèles suivant
 -	Huawei B525s-65a
 -	Huawei E5186s-22a
 -	Huawei B525s-23a
+-	Huawei E5573Bs-320
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
@@ -97,4 +98,4 @@ Changelog
 -	30/03/2020 : Ajout suppression SMS et marge RF
 -	14/04/2020 : Ajout des valeurs pour les SMS (non lu, reçu; envoyé, supprimé) et une action pour rafraichir les SMS, ajout mode texte pour les SMS
 -	15/04/2020 : Ajout des stats mensuelle, ajout dépendance setuptools
--	17/04/2020 : Ajout switch mobile data et wifi
+-	17/04/2020 : Ajout switch mobile data et wifi, correction affichage

@@ -5,19 +5,30 @@
 	<script>
 	jeedom.cmd.update['#id#'] = function(_options) {
 		if(_options.display_value) {
-			var ssids;
 			var arrayJSON = JSON.parse(_options.display_value);
+            $('.cmd[data-cmd_id=#id#] .SSID').empty();
 			for (var i = 0; i < arrayJSON.length; i++) {
 				var SSID = arrayJSON[i];
-				var StatutSMS;
+                var icon;
 				if(SSID.ID.includes('Radio.1')) {
-					ssids += $('<span>2.4 GHz Statut : '+SSID.WifiEnable+' '+SSID.WifiSsid+'</span>');
+                	if(SSID.WifiEnable == '0') {
+                    	icon = '<i class="fas fa-times"></i>';
+                    } else {
+                    	icon = '<i class="fas fa-check"></i>';
+                       }
+      
+                    $('.cmd[data-cmd_id=#id#] .SSID').append('<span>2.4 GHz SSID : '+SSID.WifiSsid+' '+icon+'</span><br/>');
 				}else{
-					ssids += $('<span>5 GHz Statut : '+SSID.WifiEnable+' '+SSID.WifiSsid+'</span>');
+					if(SSID.WifiEnable == '0') {
+                    	icon = '<i class="fas fa-times"></i>';
+                    } else {
+                    	icon = '<i class="fas fa-check"></i>';
+                       }
+					$('.cmd[data-cmd_id=#id#] .SSID').append('<span>5 GHz Statut : '+SSID.WifiSsid+' '+icon+'</span><br/>');
 				}
 			}
-			$('.cmd[data-cmd_id=#id#] .SSID').empty().append(ssids);
 		}
+		
 		var cmd = $('.cmd[data-cmd_id=#id#]')
 		cmd.attr('title','Date de valeur : '+_options.valueDate+'<br/>Date de collecte : '+_options.collectDate)
 		if(_options.alertLevel){

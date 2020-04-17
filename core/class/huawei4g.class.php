@@ -225,7 +225,7 @@ class huawei4g extends eqLogic {
 								$this->infos[$key] = json_encode($value['Message']);
 								break;
 							case "Ssid":
-								$this->infos[$key] = json_encode($value['Ssid']);
+								$this->infos[$key] = json_encode($value);
 								break;
 							case "lte_bandinfo": 
 								$this->infos['band'] = $value;
