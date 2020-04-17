@@ -17,14 +17,14 @@
                     	icon = '<i class="fas fa-check"></i>';
                        }
       
-                    $('.cmd[data-cmd_id=#id#] .SSID').append('<span>2.4 GHz SSID : '+SSID.WifiSsid+' '+icon+'</span><br/>');
+                    $('.cmd[data-cmd_id=#id#] .SSID').append('<span>2.4 GHz '+SSID.WifiSsid+' '+icon+'</span><br/>');
 				}else{
 					if(SSID.WifiEnable == '0') {
                     	icon = '<i class="fas fa-times"></i>';
                     } else {
                     	icon = '<i class="fas fa-check"></i>';
                        }
-					$('.cmd[data-cmd_id=#id#] .SSID').append('<span>5 GHz Statut : '+SSID.WifiSsid+' '+icon+'</span><br/>');
+					$('.cmd[data-cmd_id=#id#] .SSID').append('<span>5 GHz '+SSID.WifiSsid+' '+icon+'</span><br/>');
 				}
 			}
 		}
