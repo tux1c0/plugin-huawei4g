@@ -129,6 +129,12 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 									</select>
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">{{SMS en mode texte}}</label>
+								<div class="col-sm-3">
+									<input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="texteMode" />{{Activer}}
+								</div>
+							</div>
 						</div>
 					</div>
 				</fieldset>
