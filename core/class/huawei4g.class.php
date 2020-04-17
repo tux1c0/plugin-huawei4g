@@ -236,6 +236,9 @@ class huawei4g extends eqLogic {
 							case "Radio5": 
 								$this->infos['Radio5'] = intval($value);
 								break;
+							case "dataswitch": 
+								$this->infos['dataswitch'] = intval($value);
+								break;
 							default:
 								$this->infos[$key] = $value;
 						}
@@ -849,8 +852,8 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('dataswitch');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','huawei4g-data-bin');
-			$RouteurCmd->setSubType('binary');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-data-status');
+			$RouteurCmd->setSubType('numeric');
 			$RouteurCmd->setOrder('30');
 			$RouteurCmd->save();
 		}
