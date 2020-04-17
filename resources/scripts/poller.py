@@ -48,11 +48,26 @@ if len(sys.argv) == 4:
 			list.append(json.dumps(client.device.signal()))
 		except:
 			list.append('{"signal()": "Not supported"}')
-
+			
 		try:
-			list.append(json.dumps(client.sms.get_sms_list()))
+			list.append(json.dumps(client.monitoring.month_statistics()))
 		except:
-			list.append('{"get_sms_list()": "Not supported"}')
+			list.append('{"month_statistics()": "Not supported"}')
+			
+		try:
+			list.append(json.dumps(client.dial_up.mobile_dataswitch()))
+		except:
+			list.append('{"mobile_dataswitch()": "Not supported"}')
+		
+		try:
+			list.append(json.dumps(client.wlan.status_switch_settings()).replace('{"radios": ',''))
+		except:
+			list.append('{"status_switch_settings()": "Not supported"}')
+		
+		try:
+			list.append(json.dumps(client.wlan.multi_basic_settings()).replace('{"Ssids": ','')[:-1])
+		except:
+			list.append('{"multi_basic_settings()": "Not supported"}')
 
 		client.user.logout()
 

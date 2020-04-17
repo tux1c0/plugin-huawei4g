@@ -13,7 +13,7 @@ echo "deb https://repository.salamek.cz/deb/pub all main" | tee /etc/apt/sources
 echo 20 > ${PROGRESS_FILE}
 apt-get update
 echo 30 > ${PROGRESS_FILE}
-apt-get install -y python3-dicttoxml python3-xmltodict python3-requests
+apt-get install -y python3-dicttoxml python3-xmltodict python3-requests python3-setuptools
 echo 40 > ${PROGRESS_FILE}
 apt-get install -y python3-huawei-lte-api
 echo 50 > ${PROGRESS_FILE}

@@ -1,12 +1,12 @@
 <div class="cmd cmd-widget #history#" style="float:left; clear:both;" data-type="info" data-subtype="string" data-template="default" data-cmd_id="#id#" data-cmd_uid="#uid#" data-version="#version#" data-eqLogic_id="#eqLogic_id#">
 	<div class="content-xs">
 		&nbsp;<span class="fas fa-sms cmdName #hide_name#"> #name_display# </span>
-		&nbsp;<i id="Prev" class="fas fa-chevron-left" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;"></i>
-		&nbsp;<i id="Next" class="fas fa-chevron-right" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;"></i>
+		&nbsp;<span id="Prev" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;"><i class="fas fa-chevron-left" ></i> Précédent</span>
+		&nbsp;<span id="Next" style="cursor: pointer; height: 15px; padding: 1px; transition: background-color .5s, color .5s;">Suivant <i class="fas fa-chevron-right" ></i></span>
 	</div>
-	<section id="Wrapper" style="display: flex; height: 65px; width:200px;">
+	<section id="Wrapper" style="display: flex; height: 120px; width:200px;">
 		<div id="Slideshow" style="display: flex; flex-direction: column; overflow: hidden; position: relative;">
-			<div id="Slider" style="height: 50px; overflow: hidden;">
+			<div id="Slider" style="height: 120px; overflow: hidden;">
 			</div>	
 		</div>
 	</section>
@@ -30,7 +30,7 @@
 				}else{
 					StatutSMS = "Envoyé";
 				}
-				var txtArea = $('<textarea class="input-sm message" sms-id="'+SMS.Index+'">Statut : '+StatutSMS+'&#10;Tel : '+SMS.Phone+'&#10;Date : '+SMS.Date+'&#10;'+SMS.Content+'</textarea>');
+				var txtArea = $('<textarea class="input-sm message" style="height: 120px;" sms-id="'+SMS.Index+'">Statut : '+StatutSMS+'&#10;Tel : '+SMS.Phone+'&#10;Date : '+SMS.Date+'&#10;'+SMS.Content+'</textarea>');
 				$("#Slider").append(txtArea);
 			}
 		}
