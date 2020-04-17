@@ -97,3 +97,4 @@ Changelog
 -	30/03/2020 : Ajout suppression SMS et marge RF
 -	14/04/2020 : Ajout des valeurs pour les SMS (non lu, reçu; envoyé, supprimé) et une action pour rafraichir les SMS, ajout mode texte pour les SMS
 -	15/04/2020 : Ajout des stats mensuelle, ajout dépendance setuptools
+-	17/04/2020 : Ajout switch mobile data et wifi

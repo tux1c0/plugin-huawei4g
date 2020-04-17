@@ -247,6 +247,17 @@ class Router {
 		return json_decode($json, true);		
 	}
 	
+	// Switching on/off mobile data
+	private function setSwitchData($switch) {
+		$command = dirname(__FILE__) . '/../../resources/scripts/dialup.py '.$this->getIP().' '.$this->getLogin().' '.$this->getPassword().' '.$switch;
+		try{
+			$json = shell_exec('python3 '.$command);
+		} catch (Exception $e){
+			log::add('huawei4g', 'debug', $e);
+		}
+		log::add('huawei4g', 'debug', $json);
+		return json_decode($json, true);		
+	}
 		
 	/*
 	Functions w/o login needed
@@ -278,8 +289,12 @@ class Router {
 		return $this->output[7];
 	}
 	
+	public function getMobileDataswitch() {
+		return $this->output[8];
+	}
+	
 	public function getWifiInfo() {
-		$tmp = $this->output[8]['radio'];
+		$tmp = $this->output[9]['radio'];
 		$return = array();
 		log::add('huawei4g', 'debug', "Cleaning WiFi Radio");
 		foreach($tmp as $key => $value) {
@@ -301,7 +316,7 @@ class Router {
 	}
 	
 	public function getWifiDetails() {
-		return $this->output[9];
+		return $this->output[10];
 	}
 	
 	public function getSMSCount() {

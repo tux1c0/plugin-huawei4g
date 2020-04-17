@@ -146,6 +146,7 @@ class huawei4g extends eqLogic {
 				$this->setInfo($Router->getCellInfo());
 				$this->setInfo($Router->getSignal());
 				$this->setInfo($Router->getMonthStats());
+				$this->setInfo($Router->getMobileDataswitch());
 				$this->setInfo($Router->getWifiInfo());
 				$this->setInfo($Router->getWifiDetails());
 			}
@@ -223,6 +224,9 @@ class huawei4g extends eqLogic {
 							case "Messages": 
 								$this->infos[$key] = json_encode($value['Message']);
 								break;
+							case "Ssid":
+								$this->infos[$key] = json_encode($value['Ssid']);
+								break;
 							case "lte_bandinfo": 
 								$this->infos['band'] = $value;
 								break;
@@ -254,6 +258,44 @@ class huawei4g extends eqLogic {
 		}
 		
 		log::add('huawei4g', 'debug', 'Rebooting: '.$res);
+	}
+	
+	public function enableData() {
+		// getting configuration
+		$IPaddress = $this->getConfiguration('ip');
+		$login = $this->getConfiguration('username');
+		$pwd = $this->getConfiguration('password');
+		
+		// setting the router session
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+		try {
+			$Router->setSession($login, $pwd, "");
+			$res = $Router->setSwitchData(1);
+		} catch (Exception $e) {
+			log::add('huawei4g', 'error', $e);
+		}
+		
+		log::add('huawei4g', 'debug', 'Enabling data: '.$res);
+	}
+	
+	public function disableData() {
+		// getting configuration
+		$IPaddress = $this->getConfiguration('ip');
+		$login = $this->getConfiguration('username');
+		$pwd = $this->getConfiguration('password');
+		
+		// setting the router session
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+		try {
+			$Router->setSession($login, $pwd, "");
+			$res = $Router->setSwitchData(0);
+		} catch (Exception $e) {
+			log::add('huawei4g', 'error', $e);
+		}
+		
+		log::add('huawei4g', 'debug', 'Disabling data: '.$res);
 	}
 	
 	public function sendSMS($arr) {
@@ -793,6 +835,20 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
+		$RouteurCmd = $this->getCmd(null, 'dataswitch');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'dataswitch');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Mobile data', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('dataswitch');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-data-bin');
+			$RouteurCmd->setSubType('binary');
+			$RouteurCmd->setOrder('30');
+			$RouteurCmd->save();
+		}
+		
 		$RouteurCmd = $this->getCmd(null, 'Count');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'Count');
@@ -803,7 +859,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('30');
+			$RouteurCmd->setOrder('31');
 			$RouteurCmd->save();
 		}
 		
@@ -817,7 +873,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('31');
+			$RouteurCmd->setOrder('32');
 			$RouteurCmd->save();
 		}
 		
@@ -831,7 +887,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('32');
+			$RouteurCmd->setOrder('33');
 			$RouteurCmd->save();
 		}
 		
@@ -845,7 +901,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('33');
+			$RouteurCmd->setOrder('34');
 			$RouteurCmd->save();
 		}
 		
@@ -859,7 +915,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('numeric');
-			$RouteurCmd->setOrder('34');
+			$RouteurCmd->setOrder('35');
 			$RouteurCmd->save();
 		}
 		
@@ -873,7 +929,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
 			$RouteurCmd->setSubType('string');
-			$RouteurCmd->setOrder('35');
+			$RouteurCmd->setOrder('36');
 			$RouteurCmd->save();
 		}
 		
@@ -891,6 +947,34 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->save();
 		}
 		
+		$RouteurCmd = $this->getCmd(null, 'disabledata');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'disabledata');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Désactiver Data', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('disabledata');
+			$RouteurCmd->setType('action');
+			//$RouteurCmd->setTemplate('dashboard','huawei4g-btn');
+			$RouteurCmd->setSubType('other');
+			//$RouteurCmd->setOrder('30');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'enabledata');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'enabledata');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Activer Data', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('enabledata');
+			$RouteurCmd->setType('action');
+			//$RouteurCmd->setTemplate('dashboard','huawei4g-btn');
+			$RouteurCmd->setSubType('other');
+			//$RouteurCmd->setOrder('30');
+			$RouteurCmd->save();
+		}
+		
 		$RouteurCmd = $this->getCmd(null, 'sendsms');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'sendsms');
@@ -901,7 +985,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-sendsms');
 			$RouteurCmd->setSubType('message');
-			$RouteurCmd->setOrder('36');
+			$RouteurCmd->setOrder('37');
 			$RouteurCmd->save();
 		}
 		
@@ -915,7 +999,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('action');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-delsms');
 			$RouteurCmd->setSubType('other');
-			$RouteurCmd->setOrder('37');
+			$RouteurCmd->setOrder('38');
 			$RouteurCmd->save();
 		}
 		
@@ -929,7 +1013,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-wifi-bin');
 			$RouteurCmd->setSubType('binary');
-			$RouteurCmd->setOrder('38');
+			$RouteurCmd->setOrder('39');
 			$RouteurCmd->save();
 		}
 		
@@ -943,7 +1027,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setType('info');
 			$RouteurCmd->setTemplate('dashboard','huawei4g-wifi-bin');
 			$RouteurCmd->setSubType('binary');
-			$RouteurCmd->setOrder('39');
+			$RouteurCmd->setOrder('40');
 			$RouteurCmd->save();
 		}
 
@@ -975,6 +1059,7 @@ class huawei4gCmd extends cmd {
 				$eqLogic->reboot();
 				log::add('huawei4g','debug','reboot ' . $this->getHumanName());
 				break;
+				
 			case "sendsms":
 				$eqLogic->sendSMS($_options);
 				log::add('huawei4g','debug','sendsms ' . $this->getHumanName());
@@ -994,6 +1079,16 @@ class huawei4gCmd extends cmd {
 			case "delsms":
 				$eqLogic->delSMS($_options);
 				log::add('huawei4g','debug','delsms ' . $this->getHumanName());
+				break;
+			
+			case "enabledata":
+				$eqLogic->enableData($_options);
+				log::add('huawei4g','debug','enabledata ' . $this->getHumanName());
+				break;
+			
+			case "disabledata":
+				$eqLogic->disableData($_options);
+				log::add('huawei4g','debug','disabledata ' . $this->getHumanName());
 				break;
  		}
 		return true;

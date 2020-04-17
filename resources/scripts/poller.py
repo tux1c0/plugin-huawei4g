@@ -53,6 +53,11 @@ if len(sys.argv) == 4:
 			list.append(json.dumps(client.monitoring.month_statistics()))
 		except:
 			list.append('{"month_statistics()": "Not supported"}')
+			
+		try:
+			list.append(json.dumps(client.dial_up.mobile_dataswitch()))
+		except:
+			list.append('{"mobile_dataswitch()": "Not supported"}')
 		
 		try:
 			list.append(json.dumps(client.wlan.status_switch_settings()).replace('{"radios": ',''))
