@@ -239,6 +239,9 @@ class huawei4g extends eqLogic {
 							case "dataswitch": 
 								$this->infos['dataswitch'] = intval($value);
 								break;
+							case "DeviceName": 
+								$this->infos['devicename'] = $value;
+								break;
 							default:
 								$this->infos[$key] = $value;
 						}
