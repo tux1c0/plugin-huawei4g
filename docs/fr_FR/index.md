@@ -32,7 +32,7 @@ Le plugin est compatible avec les modèles suivant
 -	Huawei B525s-65a
 -	Huawei E5186s-22a
 -	Huawei B525s-23a
--	Huawei E5573Bs-320
+-	Huawei E5573Bs-320 (toutes les informations ne sont pas disponibles sur le routeur)
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
