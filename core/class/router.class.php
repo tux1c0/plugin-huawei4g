@@ -14,7 +14,7 @@ class Router {
 
 
 	private function setLogin($l) {
-		$this->login = $l;
+		$this->login = "'".str_replace("'", "'\\''", $l)."'";
 	}
 	
 	private function getLogin() {
@@ -22,7 +22,7 @@ class Router {
 	}
 	
 	private function setPassword($p) {
-		$this->password = $p;
+		$this->password = "'".str_replace("'", "'\\''", $p)."'";
 	}
 	
 	private function getPassword() {
