@@ -26,7 +26,7 @@ Un login et mot de passe doit être défini sur le routeur.
 
 Le plugin est compatible avec les modèles suivant
 -	Huawei B715s-23c
--	Huawei B528s-23a
+-	Huawei B528s-23a (certains firmware ne fournissent pas le support des SMS)
 -	Huawei B612s-25d
 -	Huawei B535-232
 -	Huawei B525s-65a
@@ -48,7 +48,7 @@ Le plugin n'est pas compatible avec les modèles suivant
 Tous les éléments suivants sont obligatoires pour avoir le plugin fonctionnel
 
 -   IP : adresse IP du routeur
--   API (login et mot de passe de connexion du routeur définit au-dessus)
+-   API (login et mot de passe de connexion du routeur définit au-dessus). Les espaces ne sont pas supportés dans le mot de passe.
 -	Fréquence : choisir si la récupération des données est toutes les 5 ou 15 minutes
 -	SMS en mode texte : cocher la case si les SMS ne fonctionnent pas (principalement à cause des caractères accentués)
 
