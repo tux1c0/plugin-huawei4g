@@ -197,6 +197,16 @@ class huawei4g extends eqLogic {
 		$this->updateInfo();
 	}
 	
+	private function getLastSMSReceived($json) {
+		$values = array();
+		
+		$obj = json_decode($json);
+		log::add('huawei4g', 'debug', $obj);
+		
+		$values['Number'] = "+33123456789";
+		$values['Text'] = "Sample test"];
+		return $values;
+	}
 	// fill the info array
 	private function setInfo($infoTab) {
 		if(isset($infoTab)) {
@@ -223,6 +233,9 @@ class huawei4g extends eqLogic {
 						switch($key) {
 							case "Messages": 
 								$this->infos[$key] = json_encode($value['Message']);
+								$LastSMS = $this->getLastSMSReceived(json_encode($value['Message']));
+								$this->infos['LastNumber'] = $LastSMS['Number'];
+								$this->infos['LastSMS'] = $LastSMS['Text'];
 								break;
 							case "Ssid":
 								$this->infos[$key] = json_encode($value);

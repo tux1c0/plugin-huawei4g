@@ -99,3 +99,5 @@ Changelog
 -	14/04/2020 : Ajout des valeurs pour les SMS (non lu, reçu; envoyé, supprimé) et une action pour rafraichir les SMS, ajout mode texte pour les SMS
 -	15/04/2020 : Ajout des stats mensuelle, ajout dépendance setuptools
 -	17/04/2020 : Ajout switch mobile data et wifi, correction affichage
+-	25/06/2020 : Corrections icônes pour Jeedom 4.1.
+-	27/06/2020 : Update librairie 1.4.12

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='huawei-lte-api',
-    version='1.4.11',
+    version='1.4.12',
     packages=find_packages(exclude=['tests', 'tests.*']),
     package_data={'huawei_lte_api': ['py.typed']},
     install_requires=[
@@ -43,6 +43,8 @@ setup(
         'pylint',
         'tox',
         'pytest-cov'
-    ]
-
+    ],
+    project_urls={
+        'Release notes': 'https://github.com/Salamek/huawei-lte-api/releases',
+    },
 )
