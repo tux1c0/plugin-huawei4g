@@ -204,7 +204,7 @@ class huawei4g extends eqLogic {
 		log::add('huawei4g', 'debug', $obj);
 		
 		$values['Number'] = "+33123456789";
-		$values['Text'] = "Sample test"];
+		$values['Text'] = "Sample test";
 		return $values;
 	}
 	
