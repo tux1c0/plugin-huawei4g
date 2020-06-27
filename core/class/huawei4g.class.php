@@ -207,6 +207,7 @@ class huawei4g extends eqLogic {
 		$values['Text'] = "Sample test"];
 		return $values;
 	}
+	
 	// fill the info array
 	private function setInfo($infoTab) {
 		if(isset($infoTab)) {
@@ -1069,7 +1070,34 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setOrder('41');
 			$RouteurCmd->save();
 		}
+		
+		$RouteurCmd = $this->getCmd(null, 'LastNumber');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'LastNumber');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Dernier Numéro', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('LastNumber');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('42');
+			$RouteurCmd->save();
+		}
 
+		$RouteurCmd = $this->getCmd(null, 'LastSMS');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'LastSMS');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Dernier Message', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('LastSMS');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('43');
+			$RouteurCmd->save();
+		}
 	}
 	
 	public function postUpdate() {		
