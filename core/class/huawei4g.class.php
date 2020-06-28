@@ -203,6 +203,11 @@ class huawei4g extends eqLogic {
 		$obj = json_decode($json);
 		log::add('huawei4g', 'debug', $obj);
 		
+		foreach($obj as $key => $value) {
+			log::add('huawei4g', 'debug', 'key SMS '.$key);
+			log::add('huawei4g', 'debug', 'value SMS '.$value);
+		}
+		
 		$values['Number'] = "+33123456789";
 		$values['Text'] = "Sample test";
 		return $values;
