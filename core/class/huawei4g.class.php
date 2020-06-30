@@ -199,17 +199,37 @@ class huawei4g extends eqLogic {
 	
 	private function getLastSMSReceived($json) {
 		$values = array();
-		
+		$DateSms;
+		$values['Number'] = "N/A";
+		$values['Text'] = "N/A";
+
 		$obj = json_decode($json);
 		log::add('huawei4g', 'debug', $obj);
-		
+
 		foreach($obj as $key => $value) {
+			$NewDate = DateTime::createFromFormat('Y-m-d H:i:s', $value->Date);
 			log::add('huawei4g', 'debug', 'key SMS '.$key);
-			log::add('huawei4g', 'debug', 'value SMS '.$value);
+			log::add('huawei4g', 'debug', 'value Phone '.$value->Phone);
+			log::add('huawei4g', 'debug', 'value Content '.$value->Content);
+			if($value->Smstat == 0) {
+				log::add('huawei4g', 'debug', 'value Sms reçu');
+				if(empty($DateSms)) {
+					log::add('huawei4g', 'debug', 'value Date empty, setting date '.$NewDate->format('Y-m-d'));
+					$DateSms = $NewDate;
+				}
+				log::add('huawei4g', 'debug', 'date sms '.$DateSms->format('Y-m-d H:i:s'));
+				log::add('huawei4g', 'debug', 'new date '.$NewDate->format('Y-m-d H:i:s'));
+
+				if($DateSms <= $NewDate) {
+					log::add('huawei4g', 'debug', 'value Date not empty, comparing dates');
+
+					$DateSme = $value->Date;
+					$values['Number'] = $value->Phone;
+					$values['Text'] = $value->Content;
+				}
+			}
 		}
-		
-		$values['Number'] = "+33123456789";
-		$values['Text'] = "Sample test";
+
 		return $values;
 	}
 	
