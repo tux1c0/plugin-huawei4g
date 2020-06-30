@@ -1104,7 +1104,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('LastNumber');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('string');
 			$RouteurCmd->setOrder('42');
 			$RouteurCmd->save();
@@ -1118,7 +1118,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setEqLogic_id($this->getId());
 			$RouteurCmd->setLogicalId('LastSMS');
 			$RouteurCmd->setType('info');
-			$RouteurCmd->setTemplate('dashboard','huawei4g-smstxt');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
 			$RouteurCmd->setSubType('string');
 			$RouteurCmd->setOrder('43');
 			$RouteurCmd->save();
