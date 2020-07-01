@@ -1,0 +1,15 @@
+<div class="cmd cmd-widget" data-type="info" data-subtype="numeric" data-template="default" data-version="#version#" data-eqLogic_id="#eqLogic_id#" data-cmd_id="#id#" data-cmd_uid="#uid#">
+	<span class="cmdName #hide_name#">#name_display#</span> <strong class="state">#state#</strong>
+	<script>
+		jeedom.cmd.update['#id#'] = function(_options) {
+			var cmd = $('.cmd[data-cmd_id=#id#]')
+			
+			var measuredTime = new Date(null);
+			measuredTime.setSeconds(_options.display_value);
+			var MHSTime = measuredTime.toISOString().substr(11, 8);
+			
+			cmd.find('.state').empty().append(MHSTime)
+		}
+		jeedom.cmd.update['#id#']({display_value:'#state#'})
+	</script>
+</div>

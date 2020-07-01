@@ -62,6 +62,11 @@ En cas de mise à jour du plugin, pensez à sauvegarder tous vos équipements si
 Utilisation
 ===
 
+### Templates
+
+-	Le plugin vient avec son jeu de template dashboard et mobile
+-	Si le template ne se configure pas, vous pouvez aller dans le menu de configuration des commandes, onglet affichage et choisir le template dans dashboard ou mobile, section Huawei4G.
+
 ### Actions sur les SMS par scénario
 
 -	Pour envoyer des SMS par scénario, choisissez la commande d'action "Envoyer SMS". Dans le champs "titre", remplissez le numéro de téléphone et dans le champs "Message" le texte à envoyer.
@@ -101,3 +106,4 @@ Changelog
 -	17/04/2020 : Ajout switch mobile data et wifi, correction affichage
 -	25/06/2020 : Corrections icônes pour Jeedom 4.1.
 -	27/06/2020 : Update librairie 1.4.12
+-	01/07/2020 : Ajout templates mobile
