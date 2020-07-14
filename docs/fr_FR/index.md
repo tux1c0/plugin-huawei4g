@@ -26,13 +26,13 @@ Un login et mot de passe doit être défini sur le routeur.
 
 Le plugin est compatible avec les modèles suivant
 -	Huawei B715s-23c
--	Huawei B528s-23a
+-	Huawei B528s-23a (certains firmware ne fournissent pas le support des SMS)
 -	Huawei B612s-25d
 -	Huawei B535-232
 -	Huawei B525s-65a
 -	Huawei E5186s-22a
 -	Huawei B525s-23a
--	Huawei E5573Bs-320
+-	Huawei E5573Bs-320 (toutes les informations ne sont pas disponibles sur le routeur)
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
@@ -48,7 +48,7 @@ Le plugin n'est pas compatible avec les modèles suivant
 Tous les éléments suivants sont obligatoires pour avoir le plugin fonctionnel
 
 -   IP : adresse IP du routeur
--   API (login et mot de passe de connexion du routeur définit au-dessus)
+-   API (login et mot de passe de connexion du routeur définit au-dessus). Les espaces ne sont pas supportés dans le mot de passe.
 -	Fréquence : choisir si la récupération des données est toutes les 5 ou 15 minutes
 -	SMS en mode texte : cocher la case si les SMS ne fonctionnent pas (principalement à cause des caractères accentués)
 
@@ -61,6 +61,11 @@ En cas de mise à jour du plugin, pensez à sauvegarder tous vos équipements si
 
 Utilisation
 ===
+
+### Templates
+
+-	Le plugin vient avec son jeu de template dashboard et mobile
+-	Si le template ne se configure pas, vous pouvez aller dans le menu de configuration des commandes, onglet affichage et choisir le template dans dashboard ou mobile, section Huawei4G.
 
 ### Actions sur les SMS par scénario
 
@@ -99,3 +104,6 @@ Changelog
 -	14/04/2020 : Ajout des valeurs pour les SMS (non lu, reçu; envoyé, supprimé) et une action pour rafraichir les SMS, ajout mode texte pour les SMS
 -	15/04/2020 : Ajout des stats mensuelle, ajout dépendance setuptools
 -	17/04/2020 : Ajout switch mobile data et wifi, correction affichage
+-	25/06/2020 : Corrections icônes pour Jeedom 4.1.
+-	27/06/2020 : Update librairie 1.4.12
+-	01/07/2020 : Ajout templates mobile

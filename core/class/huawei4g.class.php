@@ -197,6 +197,42 @@ class huawei4g extends eqLogic {
 		$this->updateInfo();
 	}
 	
+	private function getLastSMSReceived($json) {
+		$values = array();
+		$DateSms;
+		$values['Number'] = "N/A";
+		$values['Text'] = "N/A";
+
+		$obj = json_decode($json);
+		log::add('huawei4g', 'debug', $obj);
+
+		foreach($obj as $key => $value) {
+			$NewDate = DateTime::createFromFormat('Y-m-d H:i:s', $value->Date);
+			log::add('huawei4g', 'debug', 'key SMS '.$key);
+			log::add('huawei4g', 'debug', 'value Phone '.$value->Phone);
+			log::add('huawei4g', 'debug', 'value Content '.$value->Content);
+			if($value->Smstat == 0) {
+				log::add('huawei4g', 'debug', 'value Sms reçu');
+				if(empty($DateSms)) {
+					log::add('huawei4g', 'debug', 'value Date empty, setting date '.$NewDate->format('Y-m-d'));
+					$DateSms = $NewDate;
+				}
+				log::add('huawei4g', 'debug', 'date sms '.$DateSms->format('Y-m-d H:i:s'));
+				log::add('huawei4g', 'debug', 'new date '.$NewDate->format('Y-m-d H:i:s'));
+
+				if($DateSms <= $NewDate) {
+					log::add('huawei4g', 'debug', 'value Date not empty, comparing dates');
+
+					$DateSme = $value->Date;
+					$values['Number'] = $value->Phone;
+					$values['Text'] = $value->Content;
+				}
+			}
+		}
+
+		return $values;
+	}
+	
 	// fill the info array
 	private function setInfo($infoTab) {
 		if(isset($infoTab)) {
@@ -223,6 +259,9 @@ class huawei4g extends eqLogic {
 						switch($key) {
 							case "Messages": 
 								$this->infos[$key] = json_encode($value['Message']);
+								$LastSMS = $this->getLastSMSReceived(json_encode($value['Message']));
+								$this->infos['LastNumber'] = $LastSMS['Number'];
+								$this->infos['LastSMS'] = $LastSMS['Text'];
 								break;
 							case "Ssid":
 								$this->infos[$key] = json_encode($value);
@@ -238,6 +277,9 @@ class huawei4g extends eqLogic {
 								break;
 							case "dataswitch": 
 								$this->infos['dataswitch'] = intval($value);
+								break;
+							case "DeviceName": 
+								$this->infos['devicename'] = $value;
 								break;
 							default:
 								$this->infos[$key] = $value;
@@ -1053,7 +1095,34 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setOrder('41');
 			$RouteurCmd->save();
 		}
+		
+		$RouteurCmd = $this->getCmd(null, 'LastNumber');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'LastNumber');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Dernier Numéro', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('LastNumber');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('42');
+			$RouteurCmd->save();
+		}
 
+		$RouteurCmd = $this->getCmd(null, 'LastSMS');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'LastSMS');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Dernier Message', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('LastSMS');
+			$RouteurCmd->setType('info');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-sms');
+			$RouteurCmd->setSubType('string');
+			$RouteurCmd->setOrder('43');
+			$RouteurCmd->save();
+		}
 	}
 	
 	public function postUpdate() {		
