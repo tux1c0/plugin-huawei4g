@@ -107,3 +107,4 @@ Changelog
 -	25/06/2020 : Corrections icônes pour Jeedom 4.1.
 -	27/06/2020 : Update librairie 1.4.12
 -	01/07/2020 : Ajout templates mobile
+-	05/08/2020 : bug fix last SMS
