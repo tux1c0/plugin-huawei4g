@@ -235,7 +235,7 @@ class huawei4g extends eqLogic {
 					if($DateSms <= $NewDate) {
 						log::add('huawei4g', 'debug', 'value Date not empty, comparing dates');
 
-						$DateSms = $value->Date;
+						$DateSms = DateTime::createFromFormat('Y-m-d H:i:s', $value->Date);
 						$values['Number'] = $value->Phone;
 						$values['Text'] = $value->Content;
 					}
