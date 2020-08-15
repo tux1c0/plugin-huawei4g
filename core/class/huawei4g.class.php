@@ -203,33 +203,45 @@ class huawei4g extends eqLogic {
 		$values['Number'] = "N/A";
 		$values['Text'] = "N/A";
 
-		$obj = json_decode($json);
-		log::add('huawei4g', 'debug', $obj);
-
-		foreach($obj as $key => $value) {
-			$NewDate = DateTime::createFromFormat('Y-m-d H:i:s', $value->Date);
-			log::add('huawei4g', 'debug', 'key SMS '.$key);
-			log::add('huawei4g', 'debug', 'value Phone '.$value->Phone);
-			log::add('huawei4g', 'debug', 'value Content '.$value->Content);
+		if(strpos($json, '[')=== FALSE) {
+			$obj = json_decode($json);
+			log::add('huawei4g', 'debug', 'single sms '.$obj);
+			log::add('huawei4g', 'debug', 'key SMS 1');
+			log::add('huawei4g', 'debug', 'value Phone '.$obj->Phone);
+			log::add('huawei4g', 'debug', 'value Content '.$obj->Content);
 			if($value->Smstat == 0) {
 				log::add('huawei4g', 'debug', 'value Sms reçu');
-				if(empty($DateSms)) {
-					log::add('huawei4g', 'debug', 'value Date empty, setting date '.$NewDate->format('Y-m-d'));
-					$DateSms = $NewDate;
-				}
-				log::add('huawei4g', 'debug', 'date sms '.$DateSms->format('Y-m-d H:i:s'));
-				log::add('huawei4g', 'debug', 'new date '.$NewDate->format('Y-m-d H:i:s'));
+				$values['Number'] = $obj->Phone;
+				$values['Text'] = $obj->Content;
+			}
+		} else {
+			$obj = json_decode($json);
+			log::add('huawei4g', 'debug', 'multi sms '.$obj);
 
-				if($DateSms <= $NewDate) {
-					log::add('huawei4g', 'debug', 'value Date not empty, comparing dates');
+			foreach($obj as $key => $value) {
+				$NewDate = DateTime::createFromFormat('Y-m-d H:i:s', $value->Date);
+				log::add('huawei4g', 'debug', 'key SMS '.$key);
+				log::add('huawei4g', 'debug', 'value Phone '.$value->Phone);
+				log::add('huawei4g', 'debug', 'value Content '.$value->Content);
+				if($value->Smstat == 0) {
+					log::add('huawei4g', 'debug', 'value Sms reçu');
+					if(empty($DateSms)) {
+						log::add('huawei4g', 'debug', 'value Date empty, setting date '.$NewDate->format('Y-m-d'));
+						$DateSms = $NewDate;
+					}
+					log::add('huawei4g', 'debug', 'date sms '.$DateSms->format('Y-m-d H:i:s'));
+					log::add('huawei4g', 'debug', 'new date '.$NewDate->format('Y-m-d H:i:s'));
 
-					$DateSme = $value->Date;
-					$values['Number'] = $value->Phone;
-					$values['Text'] = $value->Content;
+					if($DateSms <= $NewDate) {
+						log::add('huawei4g', 'debug', 'value Date not empty, comparing dates');
+
+						$DateSms = $value->Date;
+						$values['Number'] = $value->Phone;
+						$values['Text'] = $value->Content;
+					}
 				}
 			}
 		}
-
 		return $values;
 	}
 	
