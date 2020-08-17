@@ -16,11 +16,11 @@ def Clean_JSON(wrongJSON):
 			# position of unexpected character after '"'
 			unexp = int(re.findall(r'\(char (\d+)\)', str(e))[0])
 			# position of unescaped '"' before that
-			unesc = s.rfind(r'"', 0, unexp)
-			s = s[:unesc] + r'\"' + s[unesc+1:]
+			unesc = wrongJSON.rfind(r'"', 0, unexp)
+			wrongJSON = s[:unesc] + r'\"' + s[unesc+1:]
 			# position of correspondig closing '"' (+2 for inserted '\')
-			closg = s.find(r'"', unesc + 2)
-			s = s[:closg] + r'\"' + s[closg+1:]
+			closg = wrongJSON.find(r'"', unesc + 2)
+			wrongJSON = s[:closg] + r'\"' + s[closg+1:]
 	return result
 
 if len(sys.argv) == 4:
