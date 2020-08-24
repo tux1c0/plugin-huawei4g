@@ -7,21 +7,21 @@ import json
 import sys
 
 def Clean_JSON(wrongJSON):
-	while True:
-		try:
-			result = json.loads(wrongJSON)   # try to parse...
-			break                    # parsing worked -> exit loop
-		except Exception as e:
+	#while True:
+		#try:
+			#result = json.loads(wrongJSON)   # try to parse...
+			#break                    # parsing worked -> exit loop
+		#except Exception as e:
 			# "Expecting , delimiter: line 34 column 54 (char 1158)"
 			# position of unexpected character after '"'
-			unexp = int(re.findall(r'\(char (\d+)\)', str(e))[0])
+			#unexp = int(re.findall(r'\(char (\d+)\)', str(e))[0])
 			# position of unescaped '"' before that
-			unesc = wrongJSON.rfind(r'"', 0, unexp)
-			wrongJSON = s[:unesc] + r'\"' + s[unesc+1:]
+			#unesc = wrongJSON.rfind(r'"', 0, unexp)
+			#wrongJSON = s[:unesc] + r'\"' + s[unesc+1:]
 			# position of correspondig closing '"' (+2 for inserted '\')
-			closg = wrongJSON.find(r'"', unesc + 2)
-			wrongJSON = s[:closg] + r'\"' + s[closg+1:]
-	return result
+			#closg = wrongJSON.find(r'"', unesc + 2)
+			#wrongJSON = s[:closg] + r'\"' + s[closg+1:]
+	return wrongJSON.replace('\"','')
 
 if len(sys.argv) == 4:
 	ip = sys.argv[1]
