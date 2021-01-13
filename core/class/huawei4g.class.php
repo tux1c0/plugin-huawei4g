@@ -405,8 +405,14 @@ class huawei4g extends eqLogic {
 		try {
 			$Router->setSession($login, $pwd, "");
 			log::add('huawei4g', 'debug', 'smsid: '.$arr['smsid']);
+			log::add('huawei4g', 'debug', 'title: '.$arr['title']);
 			if(empty($arr['smsid'])) {
 				log::add('huawei4g', 'debug', 'smsid empty');
+				if(empty($arr['title']) {
+					log::add('huawei4g', 'debug', 'title (id) empty');
+				} else {
+					$res = $Router->delSMS($arr['title']);
+				}
 			} else {
 				$res = $Router->delSMS($arr['smsid']);
 			}
@@ -415,6 +421,62 @@ class huawei4g extends eqLogic {
 		}
 		
 		log::add('huawei4g', 'debug', 'Sending: '.$res);
+	}
+	
+	public function delAllSMSReceived() {
+		// getting configuration
+		$IPaddress = $this->getConfiguration('ip');
+		$login = $this->getConfiguration('username');
+		$pwd = $this->getConfiguration('password');
+		
+		// setting the router session
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+		try {
+			$Router->setSession($login, $pwd, "");
+			$json = $Router->getSMS();
+			log::add('huawei4g', 'debug', 'dalallsms: '.$json);
+
+			$obj = json_decode($json);
+			log::add('huawei4g', 'debug', 'conv sms '.$obj);
+
+			foreach($obj as $key => $value) {
+				if($value->Smstat == '0') {
+					$res = $Router->delSMS($value->Index);
+					log::add('huawei4g', 'debug', 'RemoveAll: '.$res);
+				}
+			}
+		} catch (Exception $e) {
+			log::add('huawei4g', 'error', $e);
+		}
+	}
+	
+	public function delAllSMSSend() {
+		// getting configuration
+		$IPaddress = $this->getConfiguration('ip');
+		$login = $this->getConfiguration('username');
+		$pwd = $this->getConfiguration('password');
+		
+		// setting the router session
+		$Router = new Router();
+		$Router->setAddress($IPaddress);
+		try {
+			$Router->setSession($login, $pwd, "");
+			$json = $Router->getSMS();
+			log::add('huawei4g', 'debug', 'dalallsms: '.$json);
+
+			$obj = json_decode($json);
+			log::add('huawei4g', 'debug', 'conv sms '.$obj);
+
+			foreach($obj as $key => $value) {
+				if($value->Smstat == '1') {
+					$res = $Router->delSMS($value->Index);
+					log::add('huawei4g', 'debug', 'RemoveAll: '.$res);
+				}
+			}
+		} catch (Exception $e) {
+			log::add('huawei4g', 'error', $e);
+		}
 	}
 	
 	// manage API errors
@@ -1135,6 +1197,34 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setOrder('43');
 			$RouteurCmd->save();
 		}
+		
+		$RouteurCmd = $this->getCmd(null, 'delallsmssend');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'delallsmssend');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Supprimer Tous SMS Reçus', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('delallsmssend');
+			$RouteurCmd->setType('action');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-delsms');
+			$RouteurCmd->setSubType('other');
+			$RouteurCmd->setOrder('44');
+			$RouteurCmd->save();
+		}
+		
+		$RouteurCmd = $this->getCmd(null, 'delallsmsreceived');
+		if (!is_object($RouteurCmd)) {
+			log::add('huawei4g', 'debug', 'delallsmsreceived');
+			$RouteurCmd = new huawei4gCmd();
+			$RouteurCmd->setName(__('Supprimer Tous SMS Envoyés', __FILE__));
+			$RouteurCmd->setEqLogic_id($this->getId());
+			$RouteurCmd->setLogicalId('delallsmsreceived');
+			$RouteurCmd->setType('action');
+			$RouteurCmd->setTemplate('dashboard','huawei4g-delsms');
+			$RouteurCmd->setSubType('other');
+			$RouteurCmd->setOrder('45');
+			$RouteurCmd->save();
+		}
 	}
 	
 	public function postUpdate() {		
@@ -1183,6 +1273,16 @@ class huawei4gCmd extends cmd {
 			case "delsms":
 				$eqLogic->delSMS($_options);
 				log::add('huawei4g','debug','delsms ' . $this->getHumanName());
+				break;
+				
+			case "delallsmssend":
+				$eqLogic->delAllSMSSend($_options);
+				log::add('huawei4g','debug','delallsmssend ' . $this->getHumanName());
+				break;
+				
+			case "delallsmsreceived":
+				$eqLogic->delAllSMSReceived($_options);
+				log::add('huawei4g','debug','delallsmsreceived ' . $this->getHumanName());
 				break;
 			
 			case "enabledata":

@@ -137,6 +137,23 @@ foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
 							</div>
 						</div>
 					</div>
+					<div>
+						<legend>{{Options Plugin}}</legend>
+						<div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">{{Supprimer le SMS envoyé automatiquent}}</label>
+								<div class="col-sm-3">
+									<input type="checkbox" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="autodelsms" />{{Activer}}
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">{{Numéro de téléphone SMS par défaut}}</label>
+								div class="col-sm-3">
+									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="defaultsmsnumber" />
+								</div>
+							</div>
+						</div>
+					</div>
 				</fieldset>
 			</form>
 			</div>
