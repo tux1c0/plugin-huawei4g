@@ -408,7 +408,7 @@ class huawei4g extends eqLogic {
 			log::add('huawei4g', 'debug', 'title: '.$arr['title']);
 			if(empty($arr['smsid'])) {
 				log::add('huawei4g', 'debug', 'smsid empty');
-				if(empty($arr['title']) {
+				if(empty($arr['title'])) {
 					log::add('huawei4g', 'debug', 'title (id) empty');
 				} else {
 					$res = $Router->delSMS($arr['title']);
