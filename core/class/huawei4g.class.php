@@ -105,6 +105,82 @@ class huawei4g extends eqLogic {
 		}
     }
 	
+	public static function deamon_info() {
+        $return = array();
+        $return['log'] = __CLASS__;
+        $return['state'] = 'nok';
+        $return['launchable'] = 'ok';
+
+        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
+        if (file_exists($pid_file)) {
+            if (@posix_getsid(trim(file_get_contents($pid_file)))) {
+                $return['state'] = 'ok';
+            } else {
+                shell_exec(system::getCmdSudo() . 'rm -rf ' . $pid_file . ' 2>&1 > /dev/null');
+            }
+        }
+
+        $deviceUrl = config::byKey('ip', __CLASS__);
+        if (empty($deviceUrl)) {
+            $return['launchable'] = 'nok';
+            $return['launchable_message'] = __("L'URL du device n'est pas configuré", __FILE__);
+        }
+
+        return $return;
+    }
+
+    public static function deamon_start() {
+        self::deamon_stop();
+
+        $deamon_info = self::deamon_info();
+        if ($deamon_info['launchable'] != 'ok') {
+            throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
+        }
+
+        $deamon_path = realpath(__DIR__ . '/../../resources/huaweilted');
+        $cmd = '/usr/bin/python3 ' . $deamon_path . '/huaweilted.py';
+        $cmd .= ' --deviceurl ' . config::byKey('ip', __CLASS__);
+        $cmd .= ' --socketport ' . config::byKey('socketport', __CLASS__);
+        $cmd .= ' --cycle ' . config::byKey('frequence', __CLASS__);
+        $cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
+        $cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
+        $cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__);
+        $cmd .= ' --callback ' . network::getNetworkAccess('internal', 'proto:127.0.0.1:port:comp') . '/plugins/' . __CLASS__ . '/core/php/huawei4g.php';
+        log::add(__CLASS__, 'info', 'Lancement démon ' . __CLASS__ . ' : ' . $cmd);
+        $result = exec($cmd . ' >> ' . log::getPathToLog(__CLASS__) . ' 2>&1 &');
+
+        $i = 0;
+        while ($i < 30) {
+            $deamon_info = self::deamon_info();
+            if ($deamon_info['state'] == 'ok') {
+                break;
+            }
+
+            sleep(1);
+            $i++;
+        }
+        if ($i >= 30) {
+            log::add(__CLASS__, 'error', 'Impossible de lancer le démon ' . __CLASS__ .', vérifiez les paramètres', 'unableStartDeamon');
+            return false;
+        }
+
+        message::removeAll(__CLASS__, 'unableStartDeamon');
+        return true;
+    }
+
+    public static function deamon_stop() {
+        $pid_file = jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
+        if (file_exists($pid_file)) {
+            $pid = intval(trim(file_get_contents($pid_file)));
+            system::kill($pid);
+        }
+
+        system::kill('huawei4gs.py');
+        system::fuserk(55100);
+
+        sleep(1);
+    }
+	
 	public function preUpdate() {
 		if ($this->getConfiguration('ip') == '') {
 			throw new Exception(__('Le champs IP ne peut pas être vide', __FILE__));

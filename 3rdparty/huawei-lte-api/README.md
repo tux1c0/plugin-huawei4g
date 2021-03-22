@@ -2,22 +2,30 @@
 API For huawei LAN/WAN LTE Modems,
 you can use this to simply send SMS, get information about your internet usage, signal, and tons of other stuff
 
-Tested on:
+## Tested on:
+#### 3G/LTE Routers:
 * Huawei B310s-22
 * Huawei B315s-22
 * Huawei B525s-23a
 * Huawei B525s-65a
 * Huawei B715s-23c
-* Huawei E3131
 * Huawei E5186s-22a
 * Huawei B528s
-* Huawei E3531
-* (probably will work for other Huawei LTE devices too)
+* Huawei B535-232
 
-Will NOT work on:
+#### 3G/LTE USB sticks:
+(Device must support NETWork mode aka. "HiLink" version, it wont work with serial mode)
+* Huawei E3131
+* Huawei E3531
+* Huawei E3372
+
+
+(probably will work for other Huawei LTE devices too)
+
+### Will NOT work on:
+#### LTE Routers:
 * Huawei B2368-22 (Incompatible firmware, testing device needed!)
 
-PS: it is funny how many stuff you can request from modem/router without any authentication
 
 ## Installation
 
@@ -58,6 +66,13 @@ and then install by running
 $ pacman -Sy python-huawei-lte-api
 ```
 
+#### Gentoo
+
+```
+$ emerge dev-python/huawei-lte-api
+```
+
+
 ## Usage
 
 ```python3
@@ -93,6 +108,9 @@ Result dict
 
 * Relay received SMS into your email https://github.com/chenwei791129/Huawei-LTE-Router-SMS-to-E-mail-Sender
 
+## Ports to other languages
+
+* TypeScript/JavaScript https://github.com/Salamek/huawei-lte-api-ts
 
 ## Donations
 

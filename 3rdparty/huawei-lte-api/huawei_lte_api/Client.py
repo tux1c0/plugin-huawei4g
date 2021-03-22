@@ -25,6 +25,7 @@ from huawei_lte_api.config.IPv6 import IPv6
 from huawei_lte_api.config.Ota import Ota as OtaConfig
 from huawei_lte_api.config.Pb import Pb as PbConfig
 from huawei_lte_api.config.Sntp import Sntp
+from huawei_lte_api.config.Statistic import Statistic as ConfigStatistic
 from huawei_lte_api.config.Stk import Stk
 from huawei_lte_api.config.Update import Update
 from huawei_lte_api.config.UPnp import UPnp
@@ -66,7 +67,7 @@ from huawei_lte_api.api.MLog import MLog
 
 
 class Client:
-    def __init__(self, connection: Connection):
+    def __init__(self, connection: Connection):  # pylint: disable=too-many-statements
         self.monitoring = Monitoring(connection)
         self.security = Security(connection)
         self.webserver = WebServer(connection)
@@ -92,6 +93,7 @@ class Client:
         self.config_ota = OtaConfig(connection)
         self.config_pb = PbConfig(connection)
         self.config_sntp = Sntp(connection)
+        self.config_statistic = ConfigStatistic(connection)
         self.config_stk = Stk(connection)
         self.config_update = Update(connection)
         self.config_u_pnp = UPnp(connection)
