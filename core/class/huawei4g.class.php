@@ -136,12 +136,19 @@ class huawei4g extends eqLogic {
         if ($deamon_info['launchable'] != 'ok') {
             throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
         }
-
-        $deamon_path = realpath(__DIR__ . '/../../resources/huaweilted');
-        $cmd = '/usr/bin/python3 ' . $deamon_path . '/huaweilted.py';
-        $cmd .= ' --deviceurl ' . config::byKey('ip', __CLASS__);
+		
+		foreach (self::byType('huawei4g') as $rtr) {
+			if ($rtr->getIsEnable() == 1) {
+				$frq = $rtr->getConfiguration('frequence');
+				$ip = $rtr->getConfiguration('ip');
+			}
+		}
+		
+        $deamon_path = realpath(__DIR__ . '/../../resources/huawei4gd');
+        $cmd = '/usr/bin/python3 ' . $deamon_path . '/huawei4gd.py';
+        $cmd .= ' --deviceurl ' . $ip;
         $cmd .= ' --socketport ' . config::byKey('socketport', __CLASS__);
-        $cmd .= ' --cycle ' . config::byKey('frequence', __CLASS__);
+        $cmd .= ' --cycle ' . $frq;
         $cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
         $cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
         $cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__);
@@ -175,7 +182,7 @@ class huawei4g extends eqLogic {
             system::kill($pid);
         }
 
-        system::kill('huawei4gs.py');
+        system::kill('huawei4gd.py');
         system::fuserk(55100);
 
         sleep(1);
