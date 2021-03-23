@@ -109,3 +109,4 @@ Changelog
 -	01/07/2020 : Ajout templates mobile
 -	15/08/2020 : bug fix last SMS
 -	17/08/2080 : bug fix JSON format for SMS
+-	21/03/2021 : Update librairie 1.4.17

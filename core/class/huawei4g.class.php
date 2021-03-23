@@ -183,7 +183,7 @@ class huawei4g extends eqLogic {
         }
 
         system::kill('huawei4gd.py');
-        system::fuserk(55100);
+        system::fuserk(config::byKey('socketport', __CLASS__));
 
         sleep(1);
     }
@@ -475,6 +475,29 @@ class huawei4g extends eqLogic {
 		
 		log::add('huawei4g', 'debug', 'Sending: '.$res);
 	}
+	
+	public function sendSMSDeamon($_options = array()) {
+        if (isset($_options['numbers'])) {
+            $numbers = $_options['numbers'];
+        } else {
+            $numbers = explode(';', $this->getConfiguration('phonenumber'));
+        }
+
+        $message = trim($_options['message']);
+
+        if ($this->getConfiguration('ip') != null) {
+            $data = json_encode(array(
+                'apikey' => jeedom::getApiKey('huawei4g'),
+                'numbers' => $numbers,
+                'message' => $message,
+            ));
+
+            $socket = socket_create(AF_INET, SOCK_STREAM, 0);
+            socket_connect($socket, '127.0.0.1', config::byKey('socketport', 'huawei4g'));
+            socket_write($socket, $data, strlen($data));
+            socket_close($socket);
+        }
+    }
 	
 	public function delSMS($arr) {
 		// getting configuration
@@ -1248,7 +1271,8 @@ class huawei4gCmd extends cmd {
 				break;
 				
 			case "sendsms":
-				$eqLogic->sendSMS($_options);
+				//$eqLogic->sendSMS($_options);
+				$eqLogic->sendSmsDeamon($_options);
 				log::add('huawei4g','debug','sendsms ' . $this->getHumanName());
 				break;
 
