@@ -39,8 +39,6 @@
     },
     "core\/class\/huawei4g.class.php": {
         "Le champs IP ne peut pas être vide": "Le champs IP ne peut pas être vide",
-        "Le champs SSH Nom d'utilisateur ne peut pas être vide": "Le champs SSH Nom d'utilisateur ne peut pas être vide",
-        "Le champs SSH Mot de passe ne peut pas être vide": "Le champs SSH Mot de passe ne peut pas être vide",
         "Statut": "Statut",
         "Réseau mobile": "Réseau mobile",
         "Current Connect Time": "Current Connect Time",

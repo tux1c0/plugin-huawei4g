@@ -44,6 +44,7 @@ class huawei4g extends eqLogic {
 		
 		return $return;
 	}
+
 	public static function dependancy_install() {
 		log::remove(__CLASS__ . '_update');
 		return array('script' => dirname(__FILE__) . '/../../resources/install.sh ' . jeedom::getTmpFolder('huawei4g') . '/dependance', 'log' => log::getPathToLog(__CLASS__ . '_update'));
@@ -173,16 +174,10 @@ class huawei4g extends eqLogic {
 
         sleep(1);
     }
-	
+
 	public function preUpdate() {
 		if ($this->getConfiguration('ip') == '') {
 			throw new Exception(__('Le champs IP ne peut pas être vide', __FILE__));
-		}
-		if ($this->getConfiguration('username') == '') {
-			throw new Exception(__("Le champs Nom d'utilisateur ne peut pas être vide", __FILE__));
-		}
-		if ($this->getConfiguration('password') == '') {
-			throw new Exception(__('Le champs Mot de passe ne peut pas être vide', __FILE__));
 		}
 		if ($this->getConfiguration('frequence') == '') {
 			throw new Exception(__('Le champs fréquence ne peut pas être vide', __FILE__));
