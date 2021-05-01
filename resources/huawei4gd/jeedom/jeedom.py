@@ -106,6 +106,18 @@ class jeedom_com():
 			else:
 				d1[k] = v2
 
+	def get_devices_list(self):
+		try:
+			r = requests.get(self.url + '?apikey=' + self.apikey + '&deviceslist=1', timeout=(0.5, 120), verify=False)
+			if r.status_code != requests.codes.ok:
+				logging.error('Error on send request to jeedom, return code %s' % (str(r.status_code),))
+				return None
+
+			return r.json()
+		except Exception as error:
+			logging.error('Error on send request to jeedom %s' % (str(error),))
+			return None
+
 	def test(self):
 		try:
 			response = requests.get(self.url + '?apikey=' + self.apikey, verify=False)

@@ -72,6 +72,17 @@ def listen():
         while 1:
             time.sleep(_cycle)
 
+            if len(_devices) == 0:
+                continue
+
+            for key in _devices:
+                if _devices[key]['username'] and _devices[key]['password']:
+                    _device_url = 'http://' + _devices[key]['username'] + ':' + _devices[key]['password'] + '@' + _devices[key]['ip']
+                else:
+                    _device_url = 'http://' + _devices[key]['ip']
+                logging.debug('URL : ' + _device_url)
+                break
+
             try:
                 connection = AuthorizedConnection(_device_url)
                 client = Client(connection)
@@ -188,6 +199,11 @@ try:
     jeedom_com = jeedom_com(apikey = _apikey, url = _callback)
     if not jeedom_com.test():
         logging.error('Network communication issues. Please fixe your Jeedom network configuration.')
+        shutdown()
+
+    _devices = jeedom_com.get_devices_list()
+    logging.debug(_devices)
+    if not _devices:
         shutdown()
 
     jeedom_socket = jeedom_socket(port=_socket_port, address=_socket_host)

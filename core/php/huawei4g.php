@@ -27,6 +27,24 @@ if (init('test') != '') {
     die();
 }
 
+if (init('deviceslist') != '') {
+    $data = [];
+    foreach (eqLogic::byType('huawei4g') as $eqLogic) {
+        if ($eqLogic->getIsEnable() != 1) {
+            continue;
+        }
+
+        $data[$eqLogic->getId()] = array(
+            'ip' => $eqLogic->getConfiguration('ip'),
+            'username' => $eqLogic->getConfiguration('username'),
+            'password' => $eqLogic->getConfiguration('password'),
+            'frequence' => $eqLogic->getConfiguration('frequence'),
+            'texteMode' => $eqLogic->getConfiguration('texteMode'),
+        );
+    }
+    die(json_encode($data));
+}
+
 $result = json_decode(file_get_contents("php://input"), true);
 if (!is_array($result)) {
     die();
