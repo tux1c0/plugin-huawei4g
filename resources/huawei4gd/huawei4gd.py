@@ -144,7 +144,6 @@ def shutdown():
 _log_level = 'error'
 _socket_port = 55100
 _socket_host = 'localhost'
-_device_url = 'http://192.168.8.1/'
 _pidfile = '/tmp/huawei4gd.pid'
 _apikey = ''
 _callback = ''
@@ -153,7 +152,6 @@ _cycle = 60
 parser = argparse.ArgumentParser(description='Huawei 4G Daemon for Jeedom plugin')
 parser.add_argument("--loglevel", help="Log Level for the daemon", type=str)
 parser.add_argument("--socketport", help="Socketport for server", type=str)
-parser.add_argument("--deviceurl", help="Device URL", type=str)
 parser.add_argument("--pid", help="Pid file", type=str)
 parser.add_argument("--apikey", help="Apikey", type=str)
 parser.add_argument("--callback", help="Callback", type=str)
@@ -164,8 +162,6 @@ if args.loglevel:
     _log_level = args.loglevel
 if args.socketport:
     _socket_port = int(args.socketport)
-if args.deviceurl:
-    _device_url = args.deviceurl
 if args.pid:
     _pidfile = args.pid
 if args.apikey:

@@ -30,7 +30,7 @@ class huawei4g extends eqLogic {
 	const ERROR_SYSTEM_BUSY = '100004';
 	const ERROR_SYSTEM_PARAMETER = '100006';
 	const ERROR_SYSTEM_CSRF = '125002';
-	
+
     /*     * ***********************Methode static*************************** */
 	public static function dependancy_info() {
 		$return = array();
@@ -65,7 +65,7 @@ class huawei4g extends eqLogic {
 			}
 		}
 	}
-	
+
 	/*public static function cron() {
 		foreach (self::byType('huawei4g') as $rtr) {
 			if ($rtr->getIsEnable() == 1) {
@@ -75,8 +75,8 @@ class huawei4g extends eqLogic {
 				}
 			}
 		}
-    }*/
-	
+    }
+
 	public static function cron5() {
 		foreach (self::byType('huawei4g') as $rtr) {
 			if ($rtr->getIsEnable() == 1) {
@@ -90,7 +90,7 @@ class huawei4g extends eqLogic {
 			}
 		}
     }
-	
+
 	public static function cron15() {
 		foreach (self::byType('huawei4g') as $rtr) {
 			if ($rtr->getIsEnable() == 1) {
@@ -103,8 +103,8 @@ class huawei4g extends eqLogic {
 				}
 			}
 		}
-    }
-	
+    }*/
+
 	public static function deamon_info() {
         $return = array();
         $return['log'] = __CLASS__;
@@ -120,12 +120,6 @@ class huawei4g extends eqLogic {
             }
         }
 
-        $deviceUrl = config::byKey('ip', __CLASS__);
-        if (empty($deviceUrl)) {
-            $return['launchable'] = 'nok';
-            $return['launchable_message'] = __("L'URL du device n'est pas configuré", __FILE__);
-        }
-
         return $return;
     }
 
@@ -136,19 +130,11 @@ class huawei4g extends eqLogic {
         if ($deamon_info['launchable'] != 'ok') {
             throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
         }
-		
-		foreach (self::byType('huawei4g') as $rtr) {
-			if ($rtr->getIsEnable() == 1) {
-				$frq = $rtr->getConfiguration('frequence');
-				$ip = $rtr->getConfiguration('ip');
-			}
-		}
-		
+
         $deamon_path = realpath(__DIR__ . '/../../resources/huawei4gd');
         $cmd = '/usr/bin/python3 ' . $deamon_path . '/huawei4gd.py';
-        $cmd .= ' --deviceurl ' . $ip;
         $cmd .= ' --socketport ' . config::byKey('socketport', __CLASS__);
-        $cmd .= ' --cycle ' . $frq;
+        $cmd .= ' --cycle ' . config::byKey('cycle', __CLASS__);
         $cmd .= ' --loglevel ' . log::convertLogLevel(log::getLogLevel(__CLASS__));
         $cmd .= ' --pid ' . jeedom::getTmpFolder(__CLASS__) . '/deamon.pid';
         $cmd .= ' --apikey ' . jeedom::getApiKey(__CLASS__);
