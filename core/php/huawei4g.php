@@ -1,20 +1,5 @@
 <?php
 
-/* This file is part of Jeedom.
- *
- * Jeedom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jeedom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
- */
 require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
 
 if (!jeedom::apiAccess(init('apikey'), 'huawei4g')) {
@@ -39,7 +24,7 @@ if (init('deviceslist') != '') {
             'username' => $eqLogic->getConfiguration('username'),
             'password' => $eqLogic->getConfiguration('password'),
             'frequence' => $eqLogic->getConfiguration('frequence'),
-            'texteMode' => $eqLogic->getConfiguration('texteMode'),
+            'texteMode' => $eqLogic->getConfiguration('texteMode')
         );
     }
     die(json_encode($data));
@@ -54,6 +39,29 @@ $eqLogics = eqLogic::byType('huawei4g');
 if (count($eqLogics) < 1) {
     die();
 }
+
+// update a cmd
+function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
+	try {
+		$cmd = $eqLogicToUpdate->getCmd(null, $cmdToUpdate);
+		if (is_object($cmd)) {
+			$cmd->event($valueToUpdate);
+		}
+		log::add('huawei4g', 'debug', 'updateInfo cmd '.$cmdToUpdate. ' valeur '.$valueToUpdate);
+	} catch (Exception $e) {
+		log::add('huawei4g', 'error', 'Impossible de mettre à jour le champs '.$key);
+	}
+}
+
+// update all cmd
+if (isset($result['cmd']) and isset($result['data'])) {
+	log::add('huawei4g', 'debug', 'result update data'.$result['data']);
+	if($result['cmd'] == "update") {
+		//updateInfo($eqLogics[0], $data, $value);
+		
+	}
+}
+
 
 if (isset($result['cmd']) and isset($result['message'])) {
     foreach ($eqLogics as $eqLogic) {

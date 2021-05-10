@@ -1,18 +1,3 @@
-# This file is part of Jeedom.
-#
-# Jeedom is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# Jeedom is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
-
 import argparse
 import json
 import logging
@@ -87,20 +72,68 @@ def listen():
                 connection = AuthorizedConnection(_device_url)
                 client = Client(connection)
             except Exception as e:
-                logging.error('Fail to connect on the device : ' + str(e))
+                logging.error('Fail to connect on the device: ' + str(e))
                 continue
 
             try:
                 signal = client.monitoring.status()
                 jeedom_com.send_change_immediate({'cmd' : 'signal', 'message' : signal['SignalIcon']});
             except Exception as e:
-                logging.error('Fail to check signal : ' + str(e))
+                logging.error('Fail to check signal: ' + str(e))
 
             try:
                 data = client.net.current_plmn()
                 jeedom_com.send_change_immediate({'cmd' : 'operatorName', 'message' : data['FullName']});
             except Exception as e:
-                logging.error('Fail to check current plmn : ' + str(e))
+                logging.error('Fail to check current plmn: ' + str(e))
+				
+			try:
+				data = client.monitoring.traffic_statistics()
+				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+			except Exception as e:
+                logging.error('Fail to check traffic_statistics: ' + str(e))
+
+			try:
+				data = client.device.basic_information()
+				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+			except Exception as e:
+                logging.error('Fail to check basic_information: ' + str(e))
+
+			try:
+				data = client.device.information()
+				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+			except Exception as e:
+                logging.error('Fail to check information: ' + str(e))
+
+			try:
+				data = client.device.signal()
+				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+			except Exception as e:
+                logging.error('Fail to check signal: ' + str(e))
+				
+			try:
+				data = client.monitoring.month_statistics()
+				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+			except Exception as e:
+                logging.error('Fail to check month_statistics: ' + str(e))
+				
+			try:
+				data = client.dial_up.mobile_dataswitch()
+				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+			except Exception as e:
+                logging.error('Fail to check mobile_dataswitch: ' + str(e))
+			
+			try:
+				data = client.wlan.status_switch_settings().replace('{"radios": ','')
+				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+			except Exception as e:
+                logging.error('Fail to check status_switch_settings: ' + str(e))
+			
+			try:
+				data = client.wlan.multi_basic_settings().replace('{"Ssids": ','')[:-1]
+				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+			except Exception as e:
+                logging.error('Fail to check multi_basic_settings: ' + str(e))
 
             try:
                 read_socket(client)
