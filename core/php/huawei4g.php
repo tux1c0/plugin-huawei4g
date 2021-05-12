@@ -85,7 +85,7 @@ function cleanInfo($cle, $valeur) {
 		}
 	}
 	
-	log::add('huawei4g', 'debug', 'function cleanInfo key:'.$out[0}.' value: '.$out[1]);
+	log::add('huawei4g', 'debug', 'function cleanInfo key:'.$out[0].' value: '.$out[1]);
 	return $out;
 }
 
