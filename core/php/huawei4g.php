@@ -103,41 +103,63 @@ function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 	}
 }
 
-
-function frequency() {
+// deal all signal output
+function frequency($eqLogicToUpdate, $arr) {
 	$Frequency = new Frequency();
 	
 	// calculating frequencies
-	$Frequency->setBand($this->infos['band']);
-	$Frequency->setEarfcn($this->infos['earfcn']);
-	$Frequency->calculator();
-	$this->infos['frq'] = $Frequency->getName();
-	$this->infos['fdl'] = $Frequency->getFdl();
-	$this->infos['ful'] = $Frequency->getFul();
+	if(isset($arr['band']) and isset($arr['earfcn'])) {
+		$Frequency->setBand($arr['band']);
+		$Frequency->setEarfcn($arr['earfcn']);
+		$Frequency->calculator();
+		$frq = $Frequency->getName();
+		updateInfo($eqLogicToUpdate, 'frq', $frq);
+		$fdl = $Frequency->getFdl();
+		updateInfo($eqLogicToUpdate, 'fdl', $fdl);
+		$ful = $Frequency->getFul();
+		updateInfo($eqLogicToUpdate, 'ful', $ful);
+		// calcul Marge RF
+		$mrf = $arr['rssi'] - $arr['rsrp'];
+		updateInfo($eqLogicToUpdate, 'mrf', $mrf);
+	}
 	
-	// calcul Marge RF
-	$this->infos['mrf'] = $this->infos['rssi'] - $this->infos['rsrp'];
-	
+	foreach($arr as $key => $data) {
+		log::add('huawei4g', 'debug', 'update key '.$key.' - data '.$data);
+		//clean info
+		$res = cleanInfo($key, $data);
+		updateInfo($eqLogicToUpdate, $res[0], $res[1]);
+	}	
 }
 
 // update all cmd
 if (isset($result['cmd']) and isset($result['data'])) {
 	log::add('huawei4g', 'debug', 'result update data '.$result['data']);
-	if($result['cmd'] == "update") {
-		foreach($result['data'] as $key => $data) {
-			log::add('huawei4g', 'debug', 'update key '.$key.' - data '.$data);
-			//clean info
-			$res = cleanInfo($key, $data);
-			//only first eqLogics, pending support of multi eqlogics
-			updateInfo($eqLogics[0], $res[0], $res[1]);
-		}
-	}
 	
-	if($result['cmd'] == "status") {
-		log::add('huawei4g', 'debug', 'status '.$result['data']);
-		//only first eqLogics, pending support of multi eqlogics
-		updateInfo($eqLogics[0], "status", trim(secureXSS($result['data'])));
-	}
+	switch($result['cmd']) {
+		case "update":
+			foreach($result['data'] as $key => $data) {
+				log::add('huawei4g', 'debug', 'update key '.$key.' - data '.$data);
+				//clean info
+				$res = cleanInfo($key, $data);
+				//only first eqLogics, pending support of multi eqlogics
+				updateInfo($eqLogics[0], $res[0], $res[1]);
+			}
+			break;
+			
+		case "status": 
+			log::add('huawei4g', 'debug', 'status '.$result['data']);
+			//only first eqLogics, pending support of multi eqlogics
+			updateInfo($eqLogics[0], "status", trim(secureXSS($result['data'])));
+			break;
+			
+		case "signal": 
+			log::add('huawei4g', 'debug', 'signal '.$result['data']);
+			frequency($eqLogics[0], $result['data']);
+			break;
+			
+		default:
+			break;
+		}
 }
 
 

@@ -138,7 +138,7 @@ def listen():
 				logging.error('Fail to check multi_basic_settings: ' + str(e))
 
 			try:
-				data = client.client.sms.sms_count()
+				data = client.sms.sms_count()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
 				logging.error('Fail to check sms_count: ' + str(e))
