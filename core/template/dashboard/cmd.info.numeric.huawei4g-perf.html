@@ -10,8 +10,13 @@
 			
 			var debit = 0;
 			const sizes = ['Octet/s', 'Ko/s', 'Mo/s', 'Go/s'];
-			const i = Math.floor(Math.log(_options.display_value) / Math.log(1024));
-			debit = parseFloat((_options.display_value / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
+			
+			if(_options.display_value == 0){
+				debit = '0 Octet/s';
+			}else{
+				const i = Math.floor(Math.log(_options.display_value) / Math.log(1024));
+				debit = parseFloat((_options.display_value / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
+			}
 			
 			cmd.find('.state').empty().append(debit)
 			if(_options.alertLevel){

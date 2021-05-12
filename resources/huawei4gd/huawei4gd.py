@@ -71,7 +71,9 @@ def listen():
 			try:
 				connection = AuthorizedConnection(_device_url)
 				client = Client(connection)
+				jeedom_com.send_change_immediate({'cmd' : 'status', 'data' : 'Up'});
 			except Exception as e:
+				jeedom_com.send_change_immediate({'cmd' : 'status', 'data' : 'Down'});
 				logging.error('Fail to connect on the device: ' + str(e))
 				continue
 
@@ -83,9 +85,9 @@ def listen():
 
 			try:
 				data = client.net.current_plmn()
-				jeedom_com.send_change_immediate({'cmd' : 'operatorName', 'message' : data['FullName']});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-				logging.error('Fail to check current plmn: ' + str(e))
+				logging.error('Fail to check current_plmn: ' + str(e))
 
 			try:
 				data = client.monitoring.traffic_statistics()
@@ -134,6 +136,12 @@ def listen():
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
 				logging.error('Fail to check multi_basic_settings: ' + str(e))
+
+			try:
+				data = client.client.sms.sms_count()
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+			except Exception as e:
+				logging.error('Fail to check sms_count: ' + str(e))
 
 			try:
 				read_socket(client)

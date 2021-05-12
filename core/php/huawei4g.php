@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . "/../../../../core/php/core.inc.php";
+require_once dirname(__FILE__) . '/../class/frequency.class.php';
 
 if (!jeedom::apiAccess(init('apikey'), 'huawei4g')) {
     echo __('Vous n\'etes pas autorisé à effectuer cette action', __FILE__);
@@ -102,6 +103,23 @@ function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 	}
 }
 
+
+function frequency() {
+	$Frequency = new Frequency();
+	
+	// calculating frequencies
+	$Frequency->setBand($this->infos['band']);
+	$Frequency->setEarfcn($this->infos['earfcn']);
+	$Frequency->calculator();
+	$this->infos['frq'] = $Frequency->getName();
+	$this->infos['fdl'] = $Frequency->getFdl();
+	$this->infos['ful'] = $Frequency->getFul();
+	
+	// calcul Marge RF
+	$this->infos['mrf'] = $this->infos['rssi'] - $this->infos['rsrp'];
+	
+}
+
 // update all cmd
 if (isset($result['cmd']) and isset($result['data'])) {
 	log::add('huawei4g', 'debug', 'result update data '.$result['data']);
@@ -113,6 +131,12 @@ if (isset($result['cmd']) and isset($result['data'])) {
 			//only first eqLogics, pending support of multi eqlogics
 			updateInfo($eqLogics[0], $res[0], $res[1]);
 		}
+	}
+	
+	if($result['cmd'] == "status") {
+		log::add('huawei4g', 'debug', 'status '.$result['data']);
+		//only first eqLogics, pending support of multi eqlogics
+		updateInfo($eqLogics[0], "status", trim(secureXSS($result['data'])));
 	}
 }
 
