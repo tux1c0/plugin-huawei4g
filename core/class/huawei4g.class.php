@@ -974,7 +974,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setOrder('31');
 			$RouteurCmd->save();
 		}
-		/*
+		
 		$RouteurCmd = $this->getCmd(null, 'Count');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'Count');
@@ -988,7 +988,7 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setOrder('32');
 			$RouteurCmd->save();
 		}
-		*/
+		
 		$RouteurCmd = $this->getCmd(null, 'LocalUnread');
 		if (!is_object($RouteurCmd)) {
 			log::add('huawei4g', 'debug', 'LocalUnread');

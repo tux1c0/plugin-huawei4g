@@ -145,7 +145,7 @@ def listen():
 
 			try:
 				data = client.sms.get_sms_list()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data});
 			except Exception as e:
 				logging.error('Fail to check get_sms_list: ' + str(e))
 

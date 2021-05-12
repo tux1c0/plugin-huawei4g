@@ -55,12 +55,12 @@ function cleanInfo($cle, $valeur) {
 		$this->infos[$key] = str_replace('dBm', '', $value);
 	} else {	
 		switch($key) {
-		case "Messages": 
+		//case "Messages": 
 			//$this->infos[$key] = json_encode($value['Message']);
 			//$LastSMS = $this->getLastSMSReceived(json_encode($value['Message']));
 			//$this->infos['LastNumber'] = $LastSMS['Number'];
 			//$this->infos['LastSMS'] = $LastSMS['Text'];
-			break;
+			//break;
 		case "Ssid":
 			$out[1] = json_encode($value);
 			break;
@@ -155,6 +155,18 @@ if (isset($result['cmd']) and isset($result['data'])) {
 		case "signal": 
 			log::add('huawei4g', 'debug', 'signal '.$result['data']);
 			frequency($eqLogics[0], $result['data']);
+			break;
+		
+		case "smsList": 
+			log::add('huawei4g', 'debug', 'smsList '.$result['data']);
+				//clean info
+				$res = cleanInfo('Count', $result['data']['Count']);
+				//only first eqLogics, pending support of multi eqlogics
+				updateInfo($eqLogics[0], $res[0], $res[1]);
+				//clean info
+				$res = cleanInfo('Messages', $result['data']['Messages']['Message']);
+				//only first eqLogics, pending support of multi eqlogics
+				updateInfo($eqLogics[0], $res[0], $res[1]);
 			break;
 			
 		default:
