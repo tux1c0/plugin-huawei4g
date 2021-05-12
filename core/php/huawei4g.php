@@ -40,6 +40,55 @@ if (count($eqLogics) < 1) {
     die();
 }
 
+// clean the info
+function cleanInfo($cle, $valeur) {
+	$key = trim(secureXSS($cle));
+	$value = trim(secureXSS($valeur));
+	$out = array();
+	// init, default is the key/cmd
+	$out[0] = $key;
+	
+	if(strpos(strval($value), 'dB') === true) {
+		$this->infos[$key] = str_replace('dB', '', $value);
+	} elseif (strpos(strval($value), 'dBm') === true) {
+		$this->infos[$key] = str_replace('dBm', '', $value);
+	} else {	
+		switch($key) {
+		case "Messages": 
+			//$this->infos[$key] = json_encode($value['Message']);
+			//$LastSMS = $this->getLastSMSReceived(json_encode($value['Message']));
+			//$this->infos['LastNumber'] = $LastSMS['Number'];
+			//$this->infos['LastSMS'] = $LastSMS['Text'];
+			break;
+		case "Ssid":
+			$out[1] = json_encode($value);
+			break;
+		case "lte_bandinfo": 
+			$out[0] = 'band';
+			$out[1] = $value;
+			break;
+		case "Radio24": 
+			$out[1] = intval($value);
+			break;
+		case "Radio5": 
+			$out[1] = intval($value);
+			break;
+		case "dataswitch": 
+			$out[1] = intval($value);
+			break;
+		case "DeviceName": 
+			$out[0] = 'devicename';
+			$out[1] = $value;
+			break;
+		default:
+			$out[1] = $value;
+		}
+	}
+	
+	log::add('huawei4g', 'debug', 'function cleanInfo key:'.$out[0}.' value: '.$out[1]);
+	return $out;
+}
+
 // update a cmd
 function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 	try {
@@ -57,9 +106,12 @@ function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 if (isset($result['cmd']) and isset($result['data'])) {
 	log::add('huawei4g', 'debug', 'result update data '.$result['data']);
 	if($result['cmd'] == "update") {
-		foreach($result['data'] as $data) {
-			log::add('huawei4g', 'debug', 'update data '.$data);
-			//updateInfo($eqLogics[0], $data, $value);
+		foreach($result['data'] as $key => $data) {
+			log::add('huawei4g', 'debug', 'update key '.$key.' - data '.$data);
+			//clean info
+			$res = cleanInfo($key, $data);
+			//only first eqLogics, pending support of multi eqlogics
+			updateInfo($eqLogics[0], $res[0], $res[1]);
 		}
 	}
 }
