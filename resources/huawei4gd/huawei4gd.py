@@ -231,7 +231,7 @@ try:
 
     jeedom_com = jeedom_com(apikey = _apikey, url = _callback)
     if not jeedom_com.test():
-        logging.error('Network communication issues. Please fixe your Jeedom network configuration.')
+        logging.error('Network communication issues. Please fix your Jeedom network configuration.')
         shutdown()
 
     _devices = jeedom_com.get_devices_list()

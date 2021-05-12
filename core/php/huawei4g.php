@@ -94,7 +94,7 @@ function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 	try {
 		$cmd = $eqLogicToUpdate->getCmd(null, $cmdToUpdate);
 		if (is_object($cmd)) {
-			$cmd->checkAndUpdateCmd($cmd, $valueToUpdate);
+			$cmd->event($valueToUpdate);
 		}
 		log::add('huawei4g', 'debug', 'updateInfo cmd '.$cmdToUpdate. ' valeur '.$valueToUpdate);
 	} catch (Exception $e) {
