@@ -45,20 +45,22 @@ function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 	try {
 		$cmd = $eqLogicToUpdate->getCmd(null, $cmdToUpdate);
 		if (is_object($cmd)) {
-			$cmd->event($valueToUpdate);
+			$cmd->checkAndUpdateCmd($cmd, $valueToUpdate);
 		}
 		log::add('huawei4g', 'debug', 'updateInfo cmd '.$cmdToUpdate. ' valeur '.$valueToUpdate);
 	} catch (Exception $e) {
-		log::add('huawei4g', 'error', 'Impossible de mettre à jour le champs '.$key);
+		log::add('huawei4g', 'error', 'Impossible de mettre à jour le champs '.$cmdToUpdate);
 	}
 }
 
 // update all cmd
 if (isset($result['cmd']) and isset($result['data'])) {
-	log::add('huawei4g', 'debug', 'result update data'.$result['data']);
+	log::add('huawei4g', 'debug', 'result update data '.$result['data']);
 	if($result['cmd'] == "update") {
-		//updateInfo($eqLogics[0], $data, $value);
-		
+		foreach($result['data'] as $data) {
+			log::add('huawei4g', 'debug', 'update data '.$data);
+			//updateInfo($eqLogics[0], $data, $value);
+		}
 	}
 }
 

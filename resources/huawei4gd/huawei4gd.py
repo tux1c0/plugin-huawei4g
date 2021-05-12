@@ -50,109 +50,109 @@ def read_socket(client):
         client.sms.send_sms(message['numbers'], message['message']);
 
 def listen():
-    jeedom_socket.open()
-    logging.debug("Start listening...")
+	jeedom_socket.open()
+	logging.debug("Start listening...")
 
-    try:
-        while 1:
-            time.sleep(_cycle)
+	try:
+		while 1:
+			time.sleep(_cycle)
 
-            if len(_devices) == 0:
-                continue
+			if len(_devices) == 0:
+				continue
 
-            for key in _devices:
-                if _devices[key]['username'] and _devices[key]['password']:
-                    _device_url = 'http://' + _devices[key]['username'] + ':' + _devices[key]['password'] + '@' + _devices[key]['ip']
-                else:
-                    _device_url = 'http://' + _devices[key]['ip']
-                logging.debug('URL : ' + _device_url)
-                break
+			for key in _devices:
+				if _devices[key]['username'] and _devices[key]['password']:
+					_device_url = 'http://' + _devices[key]['username'] + ':' + _devices[key]['password'] + '@' + _devices[key]['ip']
+				else:
+					_device_url = 'http://' + _devices[key]['ip']
+				logging.debug('URL : ' + _device_url)
+				break
 
-            try:
-                connection = AuthorizedConnection(_device_url)
-                client = Client(connection)
-            except Exception as e:
-                logging.error('Fail to connect on the device: ' + str(e))
-                continue
+			try:
+				connection = AuthorizedConnection(_device_url)
+				client = Client(connection)
+			except Exception as e:
+				logging.error('Fail to connect on the device: ' + str(e))
+				continue
 
-            try:
-                signal = client.monitoring.status()
-                jeedom_com.send_change_immediate({'cmd' : 'signal', 'message' : signal['SignalIcon']});
-            except Exception as e:
-                logging.error('Fail to check signal: ' + str(e))
+			try:
+				signal = client.monitoring.status()
+				jeedom_com.send_change_immediate({'cmd' : 'signal', 'message' : signal['SignalIcon']});
+			except Exception as e:
+				logging.error('Fail to check signal: ' + str(e))
 
-            try:
-                data = client.net.current_plmn()
-                jeedom_com.send_change_immediate({'cmd' : 'operatorName', 'message' : data['FullName']});
-            except Exception as e:
-                logging.error('Fail to check current plmn: ' + str(e))
-				
+			try:
+				data = client.net.current_plmn()
+				jeedom_com.send_change_immediate({'cmd' : 'operatorName', 'message' : data['FullName']});
+			except Exception as e:
+				logging.error('Fail to check current plmn: ' + str(e))
+
 			try:
 				data = client.monitoring.traffic_statistics()
-				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-                logging.error('Fail to check traffic_statistics: ' + str(e))
+				logging.error('Fail to check traffic_statistics: ' + str(e))
 
 			try:
 				data = client.device.basic_information()
-				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-                logging.error('Fail to check basic_information: ' + str(e))
+				logging.error('Fail to check basic_information: ' + str(e))
 
 			try:
 				data = client.device.information()
-				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-                logging.error('Fail to check information: ' + str(e))
+				logging.error('Fail to check information: ' + str(e))
 
 			try:
 				data = client.device.signal()
-				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-                logging.error('Fail to check signal: ' + str(e))
-				
+				logging.error('Fail to check signal: ' + str(e))
+
 			try:
 				data = client.monitoring.month_statistics()
-				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-                logging.error('Fail to check month_statistics: ' + str(e))
-				
+				logging.error('Fail to check month_statistics: ' + str(e))
+
 			try:
 				data = client.dial_up.mobile_dataswitch()
-				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-                logging.error('Fail to check mobile_dataswitch: ' + str(e))
-			
+				logging.error('Fail to check mobile_dataswitch: ' + str(e))
+
 			try:
 				data = client.wlan.status_switch_settings().replace('{"radios": ','')
-				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-                logging.error('Fail to check status_switch_settings: ' + str(e))
-			
+				logging.error('Fail to check status_switch_settings: ' + str(e))
+
 			try:
 				data = client.wlan.multi_basic_settings().replace('{"Ssids": ','')[:-1]
-				jeedom_com.send_change_immediate({'cmd' : 'update', ' data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
-                logging.error('Fail to check multi_basic_settings: ' + str(e))
+				logging.error('Fail to check multi_basic_settings: ' + str(e))
 
-            try:
-                read_socket(client)
-            except Exception as e:
-                logging.error('Exception on socket : ' + str(e))
+			try:
+				read_socket(client)
+			except Exception as e:
+				logging.error('Exception on socket : ' + str(e))
 
-            try:
-                checkUnreadMessages(client)
-            except Exception as e:
-                logging.error('Fail to check unread sms : ' + str(e))
+			try:
+				checkUnreadMessages(client)
+			except Exception as e:
+				logging.error('Fail to check unread sms : ' + str(e))
 
-            try:
-                client.user.logout()
-            except ResponseErrorNotSupportedException as e:
-                pass
-            except Exception as e:
-                logging.error('Fail to logout : ' + str(e))
-    except KeyboardInterrupt:
-        shutdown()
+			try:
+				client.user.logout()
+			except ResponseErrorNotSupportedException as e:
+				pass
+			except Exception as e:
+				logging.error('Fail to logout : ' + str(e))
+	except KeyboardInterrupt:
+		shutdown()
 
 # ----------------------------------------------------------------------------
 
