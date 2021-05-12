@@ -109,7 +109,7 @@ def listen():
 
 			try:
 				data = client.device.signal()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'signal', 'data' : data});
 			except Exception as e:
 				logging.error('Fail to check signal: ' + str(e))
 
@@ -126,13 +126,13 @@ def listen():
 				logging.error('Fail to check mobile_dataswitch: ' + str(e))
 
 			try:
-				data = client.wlan.status_switch_settings().replace('{"radios": ','')
+				data = client.wlan.status_switch_settings()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
 				logging.error('Fail to check status_switch_settings: ' + str(e))
 
 			try:
-				data = client.wlan.multi_basic_settings().replace('{"Ssids": ','')[:-1]
+				data = client.wlan.multi_basic_settings()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
 				logging.error('Fail to check multi_basic_settings: ' + str(e))
@@ -142,6 +142,12 @@ def listen():
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
 			except Exception as e:
 				logging.error('Fail to check sms_count: ' + str(e))
+
+			try:
+				data = client.sms.get_sms_list()
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+			except Exception as e:
+				logging.error('Fail to check get_sms_list: ' + str(e))
 
 			try:
 				read_socket(client)
