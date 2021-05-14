@@ -335,7 +335,7 @@ class huawei4g extends eqLogic {
 		
 		// téléphone rempli dans un scenario
 		if(!empty($_options['title']) && empty($arr['numerotel'])) {
-			$numbers = explode(';', $_options['title')];
+			$numbers = explode(';', $_options['title']);
 			$check = FALSE;
 		}
 		
