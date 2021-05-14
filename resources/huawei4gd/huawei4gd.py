@@ -10,6 +10,26 @@ from huawei_lte_api.AuthorizedConnection import AuthorizedConnection
 from huawei_lte_api.Client import Client
 from huawei_lte_api.exceptions import ResponseErrorNotSupportedException
 
+class switch(object):
+    def __init__(self, value):
+        self.value = value
+        self.fall = False
+
+    def __iter__(self):
+        """Return the match method once, then stop"""
+        yield self.match
+        raise StopIteration
+    
+    def match(self, *args):
+        """Indicate whether or not to enter a case suite"""
+        if self.fall or not args:
+            return True
+        elif self.value in args:
+            self.fall = True
+            return True
+        else:
+            return False
+
 try:
     from jeedom.jeedom import *
 except ImportError:
@@ -39,28 +59,33 @@ def checkUnreadMessages(client):
                 handleMessage(client, message)
 
 def read_socket(client):
-    global JEEDOM_SOCKET_MESSAGE
-    if not JEEDOM_SOCKET_MESSAGE.empty():
-        logging.debug('Message received in socket JEEDOM_SOCKET_MESSAGE')
-        message = json.loads(jeedom_utils.stripped(JEEDOM_SOCKET_MESSAGE.get()))
-        if message['apikey'] != _apikey:
-            logging.error('Invalid apikey from socket : ' + str(message))
-            return
+	global JEEDOM_SOCKET_MESSAGE
+	if not JEEDOM_SOCKET_MESSAGE.empty():
+		logging.debug('Message received in socket JEEDOM_SOCKET_MESSAGE')
+		message = json.loads(jeedom_utils.stripped(JEEDOM_SOCKET_MESSAGE.get()))
+		if message['apikey'] != _apikey:
+			logging.error('Invalid apikey from socket: ' + str(message))
+			return
 
 		try:
-			match message['action']:
-				case "sendsms":
+			for case in switch(message['action']):
+				if case("sendsms"):
 					client.sms.send_sms(message['numbers'], message['message'])
-				case "reboot":
+					break
+				if case("reboot"):
 					client.device.reboot()
-				case "enabledata":
+					break
+				if case("enabledata"):
 					client.dial_up.set_mobile_dataswitch(1)
-				case "disabledata":
+					break
+				if case("disabledata"):
 					client.dial_up.set_mobile_dataswitch(0)
-				case "delsms":
+					break
+				if case("delsms"):
 					client.sms.delete_sms(message['index'])
-				case _:
-					logging.error('Invalid action from socket'))
+					break
+				if case():
+					logging.error('Invalid action from socket')
 		except Exception as e:
 			logging.error('Failed to perform an action: ' + str(e))
 
