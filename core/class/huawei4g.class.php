@@ -19,17 +19,11 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 require_once dirname(__FILE__) . '/router.class.php';
-require_once dirname(__FILE__) . '/frequency.class.php';
 
 class huawei4g extends eqLogic {
     /*     * *************************Attributs****************************** */
 	public static $_widgetPossibility = array('custom' => true);
-	const ERROR_SYSTEM_UNKNOWN = '100001';
-	const ERROR_SYSTEM_NO_SUPPORT = '100002';
-	const ERROR_SYSTEM_NO_RIGHTS = '100003';
-	const ERROR_SYSTEM_BUSY = '100004';
-	const ERROR_SYSTEM_PARAMETER = '100006';
-	const ERROR_SYSTEM_CSRF = '125002';
+
 
     /*     * ***********************Methode static*************************** */
 	public static function dependancy_info() {
@@ -59,8 +53,6 @@ class huawei4g extends eqLogic {
 		foreach ($eqLogics as $rtr) {
 			try {
 				$rtr->postSave();
-				//$rtr->getRouteurInfo();
-				//$rtr->getSMSInfo();
 			} catch (Exception $e) {
 				log::add('huawei4g', 'error', $e->getMessage());
 			}
@@ -141,57 +133,6 @@ class huawei4g extends eqLogic {
 		if ($this->getConfiguration('ip') == '') {
 			throw new Exception(__('Le champs IP ne peut pas être vide', __FILE__));
 		}
-		if ($this->getConfiguration('frequence') == '') {
-			throw new Exception(__('Le champs fréquence ne peut pas être vide', __FILE__));
-		}
-	}
-
-	public function getRouteurInfo() {
-		// getting configuration
-		$IPaddress = $this->getConfiguration('ip');
-		$login = $this->getConfiguration('username');
-		$pwd = $this->getConfiguration('password');
-		$RtrName = $this->getName();
-		$Frequency = new Frequency();
-		
-		$this->infos = array();
-		
-		// setting the router session
-		$Router = new Router();
-		$Router->setAddress($IPaddress);
-		
-		// calling API
-		try {
-			$Router->setSession($login, $pwd, "get");
-			$this->infos['status'] = $Router->getStatus();
-			
-			if($this->infos['status'] == "Up") {
-				$this->setInfo($Router->getTrafficStatistics());
-				$this->setInfo($Router->getPublicLandMobileNetwork());
-				$this->setInfo($Router->getDeviceBasicInfo());
-				$this->setInfo($Router->getCellInfo());
-				$this->setInfo($Router->getSignal());
-				$this->setInfo($Router->getMonthStats());
-				$this->setInfo($Router->getMobileDataswitch());
-				$this->setInfo($Router->getWifiInfo());
-				$this->setInfo($Router->getWifiDetails());
-			}
-		} catch (Exception $e) {
-			log::add('huawei4g', 'error', $e);
-		}
-		
-		// calculating frequencies
-		$Frequency->setBand($this->infos['band']);
-		$Frequency->setEarfcn($this->infos['earfcn']);
-		$Frequency->calculator();
-		$this->infos['frq'] = $Frequency->getName();
-		$this->infos['fdl'] = $Frequency->getFdl();
-		$this->infos['ful'] = $Frequency->getFul();
-		
-		// calcul Marge RF
-		$this->infos['mrf'] = $this->infos['rssi'] - $this->infos['rsrp'];
-		
-		$this->updateInfo();
 	}
 	
 	private function getLastSMSReceived($json) {
@@ -242,65 +183,6 @@ class huawei4g extends eqLogic {
 		return $values;
 	}
 	
-	// fill the info array
-	private function setInfo($infoTab) {
-		if(isset($infoTab)) {
-			// workaround PHP < 7
-			if (!function_exists('array_key_first')) {
-				function array_key_first(array $arr) {
-					foreach($arr as $key => $unused) {
-						return $key;
-					}
-					return NULL;
-				}
-			}
-			
-			if(array_key_first($infoTab) == 'code') {
-				log::add('huawei4g', 'error', $this->errorInfo($infoTab['code']));
-			} else {
-				foreach($infoTab as $key => $value) {
-					log::add('huawei4g', 'debug', 'key:'.$key.' value:'.$value);
-					if(strpos(strval($value), 'dB') === true) {
-						$this->infos[$key] = str_replace('dB', '', $value);
-					} elseif (strpos(strval($value), 'dBm') === true) {
-						$this->infos[$key] = str_replace('dBm', '', $value);
-					} else {
-						switch($key) {
-							case "Messages": 
-								$this->infos[$key] = json_encode($value['Message']);
-								$LastSMS = $this->getLastSMSReceived(json_encode($value['Message']));
-								$this->infos['LastNumber'] = $LastSMS['Number'];
-								$this->infos['LastSMS'] = $LastSMS['Text'];
-								break;
-							case "Ssid":
-								$this->infos[$key] = json_encode($value);
-								break;
-							case "lte_bandinfo": 
-								$this->infos['band'] = $value;
-								break;
-							case "Radio24": 
-								$this->infos['Radio24'] = intval($value);
-								break;
-							case "Radio5": 
-								$this->infos['Radio5'] = intval($value);
-								break;
-							case "dataswitch": 
-								$this->infos['dataswitch'] = intval($value);
-								break;
-							case "DeviceName": 
-								$this->infos['devicename'] = $value;
-								break;
-							default:
-								$this->infos[$key] = $value;
-						}
-					}
-				}
-			}
-		} else {
-			log::add('huawei4g', 'debug', 'function setInfo has a NULL parameter');
-		}
-	}
-	
 	public function reboot() {
 		$sendData['action'] = "reboot";
 		$this->sendDeamon($sendData);
@@ -319,6 +201,17 @@ class huawei4g extends eqLogic {
 		log::add('huawei4g', 'debug', 'send disabledata to deamon: '.$sendData);
 	}	
 	
+	public function delSMS($arr) {
+		if(empty($arr['smsid'])) {
+			log::add('huawei4g', 'debug', 'delSMS smsid empty');
+		} else {
+			$index = $arr['smsid'];
+			$sendData['index'] = $index;
+			$sendData['action'] = "delsms";
+			$this->sendDeamon($sendData);
+			log::add('huawei4g', 'debug', 'send enabledata to deamon: '.$sendData);
+		}
+	}
 	public function sendSMSDeamon($_options = array()) {
 		$texteMode = $this->getConfiguration('texteMode');
 		$check = TRUE;
@@ -376,46 +269,6 @@ class huawei4g extends eqLogic {
         }
     }
 	
-	public function delSMS($arr) {
-		if(empty($arr['smsid'])) {
-			log::add('huawei4g', 'debug', 'delSMS smsid empty');
-		} else {
-			$index = $arr['smsid'];
-			$sendData['index'] = $index;
-			$sendData['action'] = "delsms";
-			$this->sendDeamon($sendData);
-			log::add('huawei4g', 'debug', 'send enabledata to deamon: '.$sendData);
-		}
-	}
-	
-	// manage API errors
-	private function errorInfo($code) {
-		switch($code) {
-			case ERROR_SYSTEM_BUSY: 
-				$e = "System busy";
-				break;
-			case ERROR_SYSTEM_CSRF: 
-				$e = "Token error";
-				break;
-			case ERROR_SYSTEM_NO_RIGHTS: 
-				$e = "You don't have rights";
-				break;
-			case ERROR_SYSTEM_NO_SUPPORT: 
-				$e = "API not supported";
-				break;
-			case ERROR_SYSTEM_PARAMETER: 
-				$e = "Wrong parameter";
-				break;
-			case ERROR_SYSTEM_UNKNOWN: 
-				$e = "Unknown API error";
-				break;	
-			default:
-				$e = "UNKNOWN ERROR";
-		}
-		
-		return $e;
-	}
-	
 	private function cleanSMS($message) {
 		$caracteres = array(
 				'À' => 'a', 'Á' => 'a', 'Â' => 'a', 'Ä' => 'a', 'à' => 'a', 'á' => 'a', 'â' => 'a', 'ä' => 'a', '@' => 'a',
@@ -428,22 +281,6 @@ class huawei4g extends eqLogic {
 		return preg_replace('#[^A-Za-z0-9 \n\.\'=\*:]+#', '', strtr($message, $caracteres));
 	}
 	
-	// update HTML
-	public function updateInfo() {
-		foreach ($this->getCmd('info') as $cmd) {
-			try {
-				$key = $cmd->getLogicalId();
-				$value = $this->infos[$key];
-				if(!empty($value)) {
-					$this->checkAndUpdateCmd($cmd, $value);
-				}
-				log::add('huawei4g', 'debug', 'updateInfo key '.$key. ' valeur '.$value);
-			} catch (Exception $e) {
-				log::add('huawei4g', 'error', 'Impossible de mettre à jour le champs '.$key);
-			}
-		}
-	}
-
 	
 		/*     * *********************Methode d'instance************************* */
 	public function preSave() {

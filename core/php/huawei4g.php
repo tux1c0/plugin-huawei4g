@@ -23,9 +23,7 @@ if (init('deviceslist') != '') {
         $data[$eqLogic->getId()] = array(
             'ip' => $eqLogic->getConfiguration('ip'),
             'username' => $eqLogic->getConfiguration('username'),
-            'password' => $eqLogic->getConfiguration('password'),
-            'frequence' => $eqLogic->getConfiguration('frequence'),
-            'texteMode' => $eqLogic->getConfiguration('texteMode')
+            'password' => $eqLogic->getConfiguration('password')
         );
     }
     die(json_encode($data));
@@ -36,6 +34,7 @@ if (!is_array($result)) {
     die();
 }
 
+// get all Huawei4g equipments
 $eqLogics = eqLogic::byType('huawei4g');
 if (count($eqLogics) < 1) {
     die();
@@ -90,7 +89,7 @@ function cleanInfo($cle, $valeur) {
 	return $out;
 }
 
-// update a cmd
+// update a single cmd
 function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 	try {
 		$cmd = $eqLogicToUpdate->getCmd(null, $cmdToUpdate);
@@ -103,7 +102,7 @@ function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 	}
 }
 
-// deal all signal output
+// deal with signal API output
 function frequency($eqLogicToUpdate, $arr) {
 	$Frequency = new Frequency();
 	
