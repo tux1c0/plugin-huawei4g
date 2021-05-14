@@ -47,7 +47,22 @@ def read_socket(client):
             logging.error('Invalid apikey from socket : ' + str(message))
             return
 
-        client.sms.send_sms(message['numbers'], message['message']);
+		try:
+			match message['action']:
+				case "sendsms":
+					client.sms.send_sms(message['numbers'], message['message'])
+				case "reboot":
+					client.device.reboot()
+				case "enabledata":
+					client.dial_up.set_mobile_dataswitch(1)
+				case "disabledata":
+					client.dial_up.set_mobile_dataswitch(0)
+				case "delsms":
+					client.sms.delete_sms(message['index'])
+				case _:
+					logging.error('Invalid action from socket'))
+		except Exception as e:
+			logging.error('Failed to perform an action: ' + str(e))
 
 def listen():
 	jeedom_socket.open()
@@ -71,83 +86,83 @@ def listen():
 			try:
 				connection = AuthorizedConnection(_device_url)
 				client = Client(connection)
-				jeedom_com.send_change_immediate({'cmd' : 'status', 'data' : 'Up'});
+				jeedom_com.send_change_immediate({'cmd' : 'status', 'data' : 'Up'})
 			except Exception as e:
-				jeedom_com.send_change_immediate({'cmd' : 'status', 'data' : 'Down'});
-				logging.error('Fail to connect on the device: ' + str(e))
+				jeedom_com.send_change_immediate({'cmd' : 'status', 'data' : 'Down'})
+				logging.error('Failed to connect on the device: ' + str(e))
 				continue
 
 			try:
 				signal = client.monitoring.status()
-				jeedom_com.send_change_immediate({'cmd' : 'signal', 'message' : signal['SignalIcon']});
+				jeedom_com.send_change_immediate({'cmd' : 'signal', 'message' : signal['SignalIcon']})
 			except Exception as e:
-				logging.error('Fail to check signal: ' + str(e))
+				logging.error('Failed to check signal: ' + str(e))
 
 			try:
 				data = client.net.current_plmn()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check current_plmn: ' + str(e))
+				logging.error('Failed to check current_plmn: ' + str(e))
 
 			try:
 				data = client.monitoring.traffic_statistics()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check traffic_statistics: ' + str(e))
+				logging.error('Failed to check traffic_statistics: ' + str(e))
 
 			try:
 				data = client.device.basic_information()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check basic_information: ' + str(e))
+				logging.error('Failed to check basic_information: ' + str(e))
 
 			try:
 				data = client.device.information()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check information: ' + str(e))
+				logging.error('Failed to check information: ' + str(e))
 
 			try:
 				data = client.device.signal()
-				jeedom_com.send_change_immediate({'cmd' : 'signal', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'signal', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check signal: ' + str(e))
+				logging.error('Failed to check signal: ' + str(e))
 
 			try:
 				data = client.monitoring.month_statistics()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check month_statistics: ' + str(e))
+				logging.error('Failed to check month_statistics: ' + str(e))
 
 			try:
 				data = client.dial_up.mobile_dataswitch()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check mobile_dataswitch: ' + str(e))
+				logging.error('Failed to check mobile_dataswitch: ' + str(e))
 
 			try:
 				data = client.wlan.status_switch_settings()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check status_switch_settings: ' + str(e))
+				logging.error('Failed to check status_switch_settings: ' + str(e))
 
 			try:
 				data = client.wlan.multi_basic_settings()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check multi_basic_settings: ' + str(e))
+				logging.error('Failed to check multi_basic_settings: ' + str(e))
 
 			try:
 				data = client.sms.sms_count()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check sms_count: ' + str(e))
+				logging.error('Failed to check sms_count: ' + str(e))
 
 			try:
 				data = client.sms.get_sms_list()
-				jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data});
+				jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data})
 			except Exception as e:
-				logging.error('Fail to check get_sms_list: ' + str(e))
+				logging.error('Failed to check get_sms_list: ' + str(e))
 
 			try:
 				read_socket(client)
@@ -157,14 +172,14 @@ def listen():
 			try:
 				checkUnreadMessages(client)
 			except Exception as e:
-				logging.error('Fail to check unread sms : ' + str(e))
+				logging.error('Failed to check unread sms : ' + str(e))
 
 			try:
 				client.user.logout()
 			except ResponseErrorNotSupportedException as e:
 				pass
 			except Exception as e:
-				logging.error('Fail to logout : ' + str(e))
+				logging.error('Failed to logout : ' + str(e))
 	except KeyboardInterrupt:
 		shutdown()
 

@@ -194,35 +194,6 @@ class huawei4g extends eqLogic {
 		$this->updateInfo();
 	}
 	
-	public function getSMSInfo() {
-		// getting configuration
-		$IPaddress = $this->getConfiguration('ip');
-		$login = $this->getConfiguration('username');
-		$pwd = $this->getConfiguration('password');
-		$RtrName = $this->getName();
-		
-		$this->infos = array();
-		
-		// setting the router session
-		$Router = new Router();
-		$Router->setAddress($IPaddress);
-		
-		// calling API
-		try {
-			$Router->setSession($login, $pwd, "sms");
-			$this->infos['status'] = $Router->getStatus();
-			
-			if($this->infos['status'] == "Up") {
-				$this->setInfo($Router->getSMS());
-				$this->setInfo($Router->getSMSCount());
-			}
-		} catch (Exception $e) {
-			log::add('huawei4g', 'error', $e);
-		}
-		
-		$this->updateInfo();
-	}
-	
 	private function getLastSMSReceived($json) {
 		$values = array();
 		$DateSms;
@@ -331,109 +302,72 @@ class huawei4g extends eqLogic {
 	}
 	
 	public function reboot() {
-		// getting configuration
-		$IPaddress = $this->getConfiguration('ip');
-		$login = $this->getConfiguration('username');
-		$pwd = $this->getConfiguration('password');
-		
-		// setting the router session
-		$Router = new Router();
-		$Router->setAddress($IPaddress);
-		try {
-			$Router->setSession($login, $pwd, "");
-			$res = $Router->setReboot();
-		} catch (Exception $e) {
-			log::add('huawei4g', 'error', $e);
-		}
-		
-		log::add('huawei4g', 'debug', 'Rebooting: '.$res);
+		$sendData['action'] = "reboot";
+		$this->sendDeamon($sendData);
+		log::add('huawei4g', 'debug', 'send reboot to deamon: '.$sendData);
 	}
 	
 	public function enableData() {
-		// getting configuration
-		$IPaddress = $this->getConfiguration('ip');
-		$login = $this->getConfiguration('username');
-		$pwd = $this->getConfiguration('password');
-		
-		// setting the router session
-		$Router = new Router();
-		$Router->setAddress($IPaddress);
-		try {
-			$Router->setSession($login, $pwd, "");
-			$res = $Router->setSwitchData(1);
-		} catch (Exception $e) {
-			log::add('huawei4g', 'error', $e);
-		}
-		
-		log::add('huawei4g', 'debug', 'Enabling data: '.$res);
+		$sendData['action'] = "enabledata";
+		$this->sendDeamon($sendData);
+		log::add('huawei4g', 'debug', 'send enabledata to deamon: '.$sendData);
 	}
 	
 	public function disableData() {
-		// getting configuration
-		$IPaddress = $this->getConfiguration('ip');
-		$login = $this->getConfiguration('username');
-		$pwd = $this->getConfiguration('password');
-		
-		// setting the router session
-		$Router = new Router();
-		$Router->setAddress($IPaddress);
-		try {
-			$Router->setSession($login, $pwd, "");
-			$res = $Router->setSwitchData(0);
-		} catch (Exception $e) {
-			log::add('huawei4g', 'error', $e);
-		}
-		
-		log::add('huawei4g', 'debug', 'Disabling data: '.$res);
-	}
-	
-	public function sendSMS($arr) {
-		// getting configuration
-		$IPaddress = $this->getConfiguration('ip');
-		$login = $this->getConfiguration('username');
-		$pwd = $this->getConfiguration('password');
-		$texteMode = $this->getConfiguration('texteMode');
-		
-		// setting the router session
-		$Router = new Router();
-		$Router->setAddress($IPaddress);
-		try {
-			if($texteMode == 1) {
-				$messageSMS = $this->cleanSMS($arr['message']);
-			} else {
-				$messageSMS = $arr['message'];
-			}
-			$Router->setSession($login, $pwd, "");
-			log::add('huawei4g', 'debug', 'numerotel: '.$arr['numerotel']);
-			log::add('huawei4g', 'debug', 'title: '.$arr['title']);
-			log::add('huawei4g', 'debug', 'message: '.$messageSMS);
-			if(empty($arr['numerotel'])) {
-				$res = $Router->sendSMS($arr['title'], $messageSMS);
-			} else {
-				$res = $Router->sendSMS($arr['numerotel'], $messageSMS);
-			}
-		} catch (Exception $e) {
-			log::add('huawei4g', 'error', $e);
-		}
-		
-		log::add('huawei4g', 'debug', 'Sending: '.$res);
-	}
+		$sendData['action'] = "disabledata";
+		$this->sendDeamon($sendData);
+		log::add('huawei4g', 'debug', 'send disabledata to deamon: '.$sendData);
+	}	
 	
 	public function sendSMSDeamon($_options = array()) {
-        if (isset($_options['numbers'])) {
-            $numbers = $_options['numbers'];
-        } else {
+		$texteMode = $this->getConfiguration('texteMode');
+		$check = TRUE;
+		
+		if($texteMode == 1) {
+			$messageSMS = $this->cleanSMS($_options['message']);
+		} else {
+			$messageSMS = $_options['message'];
+		}
+		
+		log::add('huawei4g', 'debug', 'numerotel: '.$_options['numerotel']);
+		log::add('huawei4g', 'debug', 'title: '.$_options['title']);
+		log::add('huawei4g', 'debug', 'message: '.$messageSMS);
+		
+		// téléphone rempli dans un scenario
+		if(!empty($_options['title']) && empty($arr['numerotel'])) {
+			$numbers = explode(';', $_options['title')];
+			$check = FALSE;
+		}
+		
+		// téléphone rempli dans le widget
+		if(empty($_options['title']) && !empty($_options['numerotel'])) {
+			$numbers = explode(';', $_options['numerotel']);
+			$check = FALSE;
+		}
+		
+		// default
+        if($check) {
             $numbers = explode(';', $this->getConfiguration('phonenumber'));
         }
 
-        $message = trim($_options['message']);
-
+		if(!empty($numbers)) {
+			$message = trim($_options['message']);
+			$sendData['message'] = $messageSMS;
+			$sendData['numbers'] = $numbers;
+			$sendData['action'] = "sendsms";
+			$this->sendDeamon($sendData);
+			log::add('huawei4g', 'debug', 'send SMS to deamon: '.$sendData);
+		} else {
+			log::add('huawei4g', 'debug', 'SMS numbers missing');
+		}
+    }
+	
+	// send data to deamon
+	public function sendDeamon($dataToSend) {
+		$dataToSend['apikey'] = jeedom::getApiKey('huawei4g');
+		
         if ($this->getConfiguration('ip') != null) {
-            $data = json_encode(array(
-                'apikey' => jeedom::getApiKey('huawei4g'),
-                'numbers' => $numbers,
-                'message' => $message,
-            ));
+            $data = json_encode($dataToSend);
 
             $socket = socket_create(AF_INET, SOCK_STREAM, 0);
             socket_connect($socket, '127.0.0.1', config::byKey('socketport', 'huawei4g'));
@@ -443,27 +377,15 @@ class huawei4g extends eqLogic {
     }
 	
 	public function delSMS($arr) {
-		// getting configuration
-		$IPaddress = $this->getConfiguration('ip');
-		$login = $this->getConfiguration('username');
-		$pwd = $this->getConfiguration('password');
-		
-		// setting the router session
-		$Router = new Router();
-		$Router->setAddress($IPaddress);
-		try {
-			$Router->setSession($login, $pwd, "");
-			log::add('huawei4g', 'debug', 'smsid: '.$arr['smsid']);
-			if(empty($arr['smsid'])) {
-				log::add('huawei4g', 'debug', 'smsid empty');
-			} else {
-				$res = $Router->delSMS($arr['smsid']);
-			}
-		} catch (Exception $e) {
-			log::add('huawei4g', 'error', $e);
+		if(empty($arr['smsid'])) {
+			log::add('huawei4g', 'debug', 'delSMS smsid empty');
+		} else {
+			$index = $arr['smsid'];
+			$sendData['index'] = $index;
+			$sendData['action'] = "delsms";
+			$this->sendDeamon($sendData);
+			log::add('huawei4g', 'debug', 'send enabledata to deamon: '.$sendData);
 		}
-		
-		log::add('huawei4g', 'debug', 'Sending: '.$res);
 	}
 	
 	// manage API errors
@@ -706,30 +628,6 @@ class huawei4g extends eqLogic {
 			$RouteurCmd->setSubType('numeric');
 			//$RouteurCmd->setUnite( 'o' );
 			$RouteurCmd->setOrder('13');
-			$RouteurCmd->save();
-		}
-		
-		$RouteurCmd = $this->getCmd(null, 'refresh');
-		if (!is_object($RouteurCmd)) {
-			log::add('huawei4g', 'debug', 'refresh');
-			$RouteurCmd = new huawei4gCmd();
-			$RouteurCmd->setName(__('Rafraîchir', __FILE__));
-			$RouteurCmd->setEqLogic_id($this->getId());
-			$RouteurCmd->setLogicalId('refresh');
-			$RouteurCmd->setType('action');
-			$RouteurCmd->setSubType('other');
-			$RouteurCmd->save();
-		}
-		
-		$RouteurCmd = $this->getCmd(null, 'refreshsms');
-		if (!is_object($RouteurCmd)) {
-			log::add('huawei4g', 'debug', 'refreshsms');
-			$RouteurCmd = new huawei4gCmd();
-			$RouteurCmd->setName(__('Rafraîchir SMS', __FILE__));
-			$RouteurCmd->setEqLogic_id($this->getId());
-			$RouteurCmd->setLogicalId('refreshsms');
-			$RouteurCmd->setType('action');
-			$RouteurCmd->setSubType('other');
 			$RouteurCmd->save();
 		}
 		
@@ -1201,10 +1099,10 @@ class huawei4g extends eqLogic {
 	}
 	
 	public function postUpdate() {		
-		$cmd = $this->getCmd(null, 'refresh');
+		/*$cmd = $this->getCmd(null, 'refresh');
 		if (is_object($cmd)) { 
 			$cmd->execCmd();
-		}
+		}*/
     }
 	
 }
@@ -1228,22 +1126,10 @@ class huawei4gCmd extends cmd {
 				break;
 				
 			case "sendsms":
-				//$eqLogic->sendSMS($_options);
 				$eqLogic->sendSmsDeamon($_options);
 				log::add('huawei4g','debug','sendsms ' . $this->getHumanName());
 				break;
-
-			case "refresh":
-				$eqLogic->getRouteurInfo();
-				$eqLogic->getSMSInfo();
-				log::add('huawei4g','debug','refresh ' . $this->getHumanName());
-				break;
-				
-			case "refreshsms":
-				$eqLogic->getSMSInfo();
-				log::add('huawei4g','debug','refreshsms ' . $this->getHumanName());
-				break;
-			
+	
 			case "delsms":
 				$eqLogic->delSMS($_options);
 				log::add('huawei4g','debug','delsms ' . $this->getHumanName());
