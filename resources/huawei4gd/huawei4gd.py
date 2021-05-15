@@ -60,7 +60,7 @@ def checkUnreadMessages(client):
 
 def read_socket(client):
 	global JEEDOM_SOCKET_MESSAGE
-	if not JEEDOM_SOCKET_MESSAGE.empty():
+	while not JEEDOM_SOCKET_MESSAGE.empty():
 		logging.debug('Message received in socket JEEDOM_SOCKET_MESSAGE')
 		message = json.loads(jeedom_utils.stripped(JEEDOM_SOCKET_MESSAGE.get()))
 		if message['apikey'] != _apikey:
@@ -116,6 +116,11 @@ def listen():
 				jeedom_com.send_change_immediate({'cmd' : 'status', 'data' : 'Down'})
 				logging.error('Failed to connect on the device: ' + str(e))
 				continue
+
+			try:
+				read_socket(client)
+			except Exception as e:
+				logging.error('Exception on socket : ' + str(e))
 
 			try:
 				signal = client.monitoring.status()
@@ -188,11 +193,6 @@ def listen():
 				jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check get_sms_list: ' + str(e))
-
-			try:
-				read_socket(client)
-			except Exception as e:
-				logging.error('Exception on socket : ' + str(e))
 
 			try:
 				checkUnreadMessages(client)
