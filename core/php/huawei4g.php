@@ -54,24 +54,9 @@ function cleanInfo($cle, $valeur) {
 		$this->infos[$key] = str_replace('dBm', '', $value);
 	} else {	
 		switch($key) {
-		//case "Messages": 
-			//$this->infos[$key] = json_encode($value['Message']);
-			//$LastSMS = $this->getLastSMSReceived(json_encode($value['Message']));
-			//$this->infos['LastNumber'] = $LastSMS['Number'];
-			//$this->infos['LastSMS'] = $LastSMS['Text'];
-			//break;
-		case "Ssid":
-			$out[1] = json_encode($value);
-			break;
 		case "lte_bandinfo": 
 			$out[0] = 'band';
 			$out[1] = $value;
-			break;
-		case "Radio24": 
-			$out[1] = intval($value);
-			break;
-		case "Radio5": 
-			$out[1] = intval($value);
 			break;
 		case "dataswitch": 
 			$out[1] = intval($value);
@@ -158,14 +143,8 @@ if (isset($result['cmd']) and isset($result['data'])) {
 		
 		case "smsList": 
 			log::add('huawei4g', 'debug', 'smsList '.$result['data']);
-				//clean info
-				$res = cleanInfo('Count', $result['data']['Count']);
-				//only first eqLogics, pending support of multi eqlogics
-				updateInfo($eqLogics[0], $res[0], $res[1]);
-				//clean info
-				$res = cleanInfo('Messages', $result['data']['Messages']);
-				//only first eqLogics, pending support of multi eqlogics
-				updateInfo($eqLogics[0], $res[0], $res[1]);
+			//only first eqLogics, pending support of multi eqlogics
+			updateInfo($eqLogics[0], "Messages", trim(secureXSS(json_encode($result['data']['Message']))));
 			break;
 
 		case "ssid": 
