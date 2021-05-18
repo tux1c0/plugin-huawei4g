@@ -144,13 +144,13 @@ if (isset($result['cmd']) and isset($result['data'])) {
 		case "smsList": 
 			log::add('huawei4g', 'debug', 'smsList '.$result['data']);
 			//only first eqLogics, pending support of multi eqlogics
-			updateInfo($eqLogics[0], "Messages", trim(secureXSS(json_encode($result['data']['Message']))));
+			updateInfo($eqLogics[0], "Messages", trim(json_encode($result['data']['Message'])));
 			break;
 
 		case "ssid": 
 			log::add('huawei4g', 'debug', 'ssid '.$result['data']);
 			//only first eqLogics, pending support of multi eqlogics
-			updateInfo($eqLogics[0], "Ssid", trim(secureXSS(json_encode($result['data']['Ssid']))));
+			updateInfo($eqLogics[0], "Ssid", trim(json_encode($result['data']['Ssid'])));
 			break;
 
 		case "radio": 
