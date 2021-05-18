@@ -222,25 +222,28 @@ class huawei4g extends eqLogic {
 			$messageSMS = $_options['message'];
 		}
 		
-		log::add('huawei4g', 'debug', 'numerotel: '.$_options['numerotel']);
-		log::add('huawei4g', 'debug', 'title: '.$_options['title']);
-		log::add('huawei4g', 'debug', 'message: '.$messageSMS);
+		log::add('huawei4g', 'debug', 'SMS numerotel: '.$_options['numerotel']);
+		log::add('huawei4g', 'debug', 'SMS title: '.$_options['title']);
+		log::add('huawei4g', 'debug', 'SMS message: '.$messageSMS);
 		
 		// téléphone rempli dans un scenario
 		if(!empty($_options['title']) && empty($arr['numerotel'])) {
 			$numbers = explode(';', $_options['title']);
 			$check = FALSE;
+			log::add('huawei4g', 'debug', 'SMS par scenario');
 		}
 		
 		// téléphone rempli dans le widget
 		if(empty($_options['title']) && !empty($_options['numerotel'])) {
 			$numbers = explode(';', $_options['numerotel']);
 			$check = FALSE;
+			log::add('huawei4g', 'debug', 'SMS par widget');
 		}
 		
 		// default
         if($check) {
             $numbers = explode(';', $this->getConfiguration('phonenumber'));
+			log::add('huawei4g', 'debug', 'SMS default phonenumber: '.$numbers);
         }
 
 		if(!empty($numbers)) {

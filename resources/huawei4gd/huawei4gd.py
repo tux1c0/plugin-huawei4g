@@ -223,7 +223,7 @@ def listen():
 				jeedom_com.send_change_immediate({'cmd' : 'count', 'data' : data['Count']})
 				if data['Messages'] is None:
 					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : ''})
-				elif data['Count'] > 1:
+				elif int(data['Count']) > 1:
 					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data['Messages']})
 				else:
 					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data['Messages'].replace("{'Message': {","{'Message': [{") + ']'})
