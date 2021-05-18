@@ -228,7 +228,11 @@ class huawei4g extends eqLogic {
 		
 		// téléphone rempli dans un scenario
 		if(!empty($_options['title']) && empty($arr['numerotel'])) {
-			$numbers = explode(';', $_options['title']);
+			if(preg_match('/^[0-9]{10}+$/', $_options['title'])) {
+				$numbers = explode(';', $_options['title']);
+			} else {
+				$numbers = explode(';', $this->getConfiguration('phonenumber'));
+			}
 			$check = FALSE;
 			log::add('huawei4g', 'debug', 'SMS par scenario');
 		}
