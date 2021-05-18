@@ -202,7 +202,7 @@ def listen():
 
 			try:
 				data = client.sms.get_sms_list()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data['Count']})
+				jeedom_com.send_change_immediate({'cmd' : 'count', 'data' : data['Count']})
 				jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data['Messages']})
 			except Exception as e:
 				logging.error('Failed to check get_sms_list: ' + str(e))

@@ -152,6 +152,12 @@ if (isset($result['cmd']) and isset($result['data'])) {
 			//only first eqLogics, pending support of multi eqlogics
 			updateInfo($eqLogics[0], "Ssid", trim(json_encode($result['data']['Ssid'])));
 			break;
+			
+		case "count": 
+			log::add('huawei4g', 'debug', 'count '.$result['data']);
+			//only first eqLogics, pending support of multi eqlogics
+			updateInfo($eqLogics[0], "Count", trim(secureXSS($result['data'])));
+			break;
 
 		case "radio": 
 			$tmp = $result['data']['radio'];
