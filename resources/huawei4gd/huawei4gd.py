@@ -5,6 +5,7 @@ import os
 import signal
 import sys
 import time
+import re
 
 from huawei_lte_api.AuthorizedConnection import AuthorizedConnection
 from huawei_lte_api.Client import Client
@@ -223,7 +224,7 @@ def listen():
 				if data['Messages'] is None:
 					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : ''})
 				else:
-					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : Clean_JSON(data['Messages'])})
+					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data['Messages']})
 			except Exception as e:
 				logging.error('Failed to check get_sms_list: ' + str(e))
 				continue
