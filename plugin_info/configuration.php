@@ -27,13 +27,13 @@ if (!isConnect()) {
 <form class="form-horizontal">
     <fieldset>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Port socket interne}}</label>
+            <label class="col-sm-3 control-label">{{Port du deamon}}</label>
             <div class="col-sm-7">
                 <input class="configKey form-control" data-l1key="socketport"/>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Cycle (s)}}</label>
+            <label class="col-sm-3 control-label">{{Fréquence de rafraîchissement (s)}}</label>
             <div class="col-sm-7">
                 <input class="configKey form-control" data-l1key="cycle"/>
             </div>
