@@ -181,14 +181,14 @@ def listen():
 
 			try:
 				data = client.wlan.status_switch_settings()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data['radios']})
+				jeedom_com.send_change_immediate({'cmd' : 'radio', 'data' : data['radios']})
 			except Exception as e:
 				logging.error('Failed to check status_switch_settings: ' + str(e))
 				continue
 
 			try:
 				data = client.wlan.multi_basic_settings()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data['Ssids']})
+				jeedom_com.send_change_immediate({'cmd' : 'ssid', 'data' : data['Ssids']})
 			except Exception as e:
 				logging.error('Failed to check multi_basic_settings: ' + str(e))
 				continue

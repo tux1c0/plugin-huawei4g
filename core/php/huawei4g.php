@@ -175,9 +175,20 @@ if (isset($result['cmd']) and isset($result['data'])) {
 			break;
 
 		case "radio": 
+			$tmp = $result['data'];
 			log::add('huawei4g', 'debug', 'radio '.$result['data']);
-			//only first eqLogics, pending support of multi eqlogics
-			//updateInfo($eqLogics[0], "ssid", trim(secureXSS($result['data']['Ssids'])));
+			foreach($tmp as $key => $value) {
+				if(isset($tmp[$key]['ID'])) {
+					if($tmp[$key]['ID'] == "InternetGatewayDevice.X_Config.Wifi.Radio.1."){
+						$return["Radio24"] = $tmp[$key]['wifienable'];
+						updateInfo($eqLogics[0], "Radios24", trim(secureXSS($tmp[$key]['wifienable'])));
+					}
+					if($tmp[$key]['ID'] == "InternetGatewayDevice.X_Config.Wifi.Radio.2."){
+						updateInfo($eqLogics[0], "Radios5", trim(secureXSS($tmp[$key]['wifienable'])));
+					}
+				}
+			}
+
 			break;
 
 		default:
