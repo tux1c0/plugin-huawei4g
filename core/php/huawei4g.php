@@ -163,11 +163,23 @@ if (isset($result['cmd']) and isset($result['data'])) {
 				//only first eqLogics, pending support of multi eqlogics
 				updateInfo($eqLogics[0], $res[0], $res[1]);
 				//clean info
-				$res = cleanInfo('Messages', $result['data']['Messages']['Message']);
+				$res = cleanInfo('Messages', $result['data']['Messages']);
 				//only first eqLogics, pending support of multi eqlogics
 				updateInfo($eqLogics[0], $res[0], $res[1]);
 			break;
-			
+
+		case "ssid": 
+			log::add('huawei4g', 'debug', 'ssid '.$result['data']);
+			//only first eqLogics, pending support of multi eqlogics
+			//updateInfo($eqLogics[0], "ssid", trim(secureXSS($result['data']['Ssids'])));
+			break;
+
+		case "radio": 
+			log::add('huawei4g', 'debug', 'radio '.$result['data']);
+			//only first eqLogics, pending support of multi eqlogics
+			//updateInfo($eqLogics[0], "ssid", trim(secureXSS($result['data']['Ssids'])));
+			break;
+
 		default:
 			break;
 		}

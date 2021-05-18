@@ -121,83 +121,97 @@ def listen():
 				read_socket(client)
 			except Exception as e:
 				logging.error('Exception on socket : ' + str(e))
+				continue
 
 			try:
 				signal = client.monitoring.status()
 				jeedom_com.send_change_immediate({'cmd' : 'signal', 'message' : signal['SignalIcon']})
 			except Exception as e:
 				logging.error('Failed to check signal: ' + str(e))
+				continue
 
 			try:
 				data = client.net.current_plmn()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check current_plmn: ' + str(e))
+				continue
 
 			try:
 				data = client.monitoring.traffic_statistics()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check traffic_statistics: ' + str(e))
+				continue
 
 			try:
 				data = client.device.basic_information()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check basic_information: ' + str(e))
+				continue
 
 			try:
 				data = client.device.information()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check information: ' + str(e))
+				continue
 
 			try:
 				data = client.device.signal()
 				jeedom_com.send_change_immediate({'cmd' : 'signal', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check signal: ' + str(e))
+				continue
 
 			try:
 				data = client.monitoring.month_statistics()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check month_statistics: ' + str(e))
+				continue
 
 			try:
 				data = client.dial_up.mobile_dataswitch()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check mobile_dataswitch: ' + str(e))
+				continue
 
 			try:
 				data = client.wlan.status_switch_settings()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data['radios']})
 			except Exception as e:
 				logging.error('Failed to check status_switch_settings: ' + str(e))
+				continue
 
 			try:
 				data = client.wlan.multi_basic_settings()
-				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
+				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data['Ssids']})
 			except Exception as e:
 				logging.error('Failed to check multi_basic_settings: ' + str(e))
+				continue
 
 			try:
 				data = client.sms.sms_count()
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check sms_count: ' + str(e))
+				continue
 
 			try:
 				data = client.sms.get_sms_list()
 				jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check get_sms_list: ' + str(e))
+				continue
 
 			try:
 				checkUnreadMessages(client)
 			except Exception as e:
 				logging.error('Failed to check unread sms : ' + str(e))
+				continue
 
 			try:
 				client.user.logout()
