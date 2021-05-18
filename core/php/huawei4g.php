@@ -143,8 +143,10 @@ if (isset($result['cmd']) and isset($result['data'])) {
 		
 		case "smsList": 
 			log::add('huawei4g', 'debug', 'smsList '.$result['data']);
+			$outputSMS = str_replace("\\'", "'", $result['data']['Message']);
+			$outputSMS = str_replace(array("\r\n", "\n", "\r"), "", $outputSMS);
 			//only first eqLogics, pending support of multi eqlogics
-			updateInfo($eqLogics[0], "Messages", trim(json_encode($result['data']['Message'])));
+			updateInfo($eqLogics[0], "Messages", trim(json_encode($outputSMS)));
 			break;
 
 		case "ssid": 

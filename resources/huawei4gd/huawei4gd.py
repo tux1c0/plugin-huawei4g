@@ -58,6 +58,23 @@ def checkUnreadMessages(client):
             for message in smsList['Messages']['Message']:
                 handleMessage(client, message)
 
+def Clean_JSON(wrongJSON):
+	while True:
+		try:
+			result = json.loads(wrongJSON)   # try to parse...
+			break                    # parsing worked -> exit loop
+		except Exception as e:
+			# "Expecting , delimiter: line 34 column 54 (char 1158)"
+			# position of unexpected character after '"'
+			unexp = int(re.findall(r'\(char (\d+)\)', str(e))[0])
+			# position of unescaped '"' before that
+			unesc = wrongJSON.rfind(r'"', 0, unexp)
+			wrongJSON = s[:unesc] + r'\"' + s[unesc+1:]
+			# position of correspondig closing '"' (+2 for inserted '\')
+			closg = wrongJSON.find(r'"', unesc + 2)
+			wrongJSON = s[:closg] + r'\"' + s[closg+1:]
+	return wrongJSON
+
 def read_socket(client):
 	global JEEDOM_SOCKET_MESSAGE
 	while not JEEDOM_SOCKET_MESSAGE.empty():
@@ -203,7 +220,10 @@ def listen():
 			try:
 				data = client.sms.get_sms_list()
 				jeedom_com.send_change_immediate({'cmd' : 'count', 'data' : data['Count']})
-				jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data['Messages']})
+				if data['Messages'] is None:
+					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : ''})
+				else:
+					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : Clean_JSON(data['Messages'])})
 			except Exception as e:
 				logging.error('Failed to check get_sms_list: ' + str(e))
 				continue
