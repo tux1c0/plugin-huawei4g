@@ -223,8 +223,10 @@ def listen():
 				jeedom_com.send_change_immediate({'cmd' : 'count', 'data' : data['Count']})
 				if data['Messages'] is None:
 					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : ''})
-				else:
+				elif data['Count'] > 1:
 					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data['Messages']})
+				else:
+					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : data['Messages'].replace("{'Message': {","{'Message': [{") + ']'})
 			except Exception as e:
 				logging.error('Failed to check get_sms_list: ' + str(e))
 				continue
