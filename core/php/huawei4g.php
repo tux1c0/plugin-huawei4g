@@ -171,7 +171,7 @@ if (isset($result['cmd']) and isset($result['data'])) {
 		case "ssid": 
 			log::add('huawei4g', 'debug', 'ssid '.$result['data']);
 			//only first eqLogics, pending support of multi eqlogics
-			updateInfo($eqLogics[0], "Ssid", trim(secureXSS($result['data']['Ssid'])));
+			updateInfo($eqLogics[0], "Ssid", trim(secureXSS(json_encode($result['data']['Ssid']))));
 			break;
 
 		case "radio": 
