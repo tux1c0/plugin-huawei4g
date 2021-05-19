@@ -160,7 +160,19 @@ if (isset($result['cmd']) and isset($result['data'])) {
 			//only first eqLogics, pending support of multi eqlogics
 			updateInfo($eqLogics[0], "Count", trim(secureXSS($result['data'])));
 			break;
+		
+		case "lastmessage": 
+			log::add('huawei4g', 'debug', 'lastmessage '.$result['data']);
+			//only first eqLogics, pending support of multi eqlogics
+			updateInfo($eqLogics[0], "LastSMS", trim(secureXSS($result['data'])));
+			break;
 
+		case "lastsender": 
+			log::add('huawei4g', 'debug', 'lastsender '.$result['data']);
+			//only first eqLogics, pending support of multi eqlogics
+			updateInfo($eqLogics[0], "LastNumber", trim(secureXSS($result['data'])));
+			break;
+			
 		case "radio": 
 			$tmp = $result['data']['radio'];
 			log::add('huawei4g', 'debug', 'radio '.$result['data']);
@@ -233,11 +245,11 @@ if (isset($result['messages'])) {
                     log::add('huawei4g', 'info', __('Réponse : ', __FILE__) . $reply['reply']);
                 }
 
-                $cmd = $eqLogicCmd->getEqlogic()->getCmd('info', 'smsLastMessage');
-                $cmd->event($message);
+                //$cmd = $eqLogicCmd->getEqlogic()->getCmd('info', 'smsLastMessage');
+                //$cmd->event($message);
 
-                $cmd = $eqLogicCmd->getEqlogic()->getCmd('info', 'smsLastSender');
-                $cmd->event($sender);
+                //$cmd = $eqLogicCmd->getEqlogic()->getCmd('info', 'smsLastSender');
+                //$cmd->event($sender);
                 break;
             }
         }

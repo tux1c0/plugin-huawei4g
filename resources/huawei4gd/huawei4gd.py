@@ -38,26 +38,26 @@ except ImportError:
 	sys.exit(1)
 
 def handleMessage(client, message):
-    if int(message['Smstat']) != 0:
-        return
+	if int(message['Smstat']) != 0:
+		return
 
-    logging.debug('SMS message : ' + str(message))
-    jeedom_com.add_changes('messages::'+str(message['Index']), {'sender' : message['Phone'], 'message' : message['Content']})
-    client.sms.set_read(message['Index'])
+	logging.debug('Handle SMS non lu - message : ' + str(message))
+	jeedom_com.add_changes('messages::'+str(message['Index']), {'sender' : message['Phone'], 'message' : message['Content']})
+	client.sms.set_read(message['Index'])
+	jeedom_com.send_change_immediate({'cmd' : 'lastmessage', 'data' : message['Content']})
+	jeedom_com.send_change_immediate({'cmd' : 'lastsender', 'data' : message['Phone']})
 
-def checkUnreadMessages(client):
-    smsCount = client.sms.sms_count()
-    logging.debug('SMS Count : ' + str(smsCount))
+def checkUnreadMessages(client, sms, unread, count):
+	logging.debug('CheckUnread SMS Count : ' + str(count))
 
-    if int(smsCount['LocalUnread']) > 0:
-        smsList = client.sms.get_sms_list()
-        logging.debug('SMS List : ' + str(smsList))
+    if int(unread) > 0:
+		logging.debug('CheckUnread SMS List : ' + str(sms))
 
-        if int(smsList['Count']) == 1:
-            handleMessage(client, smsList['Messages']['Message'])
-        else:
-            for message in smsList['Messages']['Message']:
-                handleMessage(client, message)
+		if int(count) == 1:
+			handleMessage(client, sms['Message'])
+		else:
+			for message in sms['Message']:
+				handleMessage(client, message)
 
 def Clean_JSON(wrongJSON):
 	while True:
@@ -213,6 +213,7 @@ def listen():
 
 			try:
 				data = client.sms.sms_count()
+				SmsUnread = data['LocalUnread']
 				jeedom_com.send_change_immediate({'cmd' : 'update', 'data' : data})
 			except Exception as e:
 				logging.error('Failed to check sms_count: ' + str(e))
@@ -220,6 +221,8 @@ def listen():
 
 			try:
 				data = client.sms.get_sms_list()
+				dataSMS = data['Messages']
+				dataCount = data['Count']
 				jeedom_com.send_change_immediate({'cmd' : 'count', 'data' : data['Count']})
 				if data['Messages'] is None:
 					jeedom_com.send_change_immediate({'cmd' : 'smsList', 'data' : ''})
@@ -232,7 +235,7 @@ def listen():
 				continue
 
 			try:
-				checkUnreadMessages(client)
+				checkUnreadMessages(client, dataSMS, SmsUnread, dataCount)
 			except Exception as e:
 				logging.error('Failed to check unread sms : ' + str(e))
 				continue
