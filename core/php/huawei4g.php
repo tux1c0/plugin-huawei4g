@@ -74,14 +74,31 @@ function cleanInfo($cle, $valeur) {
 	return $out;
 }
 
+function askAndInteraction($eqLogicToAsk, $phone, $msg) {
+	$message = trim(secureXSS($msg));
+	$sender = trim(secureXSS($phone));
+
+	if(empty($message) or empty($sender)) {
+		continue;
+	}
+
+	log::add('huawei4g', 'debug', 'Verification réponse Ask de '.$sender.' : '.$message);
+
+	// Prise en charge de la commande ask
+	if ($eqLogicToAsk->askResponse($message)) {
+		log::add('huawei4g', 'debug', 'Envoi réponse Ask');
+		continue(3);
+	}
+}
+
 // update a single cmd
 function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 	try {
 		$cmd = $eqLogicToUpdate->getCmd(null, $cmdToUpdate);
-		if (is_object($cmd)) {
+		if(is_object($cmd)) {
 			$cmd->event($valueToUpdate);
 		}
-		log::add('huawei4g', 'debug', 'updateInfo cmd '.$cmdToUpdate. ' valeur '.$valueToUpdate);
+		log::add('huawei4g', 'debug', 'updateInfo cmd '.$cmdToUpdate.' valeur '.$valueToUpdate);
 	} catch (Exception $e) {
 		log::add('huawei4g', 'error', 'Impossible de mettre à jour le champs '.$cmdToUpdate);
 	}
@@ -173,6 +190,12 @@ if (isset($result['cmd']) and isset($result['data'])) {
 			updateInfo($eqLogics[0], "LastNumber", trim(secureXSS($result['data'])));
 			break;
 			
+		case "ask": 
+			log::add('huawei4g', 'debug', 'ask '.$result['data']);
+			//only first eqLogics, pending support of multi eqlogics
+			askAndInteraction($eqLogics[0], $result['sender'], $result['data']);
+			break;
+			
 		case "radio": 
 			$tmp = $result['data']['radio'];
 			log::add('huawei4g', 'debug', 'radio '.$result['data']);
@@ -195,16 +218,6 @@ if (isset($result['cmd']) and isset($result['data'])) {
 		}
 }
 
-
-if (isset($result['cmd']) and isset($result['message'])) {
-    foreach ($eqLogics as $eqLogic) {
-        $cmd = $eqLogic->getCmd(null, $result['cmd']);
-        if (is_object($cmd)) {
-            $cmd->event($result['message']);
-        }
-    }
-    die();
-}
 
 if (isset($result['messages'])) {
     foreach ($result['messages'] as $key => $datas) {
@@ -245,11 +258,6 @@ if (isset($result['messages'])) {
                     log::add('huawei4g', 'info', __('Réponse : ', __FILE__) . $reply['reply']);
                 }
 
-                //$cmd = $eqLogicCmd->getEqlogic()->getCmd('info', 'smsLastMessage');
-                //$cmd->event($message);
-
-                //$cmd = $eqLogicCmd->getEqlogic()->getCmd('info', 'smsLastSender');
-                //$cmd->event($sender);
                 break;
             }
         }

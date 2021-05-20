@@ -43,9 +43,14 @@ def handleMessage(client, message):
 
 	logging.debug('Handle SMS non lu - message : ' + str(message))
 	jeedom_com.add_changes('messages::'+str(message['Index']), {'sender' : message['Phone'], 'message' : message['Content']})
-	client.sms.set_read(message['Index'])
-	jeedom_com.send_change_immediate({'cmd' : 'lastmessage', 'data' : message['Content']})
-	jeedom_com.send_change_immediate({'cmd' : 'lastsender', 'data' : message['Phone']})
+	
+	try:
+		client.sms.set_read(message['Index'])
+		jeedom_com.send_change_immediate({'cmd' : 'lastmessage', 'data' : message['Content']})
+		jeedom_com.send_change_immediate({'cmd' : 'lastsender', 'data' : message['Phone']})
+		jeedom_com.send_change_immediate({'cmd' : 'ask', 'sender' : message['Phone'], 'data' : message['Content']})
+	except Exception as e:
+		logging.error('Failed to handle message: ' + str(e))
 
 def checkUnreadMessages(client, sms, unread, count):
 	logging.debug('CheckUnread SMS Count : ' + str(count))
@@ -139,13 +144,6 @@ def listen():
 				read_socket(client)
 			except Exception as e:
 				logging.error('Exception on socket : ' + str(e))
-				continue
-
-			try:
-				signal = client.monitoring.status()
-				jeedom_com.send_change_immediate({'cmd' : 'signal', 'message' : signal['SignalIcon']})
-			except Exception as e:
-				logging.error('Failed to check signal: ' + str(e))
 				continue
 
 			try:
