@@ -79,7 +79,7 @@ function askAndInteraction($eqLogicToAsk, $phone, $msg) {
 	$sender = trim(secureXSS($phone));
 
 	if(empty($message) or empty($sender)) {
-		continue;
+		die();
 	}
 
 	log::add('huawei4g', 'debug', 'Verification réponse Ask de '.$sender.' : '.$message);
@@ -87,7 +87,6 @@ function askAndInteraction($eqLogicToAsk, $phone, $msg) {
 	// Prise en charge de la commande ask
 	if ($eqLogicToAsk->askResponse($message)) {
 		log::add('huawei4g', 'debug', 'Envoi réponse Ask');
-		continue(3);
 	}
 }
 
