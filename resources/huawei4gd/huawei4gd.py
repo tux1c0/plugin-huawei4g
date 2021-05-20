@@ -50,7 +50,7 @@ def handleMessage(client, message):
 def checkUnreadMessages(client, sms, unread, count):
 	logging.debug('CheckUnread SMS Count : ' + str(count))
 
-    if int(unread) > 0:
+	if int(unread) > 0:
 		logging.debug('CheckUnread SMS List : ' + str(sms))
 
 		if int(count) == 1:
