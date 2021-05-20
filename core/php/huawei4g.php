@@ -79,14 +79,18 @@ function askAndInteraction($eqLogicToAsk, $phone, $msg) {
 	$sender = trim(secureXSS($phone));
 
 	if(empty($message) or empty($sender)) {
+		log::add('huawei4g', 'debug', 'Ask vide');
 		die();
 	}
 
 	log::add('huawei4g', 'debug', 'Verification réponse Ask de '.$sender.' : '.$message);
 
 	// Prise en charge de la commande ask
-	if ($eqLogicToAsk->askResponse($message)) {
-		log::add('huawei4g', 'debug', 'Envoi réponse Ask');
+	foreach ($eqLogicToAsk->getCmd('action') as $cmd) {
+		if($cmd->askResponse($message)) {
+			log::add('huawei4g', 'debug', 'Envoi réponse Ask');
+			die();
+		}
 	}
 }
 
@@ -236,11 +240,6 @@ if (isset($result['messages'])) {
 
                 $smsOk = true;
                 log::add('huawei4g', 'info', __('Message de ', __FILE__) . $sender . ' : ' . $message);
-
-                // Prise en charge de la commande ask
-                if ($eqLogicCmd->askResponse($message)) {
-                    continue(3);
-                }
 
                 // Gestion des interactions
                 $params = array('plugin', 'huawei4g');

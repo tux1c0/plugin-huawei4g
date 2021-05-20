@@ -988,6 +988,9 @@ class huawei4gCmd extends cmd {
 				$eqLogic->disableData($_options);
 				log::add('huawei4g','debug','disabledata ' . $this->getHumanName());
 				break;
+				
+			default:
+				log::add('huawei4g','debug','execute non reconnu ' . $this->getLogicalId());
  		}
 		return true;
 	}

@@ -80,7 +80,7 @@ Utilisation
 ### Actions sur les SMS par scénario
 
 -	Pour envoyer des SMS par scénario, choisissez la commande d'action "Envoyer SMS". Dans le champs "titre", remplissez le(s) numéro(s) de téléphone et dans le champs "Message" le texte à envoyer.
--	L'envoie du SMS sera effectué au prochain passage du deamon (fréquence) - par défaut 1 min maximum
+-	L'envoie du SMS sera effectué au prochain passage du deamon (fréquence) - par défaut 60 secondes. 
 -	Format des numéros 0123456789 (le +xx n'est pas supporté)
 -	Pour envoyer à plusieurs numéros, séparez les avec des ';' sans espace. Exemple : 0123456789;9876543210
 
@@ -94,6 +94,11 @@ Dans ce cas, il existe 2 possibilités en utilisant un scénario (voir au-dessus
 -	Ajouter le scénario dans la section "Action avant exécution de la commande"
 -	Sauvegarder
 
+### Fonction Ask
+
+Le plugin supporte la fonction Ask de Jeedom. Pour la configuration, il faut avoir ces 2 prérequis
+-	Avoir configuré le numéro par défaut
+-	Mettre dans le délai du Ask, 2x le temps de la fréquence du plugin (120 si la valeur de 60s du plugin est restée par défaut)
 
 ### Debug
 
