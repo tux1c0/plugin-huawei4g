@@ -36,7 +36,11 @@ Le plugin est compatible avec les modèles suivant
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
+-	Huawei B315s-22
 -	Huawei E3131
+-	Huawei E3531
+-	Huawei B818-263
+-	Huawei 5G CPE Pro 2 (H122-373)
 -	Autres modèles LTE non listés
 
 Le plugin n'est pas compatible avec les modèles suivant
@@ -45,18 +49,29 @@ Le plugin n'est pas compatible avec les modèles suivant
 
 ### Plugin
 
+Paramètres à configurer
+-	Port : port sur lequel le deamon écoute (défaut 55100)
+-	Fréquence : en secondes, indique toutes les x secondes où le deamon récupère les informations et exécute les actions en attente (défaut 60)
+Sauvegarder la configuration. 
+Lancez le deamon uniquement après avoir ajouté votre routeur dans le plugin. Il ne démarrera pas sinon et vous aurez une erreur.
+
+### Equipement
+
 Tous les éléments suivants sont obligatoires pour avoir le plugin fonctionnel
 
 -   IP : adresse IP du routeur
 -   API (login et mot de passe de connexion du routeur définit au-dessus). Les espaces ne sont pas supportés dans le mot de passe.
--	Fréquence : choisir si la récupération des données est toutes les 5 ou 15 minutes
 -	SMS en mode texte : cocher la case si les SMS ne fonctionnent pas (principalement à cause des caractères accentués)
+-	Numéro d'envoi SMS par défaut. Si aucun numéro n'est définit dans le scénario ou dans le widget, ce champs sera utilisé.
+-	Format des numéros 0123456789 (le +xx n'est pas supporté)
+-	Pour envoyer à plusieurs numéros, séparez les avec des ';' sans espace. Exemple : 0123456789;9876543210
 
 Sauvegarder la configuration. 
 
 Upgrade
 ===
-En cas de mise à jour du plugin, pensez à sauvegarder tous vos équipements si les données ne s'affichent pas, ou pour voirs les nouvelles commandes.
+En cas de mise à jour du plugin, pensez à sauvegarder tous vos équipements si les données ne s'affichent pas, ou pour voir les nouvelles commandes.
+Pensez à réinstaller les dépendances, elles sont régulièrement à jour.
 
 
 Utilisation
@@ -69,10 +84,10 @@ Utilisation
 
 ### Actions sur les SMS par scénario
 
--	Pour envoyer des SMS par scénario, choisissez la commande d'action "Envoyer SMS". Dans le champs "titre", remplissez le numéro de téléphone et dans le champs "Message" le texte à envoyer.
--	Utilisez la fonction "Rafraichir SMS" si vous souhaitez mettre à jour les informations liées aux SMS. C'est pratique si vous voulez allez à un polling supérieur aux 5min.
--	De manière générale, lancer les fonctions de refresh trop souvent peuvent bloquer le routeur qui se met en sécurité. Si cela arrive, penser à augmenter votre fréquence.
-
+-	Pour envoyer des SMS par scénario, choisissez la commande d'action "Envoyer SMS". Dans le champs "titre", remplissez le(s) numéro(s) de téléphone et dans le champs "Message" le texte à envoyer.
+-	L'envoie du SMS sera effectué au prochain passage du deamon (fréquence) - par défaut 60 secondes. 
+-	Format des numéros 0123456789 (le +xx n'est pas supporté)
+-	Pour envoyer à plusieurs numéros, séparez les avec des ';' sans espace. Exemple : 0123456789;9876543210
 
 ### Notification Manager
 
@@ -84,6 +99,11 @@ Dans ce cas, il existe 2 possibilités en utilisant un scénario (voir au-dessus
 -	Ajouter le scénario dans la section "Action avant exécution de la commande"
 -	Sauvegarder
 
+### Fonction Ask
+
+Le plugin supporte la fonction Ask de Jeedom. Pour la configuration, il faut avoir ces 2 prérequis
+-	Avoir configuré le numéro par défaut
+-	Mettre dans le délai du Ask, 2x le temps de la fréquence du plugin (120 si la valeur de 60s du plugin est restée par défaut)
 
 ### Debug
 
@@ -94,6 +114,7 @@ Dans ce cas, il existe 2 possibilités en utilisant un scénario (voir au-dessus
 Changelog
 ===
 
+-	26/09/2021 : Passage du mode deamon en production
 -	18/01/2020 : Init du plugin
 -	08/02/2020 : 1ere version beta fonctionnelle
 -	12/03/2020 : Passage en prod
@@ -108,4 +129,6 @@ Changelog
 -	27/06/2020 : Update librairie 1.4.12
 -	01/07/2020 : Ajout templates mobile
 -	15/08/2020 : bug fix last SMS
--	17/08/2080 : bug fix JSON format for SMS
+-	17/08/2020 : bug fix JSON format for SMS
+-	21/03/2021 : Update librairie 1.4.17
+-	xx/05/2021 : Mise en place du deamon, upgrade librairies, refonte

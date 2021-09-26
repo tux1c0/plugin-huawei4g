@@ -7,6 +7,7 @@
 	"require" : "3.3",
 	"category" : "monitoring",
 	"hasDependency" : true,
+    "hasOwnDeamon": true,
 	"changelog" : "https://tux1c0.github.io/plugin-huawei4g/#language#/",
 	"documentation" : "https://tux1c0.github.io/plugin-huawei4g/#language#/"
 }

@@ -1,0 +1,113 @@
+stages:
+  - test
+  - package
+  - packagetest
+  - deploy
+
+test:debian:
+  stage: test
+  script:
+    - apt-get update -qy
+    - apt-get install -y python3-setuptools python3-pytest-runner python3-pytest python3-pylint-common python3-pytest-cov python3-xmltodict python3-dicttoxml python3-requests
+    #- python3 setup.py test
+  tags:
+    - debian
+
+test:archlinux:
+  stage: test
+  script:
+    - echo "[salamek]" >> /etc/pacman.conf
+    - echo "Server = https://repository.salamek.cz/arch/pub/any" >> /etc/pacman.conf
+    - echo "SigLevel = Optional" >> /etc/pacman.conf
+    - pacman -Sy python-pytest-runner python-pytest python-pylint python-pytest-cov python-xmltodict python-dicttoxml python-requests --noconfirm
+    - python setup.py test
+  tags:
+    - archlinux
+
+package:debian:
+  stage: package
+  script:
+    - apt-get update -qy
+    - apt-get install -y python-all python3-pytest-runner python3-stdeb python3-pytest python3-pylint-common python3-pytest-cov python3-xmltodict python3-dicttoxml python3-requests tox
+    - rm -rf "./deb_dist"
+    - python3 setup.py --command-packages=stdeb.command bdist_deb
+  tags:
+    - debian
+
+  artifacts:
+    paths:
+      - deb_dist/*.deb
+    expire_in: 1d
+
+package:archlinux:
+  stage: package
+  script:
+    - echo "[salamek]" >> /etc/pacman.conf
+    - echo "Server = https://repository.salamek.cz/arch/pub/any" >> /etc/pacman.conf
+    - echo "SigLevel = Optional" >> /etc/pacman.conf
+    - pacman -Sy python-pip sudo openssh binutils fakeroot python-xmltodict python-dicttoxml python-requests --noconfirm
+    - useradd -m -G users -s /bin/bash package
+    - chown -R package:users archlinux
+    - cd archlinux
+    - sudo -H -u package makepkg -f
+  tags:
+    - archlinux
+
+  artifacts:
+    paths:
+      - archlinux/python-huawei-lte-api*
+    expire_in: 1d
+
+packagetest:debian:
+  stage: packagetest
+  script:
+    - apt-get update -qy
+    - cd deb_dist
+    - apt install ./*.deb -qy
+  tags:
+    - debian
+  dependencies:
+    - package:debian
+
+packagetest:archlinux:
+  stage: packagetest
+  script:
+    - echo "[salamek]" >> /etc/pacman.conf
+    - echo "Server = https://repository.salamek.cz/arch/pub/any" >> /etc/pacman.conf
+    - echo "SigLevel = Optional" >> /etc/pacman.conf
+    - pacman -Sy --noconfirm
+    - cd archlinux
+    - pacman -U python-huawei-lte-api*.pkg.tar.zst --noconfirm
+  tags:
+    - archlinux
+  dependencies:
+    - package:archlinux
+
+repoupdate:
+  stage: deploy
+  variables:
+    TWINE_USERNAME: Salamek
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - apt-get update -y
+    - apt-get install twine python-setuptools -y
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - ssh www-data@repository 'rm -rf /var/www/repository.salamek.cz/www/arch/pub/any/python-huawei-lte-api*.pkg.tar.zst'
+    - ssh www-data@repository 'rm -rf /var/www/repository.salamek.cz/cache/deb/pub/python3-huawei-lte-api*.deb'
+    - scp archlinux/python-huawei-lte-api*.pkg.tar.zst www-data@repository:/var/www/repository.salamek.cz/www/arch/pub/any
+    - scp deb_dist/*.deb www-data@repository:/var/www/repository.salamek.cz/cache/deb/pub
+    - ssh www-data@repository '/var/www/repository.salamek.cz/deb-pub-update.sh'
+    - ssh www-data@repository '/var/www/repository.salamek.cz/arch-pub-update.sh'
+    - python3 setup.py sdist
+    - twine upload dist/*
+  dependencies:
+    - package:archlinux
+    - package:debian
+  tags:
+    - debian
+  only:
+    - tags

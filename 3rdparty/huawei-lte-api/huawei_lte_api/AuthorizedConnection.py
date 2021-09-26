@@ -1,4 +1,5 @@
 import datetime
+import warnings
 from typing import Optional, Tuple, Union
 from urllib.parse import urlparse, urlunparse
 from huawei_lte_api.Connection import Connection
@@ -18,17 +19,22 @@ class AuthorizedConnection(Connection):
             parsed_url.netloc.rpartition("@")[-1],
             *parsed_url[2:]
         ))
-        super(AuthorizedConnection, self).__init__(clear_url, timeout=timeout)
+        super().__init__(clear_url, timeout=timeout)
         username = username if username else parsed_url.username
         password = password if password else parsed_url.password
 
         from huawei_lte_api.api.User import User  # pylint: disable=cyclic-import,import-outside-toplevel
         self.user = User(self, username, password)
 
-        if not login_on_demand:
-            if self.user.login(True):
-                self.login_time = datetime.datetime.utcnow()
-                self.logged_in = True
+        if login_on_demand:
+            warnings.warn(
+                "login_on_demand is deprecated, and has no effect, please remove this parameter from your code! if  will get removed in next minor release.",
+                DeprecationWarning
+            )
+
+        if self.user.login(True):
+            self.login_time = datetime.datetime.utcnow()
+            self.logged_in = True
 
     def _is_login_timeout(self) -> bool:
         if self.login_time is None:
