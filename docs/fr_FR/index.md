@@ -36,7 +36,11 @@ Le plugin est compatible avec les modèles suivant
 
 Le plugin devrait être compatible avec les modèles suivants (non testés)
 -	Huawei B310s-22
+-	Huawei B315s-22
 -	Huawei E3131
+-	Huawei E3531
+-	Huawei B818-263
+-	Huawei 5G CPE Pro 2 (H122-373)
 -	Autres modèles LTE non listés
 
 Le plugin n'est pas compatible avec les modèles suivant
@@ -49,6 +53,7 @@ Paramètres à configurer
 -	Port : port sur lequel le deamon écoute (défaut 55100)
 -	Fréquence : en secondes, indique toutes les x secondes où le deamon récupère les informations et exécute les actions en attente (défaut 60)
 Sauvegarder la configuration. 
+Lancez le deamon uniquement après avoir ajouté votre routeur dans le plugin. Il ne démarrera pas sinon et vous aurez une erreur.
 
 ### Equipement
 
@@ -109,6 +114,7 @@ Le plugin supporte la fonction Ask de Jeedom. Pour la configuration, il faut avo
 Changelog
 ===
 
+-	26/09/2021 : Passage du mode deamon en production
 -	18/01/2020 : Init du plugin
 -	08/02/2020 : 1ere version beta fonctionnelle
 -	12/03/2020 : Passage en prod

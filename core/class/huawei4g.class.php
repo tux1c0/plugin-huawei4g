@@ -18,7 +18,6 @@
 
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-require_once dirname(__FILE__) . '/router.class.php';
 
 class huawei4g extends eqLogic {
     /*     * *************************Attributs****************************** */
