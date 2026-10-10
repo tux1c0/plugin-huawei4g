@@ -7,9 +7,9 @@ echo 0 > ${PROGRESS_FILE}
 echo "********************************************************"
 echo "* Installation des dépendances *"
 echo "********************************************************"
-wget -O - https://repository.salamek.cz/deb/salamek.gpg.key|apt-key add -
+wget -O- https://salamek.cz | sudo tee /usr/share/keyrings/salamek-archive-keyring.gpg > /dev/null
 echo 10 > ${PROGRESS_FILE}
-echo "deb https://repository.salamek.cz/deb/pub all main" | tee /etc/apt/sources.list.d/salamek.cz.list
+echo "deb [signed-by=/usr/share/keyrings/salamek-archive-keyring.gpg] https://salamek.cz all main" | sudo tee /etc/apt/sources.list.d/salamek.cz.list
 echo 20 > ${PROGRESS_FILE}
 apt-get update
 echo 30 > ${PROGRESS_FILE}
