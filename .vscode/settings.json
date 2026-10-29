@@ -1,0 +1,9 @@
+{
+    "python.analysis.extraPaths": [
+        "./3rdparty/huawei-lte-api"
+    ],
+    "chat.tools.terminal.autoApprove": {
+        "git remote": true,
+        "git rev-parse": true
+    }
+}

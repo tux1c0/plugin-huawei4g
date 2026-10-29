@@ -1,0 +1,3 @@
+[submodule "3rdparty/huawei-lte-api"]
+	path = 3rdparty/huawei-lte-api
+	url = https://github.com/Salamek/huawei-lte-api.git

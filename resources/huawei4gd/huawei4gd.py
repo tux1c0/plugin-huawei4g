@@ -7,7 +7,7 @@ import sys
 import time
 import re
 
-from huawei_lte_api.AuthorizedConnection import AuthorizedConnection
+from huawei_lte_api.Connection import Connection
 from huawei_lte_api.Client import Client
 from huawei_lte_api.exceptions import ResponseErrorNotSupportedException
 
@@ -132,7 +132,7 @@ def listen():
 				break
 
 			try:
-				connection = AuthorizedConnection(_device_url)
+				connection = Connection(_device_url)
 				client = Client(connection)
 				jeedom_com.send_change_immediate({'cmd' : 'status', 'data' : 'Up'})
 			except Exception as e:
