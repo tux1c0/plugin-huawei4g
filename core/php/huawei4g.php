@@ -101,7 +101,7 @@ function updateInfo($eqLogicToUpdate, $cmdToUpdate, $valueToUpdate) {
 		if(is_object($cmd)) {
 			$cmd->event($valueToUpdate);
 		}
-		log::add('huawei4g', 'debug', 'updateInfo cmd '.$cmdToUpdate.' valeur '.$valueToUpdate);
+		log::add('huawei4g', 'debug', 'updateInfo cmd '.$cmdToUpdate.' valeur '.json_encode($valueToUpdate, JSON_UNESCAPED_UNICODE));
 	} catch (Exception $e) {
 		log::add('huawei4g', 'error', 'Impossible de mettre à jour le champs '.$cmdToUpdate);
 	}
@@ -123,12 +123,14 @@ function frequency($eqLogicToUpdate, $arr) {
 		$ful = $Frequency->getFul();
 		updateInfo($eqLogicToUpdate, 'ful', $ful);
 		// calcul Marge RF
-		$mrf = $arr['rssi'] - $arr['rsrp'];
-		updateInfo($eqLogicToUpdate, 'mrf', $mrf);
+		if (isset($arr['rssi'], $arr['rsrp']) && preg_match('/-?[0-9]+(?:\.[0-9]+)?/', (string) $arr['rssi'], $rssiMatch) && preg_match('/-?[0-9]+(?:\.[0-9]+)?/', (string) $arr['rsrp'], $rsrpMatch)) {
+			$mrf = (float) $rssiMatch[0] - (float) $rsrpMatch[0];
+			updateInfo($eqLogicToUpdate, 'mrf', $mrf);
+                }
 	}
 	
 	foreach($arr as $key => $data) {
-		log::add('huawei4g', 'debug', 'update key '.$key.' - data '.$data);
+		log::add('huawei4g', 'debug', 'update key '.$key.' - data '.json_encode($data, JSON_UNESCAPED_UNICODE));
 		//clean info
 		$res = cleanInfo($key, $data);
 		updateInfo($eqLogicToUpdate, $res[0], $res[1]);
@@ -137,12 +139,12 @@ function frequency($eqLogicToUpdate, $arr) {
 
 // update all cmd
 if (isset($result['cmd']) and isset($result['data'])) {
-	log::add('huawei4g', 'debug', 'result update data '.$result['data']);
+		log::add('huawei4g', 'debug', 'result update data '.json_encode($result['data'], JSON_UNESCAPED_UNICODE));
 	
 	switch($result['cmd']) {
 		case "update":
 			foreach($result['data'] as $key => $data) {
-				log::add('huawei4g', 'debug', 'update key '.$key.' - data '.$data);
+				log::add('huawei4g', 'debug', 'update key '.$key.' - data '.json_encode($data, JSON_UNESCAPED_UNICODE));
 				//clean info
 				$res = cleanInfo($key, $data);
 				//only first eqLogics, pending support of multi eqlogics
@@ -151,32 +153,33 @@ if (isset($result['cmd']) and isset($result['data'])) {
 			break;
 			
 		case "status": 
-			log::add('huawei4g', 'debug', 'status '.$result['data']);
+			log::add('huawei4g', 'debug', 'status '.json_encode($result['data'], JSON_UNESCAPED_UNICODE));
 			//only first eqLogics, pending support of multi eqlogics
 			updateInfo($eqLogics[0], "status", trim(secureXSS($result['data'])));
 			break;
 			
 		case "signal": 
-			log::add('huawei4g', 'debug', 'signal '.$result['data']);
+			log::add('huawei4g', 'debug', 'signal '.json_encode($result['data'], JSON_UNESCAPED_UNICODE));
 			frequency($eqLogics[0], $result['data']);
 			break;
 		
-		case "smsList": 
-			log::add('huawei4g', 'debug', 'smsList '.$result['data']);
-			$outputSMS = str_replace("\\'", "'", $result['data']['Message']);
-			$outputSMS = str_replace(array("\r\n", "\n", "\r"), "", $outputSMS);
-			//only first eqLogics, pending support of multi eqlogics
-			updateInfo($eqLogics[0], "Messages", trim(json_encode($outputSMS)));
+		case "smsList":
+			$messages = $result['data']['Message'] ?? array();
+			if (!is_array($messages)) {
+				$messages = array();
+			}
+			log::add('huawei4g', 'debug', 'smsList ' . json_encode($messages, JSON_UNESCAPED_UNICODE));
+			updateInfo($eqLogics[0], "Messages", json_encode(array_values($messages), JSON_UNESCAPED_UNICODE));
 			break;
 
 		case "ssid": 
-			log::add('huawei4g', 'debug', 'ssid '.$result['data']);
+			log::add('huawei4g', 'debug', 'ssid '.json_encode($result['data'], JSON_UNESCAPED_UNICODE));
 			//only first eqLogics, pending support of multi eqlogics
 			updateInfo($eqLogics[0], "Ssid", trim(json_encode($result['data']['Ssid'])));
 			break;
 			
 		case "count": 
-			log::add('huawei4g', 'debug', 'count '.$result['data']);
+			log::add('huawei4g', 'debug', 'count '.json_encode($result['data'], JSON_UNESCAPED_UNICODE));
 			//only first eqLogics, pending support of multi eqlogics
 			updateInfo($eqLogics[0], "Count", trim(secureXSS($result['data'])));
 			break;
@@ -201,7 +204,7 @@ if (isset($result['cmd']) and isset($result['data'])) {
 			
 		case "radio": 
 			$tmp = $result['data']['radio'];
-			log::add('huawei4g', 'debug', 'radio '.$result['data']);
+			log::add('huawei4g', 'debug', 'radio '.json_encode($result['data'], JSON_UNESCAPED_UNICODE));
 			foreach($tmp as $key => $value) {
 				if(isset($tmp[$key]['ID'])) {
 					if($tmp[$key]['ID'] == "InternetGatewayDevice.X_Config.Wifi.Radio.1."){
